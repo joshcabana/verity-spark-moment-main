@@ -80,6 +80,7 @@ const resolvedEnvFile = resolve(envFile);
 const resolvedConfigFile = resolve(configFile);
 const envVars = parseEnvFile(resolvedEnvFile);
 const configProjectRef = parseConfigProjectRef(resolvedConfigFile);
+const envProjectId = envVars.VITE_SUPABASE_PROJECT_ID ?? "";
 const envViteRef = parseProjectRefFromUrl(envVars.VITE_SUPABASE_URL ?? "");
 const envServerRef = parseProjectRefFromUrl(envVars.SUPABASE_URL ?? "");
 const targetProjectRef = argProjectRef || process.env.SUPABASE_PROJECT_REF || configProjectRef;
@@ -100,6 +101,9 @@ const mismatches = [];
 if (configProjectRef && configProjectRef !== targetProjectRef) {
   mismatches.push(`config.toml project_id=${configProjectRef}`);
 }
+if (envProjectId && envProjectId !== targetProjectRef) {
+  mismatches.push(`.env VITE_SUPABASE_PROJECT_ID=${envProjectId}`);
+}
 if (envViteRef && envViteRef !== targetProjectRef) {
   mismatches.push(`.env VITE_SUPABASE_URL ref=${envViteRef}`);
 }
@@ -109,6 +113,7 @@ if (envServerRef && envServerRef !== targetProjectRef) {
 
 console.log(`Target project ref: ${targetProjectRef}`);
 if (configProjectRef) console.log(`Config project ref: ${configProjectRef}`);
+if (envProjectId) console.log(`Env VITE_SUPABASE_PROJECT_ID: ${envProjectId}`);
 if (envViteRef) console.log(`Env VITE_SUPABASE_URL ref: ${envViteRef}`);
 if (envServerRef) console.log(`Env SUPABASE_URL ref: ${envServerRef}`);
 if (linkedRef) console.log(`Currently linked project ref: ${linkedRef}`);

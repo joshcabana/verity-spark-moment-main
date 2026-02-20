@@ -14,4 +14,30 @@ if (typeof window !== "undefined") {
       dispatchEvent: () => {},
     }),
   });
+
+  class IntersectionObserver {
+    root = null;
+    rootMargin = "";
+    thresholds = [];
+    disconnect() {}
+    observe() {}
+    takeRecords() { return []; }
+    unobserve() {}
+  }
+  Object.defineProperty(window, "IntersectionObserver", {
+    writable: true,
+    configurable: true,
+    value: IntersectionObserver,
+  });
+
+  const localStorageMock = {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+    clear: () => {},
+  };
+  Object.defineProperty(window, "localStorage", {
+    value: localStorageMock,
+    writable: true,
+  });
 }

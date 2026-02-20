@@ -72,42 +72,46 @@ const SparkHistory = () => {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
-            className="glass-card rounded-2xl p-4 mb-6 border-verity-success/30 glow-gold-sm"
+            className="glass-card rounded-2xl p-4 mb-6 border-verity-success/30 glow-gold-sm relative overflow-hidden"
           >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-verity-success/10 flex items-center justify-center shrink-0">
-                <Users className="w-5 h-5 text-verity-success" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <div className="text-sm font-medium text-foreground">Verity Circle</div>
-                  <CheckCircle className="w-3.5 h-3.5 text-verity-success" />
+            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-xl bg-verity-success/10 flex items-center justify-center shrink-0">
+                  <Users className="w-5 h-5 text-verity-success" />
                 </div>
-                <div className="text-xs text-verity-success font-medium">Unlocked! {sparks.length} mutual sparks</div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm font-medium text-foreground">Verity Circle</div>
+                    <CheckCircle className="w-3.5 h-3.5 text-verity-success" />
+                  </div>
+                  <div className="text-xs text-verity-success font-medium">Unlocked! {sparks.length} mutual sparks</div>
+                </div>
               </div>
-            </div>
-            <div className="bg-verity-success/5 border border-verity-success/15 rounded-xl p-3">
-              <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="w-4 h-4 text-verity-success shrink-0" />
-                <span className="text-sm font-medium text-foreground">Group video rooms — coming soon</span>
+              <div className="bg-verity-success/5 border border-verity-success/15 rounded-xl p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles className="w-4 h-4 text-verity-success shrink-0" />
+                  <span className="text-sm font-medium text-foreground">Group video rooms — coming soon</span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  You've earned access to Verity Circle. Group calls with your mutual connections will be available in the next update.
+                </p>
               </div>
-              <p className="text-xs text-muted-foreground">
-                You've earned access to Verity Circle. Group calls with your mutual connections will be available in the next update.
-              </p>
             </div>
           </motion.div>
         ) : (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
-            className="glass-card rounded-2xl p-4 mb-6 flex items-center gap-3"
+            className="glass-card rounded-2xl p-4 mb-6 flex items-center gap-3 relative overflow-hidden"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 relative z-10">
               <Sparkles className="w-5 h-5 text-primary" />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 relative z-10">
               <div className="text-sm font-medium text-foreground">Verity Circle</div>
               <div className="text-xs text-muted-foreground">3+ mutual matches unlocks group video rooms</div>
             </div>
-            <div className="flex items-center gap-1 text-primary text-xs font-medium">
+            <div className="flex items-center gap-1 text-primary text-xs font-medium relative z-10">
               <Lock className="w-3 h-3" />
               {sparks.length}/3
             </div>
@@ -124,39 +128,42 @@ const SparkHistory = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="glass-card rounded-2xl p-4 hover:border-primary/20 transition-all cursor-pointer"
+                className="glass-card rounded-2xl p-4 hover:border-primary/20 transition-all cursor-pointer relative overflow-hidden"
               >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center">
-                      <Flame className="w-5 h-5 text-primary-foreground" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-foreground">Mutual Spark</div>
-                      <div className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        {formatTime(spark.created_at)}
+                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 rounded-full bg-gradient-gold flex items-center justify-center">
+                        <Flame className="w-5 h-5 text-primary-foreground" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-foreground">Mutual Spark</div>
+                        <div className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {formatTime(spark.created_at)}
+                        </div>
                       </div>
                     </div>
+                    <span className="text-[10px] bg-secondary text-secondary-foreground px-2 py-1 rounded-full">
+                      {roomNames[spark.room_id] || spark.room_id}
+                    </span>
                   </div>
-                  <span className="text-[10px] bg-secondary text-secondary-foreground px-2 py-1 rounded-full">
-                    {roomNames[spark.room_id] || spark.room_id}
-                  </span>
+
+                  {note && (
+                    <div className="bg-secondary/50 rounded-lg p-3 mt-2 text-sm text-foreground/80 italic">
+                      "{note}"
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => navigate(`/chat/${spark.id}`)}
+                    className="mt-3 w-full flex items-center justify-center gap-2 text-primary text-sm font-medium py-2 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Open Chat
+                  </button>
                 </div>
-
-                {note && (
-                  <div className="bg-secondary/50 rounded-lg p-3 mt-2 text-sm text-foreground/80 italic">
-                    "{note}"
-                  </div>
-                )}
-
-                <button
-                  onClick={() => navigate(`/chat/${spark.id}`)}
-                  className="mt-3 w-full flex items-center justify-center gap-2 text-primary text-sm font-medium py-2 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  Open Chat
-                </button>
               </motion.div>
             );
           })}

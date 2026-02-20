@@ -85,9 +85,10 @@ const TokenShop = () => {
 
         {/* Current balance */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
-          className="glass-card rounded-2xl p-5 mb-8 flex items-center justify-between"
+          className="glass-card rounded-2xl p-5 mb-8 flex items-center justify-between relative overflow-hidden"
         >
-          <div className="flex items-center gap-3">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+          <div className="flex items-center gap-3 relative z-10">
             <div className="w-12 h-12 rounded-full bg-gradient-gold flex items-center justify-center">
               <Coins className="w-6 h-6 text-primary-foreground" />
             </div>
@@ -96,7 +97,7 @@ const TokenShop = () => {
               <div className="text-xs text-muted-foreground">tokens available</div>
             </div>
           </div>
-          <div className="text-right">
+          <div className="text-right relative z-10">
             <div className="text-sm text-foreground font-medium">{freeEntries} free entries</div>
             <div className="text-xs text-muted-foreground">left this week</div>
           </div>
@@ -113,19 +114,22 @@ const TokenShop = () => {
                 key={pack.id}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setSelectedPack(pack.id)}
-                className={`relative glass-card rounded-xl p-4 text-center transition-all ${
+                className={`relative glass-card rounded-xl p-4 text-center transition-all overflow-hidden ${
                   selectedPack === pack.id ? "border-primary/50 glow-gold-sm" : "hover:border-border"
                 }`}
               >
+                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
                 {pack.popular && (
-                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-gradient-gold text-primary-foreground text-[10px] font-bold px-3 py-0.5 rounded-full">
+                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-gradient-gold text-primary-foreground text-[10px] font-bold px-3 py-0.5 rounded-full z-10">
                     BEST VALUE
                   </span>
                 )}
-                <div className="text-2xl font-bold text-foreground mb-0.5">{pack.tokens}</div>
-                <div className="text-xs text-muted-foreground mb-2">tokens</div>
-                <div className="text-lg font-semibold text-primary">{pack.price}</div>
-                <div className="text-[10px] text-muted-foreground">{pack.perToken}/token</div>
+                <div className="relative z-10">
+                  <div className="text-2xl font-bold text-foreground mb-0.5">{pack.tokens}</div>
+                  <div className="text-xs text-muted-foreground mb-2">tokens</div>
+                  <div className="text-lg font-semibold text-primary">{pack.price}</div>
+                  <div className="text-[10px] text-muted-foreground">{pack.perToken}/token</div>
+                </div>
               </motion.button>
             ))}
           </div>
@@ -144,12 +148,13 @@ const TokenShop = () => {
               { icon: Sparkles, label: "90-second Spark Extension", cost: "1 token" },
               { icon: Crown, label: "Premium themed rooms", cost: "1 token" },
             ].map((item) => (
-              <div key={item.label} className="glass-card rounded-xl p-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
+              <div key={item.label} className="glass-card rounded-xl p-3 flex items-center justify-between relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+                <div className="flex items-center gap-3 relative z-10">
                   <item.icon className="w-4 h-4 text-primary" />
                   <span className="text-sm text-foreground">{item.label}</span>
                 </div>
-                <span className="text-xs text-primary font-medium">{item.cost}</span>
+                <span className="text-xs text-primary font-medium relative z-10">{item.cost}</span>
               </div>
             ))}
           </div>
@@ -157,39 +162,42 @@ const TokenShop = () => {
 
         {/* Verity Pass */}
         <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          className="relative glass-card rounded-2xl p-6 border-primary/30 glow-gold-sm"
+          className="relative glass-card rounded-2xl p-6 border-primary/30 glow-gold-sm overflow-hidden"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center">
-              <Crown className="w-5 h-5 text-primary-foreground" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center">
+                <Crown className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h3 className="font-display text-xl font-bold text-foreground">Verity Pass</h3>
+                <p className="text-muted-foreground text-xs">The premium experience</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-display text-xl font-bold text-foreground">Verity Pass</h3>
-              <p className="text-muted-foreground text-xs">The premium experience</p>
+            <div className="text-3xl font-bold text-foreground mb-1">
+              $19.99<span className="text-sm text-muted-foreground font-normal">/month</span>
             </div>
-          </div>
-          <div className="text-3xl font-bold text-foreground mb-1">
-            $19.99<span className="text-sm text-muted-foreground font-normal">/month</span>
-          </div>
-          <ul className="space-y-2 my-5">
-            {passFeatures.map((feature) => (
-              <li key={feature} className="flex items-center gap-2 text-sm text-foreground/80">
-                <Check className="w-4 h-4 text-verity-success shrink-0" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-          <button onClick={() => handlePurchase(VERITY_PASS_PRICE_ID)} className="w-full bg-gradient-gold text-primary-foreground font-semibold py-4 rounded-full glow-gold">
-            Subscribe to Verity Pass
-          </button>
-          {subscribed && (
-            <button
-              onClick={handleManageSubscription}
-              className="w-full mt-3 border border-primary/30 text-primary font-medium py-3 rounded-full hover:bg-primary/5 transition-colors text-sm"
-            >
-              Manage Subscription
+            <ul className="space-y-2 my-5">
+              {passFeatures.map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-sm text-foreground/80">
+                  <Check className="w-4 h-4 text-verity-success shrink-0" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => handlePurchase(VERITY_PASS_PRICE_ID)} className="w-full bg-gradient-gold text-primary-foreground font-semibold py-4 rounded-full glow-gold">
+              Subscribe to Verity Pass
             </button>
-          )}
+            {subscribed && (
+              <button
+                onClick={handleManageSubscription}
+                className="w-full mt-3 border border-primary/30 text-primary font-medium py-3 rounded-full hover:bg-primary/5 transition-colors text-sm"
+              >
+                Manage Subscription
+              </button>
+            )}
+          </div>
         </motion.div>
       </div>
 

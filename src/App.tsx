@@ -3,8 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { AnimatePresence, motion } from "framer-motion";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -43,40 +45,60 @@ const PublicRoute = ({ children }: { children: ReactNode }) => {
   return <>{children}</>;
 };
 
-const AppRoutes = () => (
-  <Suspense fallback={<FullScreenLoader />}>
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/auth" element={<PublicRoute><Auth /></PublicRoute>} />
-      <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
-      <Route path="/lobby" element={<ProtectedRoute><Lobby /></ProtectedRoute>} />
-      <Route path="/call" element={<ProtectedRoute><VideoCall /></ProtectedRoute>} />
-      <Route path="/match" element={<ProtectedRoute><MatchDecision /></ProtectedRoute>} />
-      <Route path="/sparks" element={<ProtectedRoute><SparkHistory /></ProtectedRoute>} />
-      <Route path="/tokens" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />
-      <Route path="/shop" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />
-      <Route path="/transparency" element={<Transparency />} />
-      <Route path="/chat/:matchId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/appeals" element={<ProtectedRoute><Appeal /></ProtectedRoute>} />
-      <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </Suspense>
+const PageWrapper = ({ children }: { children: ReactNode }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.98 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 1.02 }}
+    transition={{ duration: 0.3, ease: "easeInOut" }}
+    className="w-full min-h-screen"
+  >
+    {children}
+  </motion.div>
 );
 
+const AppRoutes = () => {
+  const location = useLocation();
+  
+  return (
+    <Suspense fallback={<FullScreenLoader />}>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />
+          <Route path="/auth" element={<PageWrapper><PublicRoute><Auth /></PublicRoute></PageWrapper>} />
+          <Route path="/onboarding" element={<PageWrapper><ProtectedRoute><Onboarding /></ProtectedRoute></PageWrapper>} />
+          <Route path="/lobby" element={<PageWrapper><ProtectedRoute><Lobby /></ProtectedRoute></PageWrapper>} />
+          <Route path="/call" element={<PageWrapper><ProtectedRoute><VideoCall /></ProtectedRoute></PageWrapper>} />
+          <Route path="/match" element={<PageWrapper><ProtectedRoute><MatchDecision /></ProtectedRoute></PageWrapper>} />
+          <Route path="/sparks" element={<PageWrapper><ProtectedRoute><SparkHistory /></ProtectedRoute></PageWrapper>} />
+          <Route path="/tokens" element={<PageWrapper><ProtectedRoute><TokenShop /></ProtectedRoute></PageWrapper>} />
+          <Route path="/shop" element={<PageWrapper><ProtectedRoute><TokenShop /></ProtectedRoute></PageWrapper>} />
+          <Route path="/transparency" element={<PageWrapper><Transparency /></PageWrapper>} />
+          <Route path="/chat/:matchId" element={<PageWrapper><ProtectedRoute><Chat /></ProtectedRoute></PageWrapper>} />
+          <Route path="/profile" element={<PageWrapper><ProtectedRoute><Profile /></ProtectedRoute></PageWrapper>} />
+          <Route path="/appeals" element={<PageWrapper><ProtectedRoute><Appeal /></ProtectedRoute></PageWrapper>} />
+          <Route path="/admin" element={<PageWrapper><ProtectedRoute><Admin /></ProtectedRoute></PageWrapper>} />
+          <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
+        </Routes>
+      </AnimatePresence>
+    </Suspense>
+  );
+};
+
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <AppRoutes />
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

@@ -48,6 +48,27 @@ describe("security hardening regressions", () => {
     expect(source).toContain("Image too large. Maximum 5MB.");
   });
 
+  it("enforces explicit auth guards across all protected edge functions", () => {
+    const guardedFunctions = [
+      "supabase/functions/ai-moderate/index.ts",
+      "supabase/functions/verify-selfie/index.ts",
+      "supabase/functions/find-match/index.ts",
+      "supabase/functions/spark-extend/index.ts",
+      "supabase/functions/agora-token/index.ts",
+      "supabase/functions/check-subscription/index.ts",
+      "supabase/functions/create-checkout/index.ts",
+      "supabase/functions/customer-portal/index.ts",
+    ];
+
+    for (const functionPath of guardedFunctions) {
+      const source = readRepoFile(functionPath);
+      expect(source).toContain('req.headers.get("Authorization")');
+      expect(source).toContain('startsWith("Bearer ")');
+      expect(source).toContain('JSON.stringify({ error: "Unauthorized" })');
+      expect(source).toContain("status: 401");
+    }
+  });
+
   it("keeps token integrity and matchmaking RPC protections in migration", () => {
     const migration = readRepoFile("supabase/migrations/20260220143000_security_stabilization.sql");
 

@@ -17,8 +17,8 @@
     "supabase:target:check": "node scripts/check-supabase-target.mjs",
     "supabase:cli": "node scripts/run-supabase.mjs",
     "supabase:secrets:check": "node scripts/check-supabase-secrets.mjs",
-    "security:live:smoke": "node scripts/live-security-smoke.mjs",
-    "security:live:e2e": "node scripts/live-auth-e2e.mjs"
+    "security:live:smoke": "node --env-file=.env scripts/live-security-smoke.mjs",
+    "security:live:e2e": "node --env-file=.env scripts/live-auth-e2e.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

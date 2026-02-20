@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execFileSync } from "node:child_process";
+import { runSupabase } from "./lib/supabase-cli.mjs";
 
 const REQUIRED_CORE_SECRETS = [
   "SUPABASE_URL",
@@ -57,9 +57,8 @@ if (!["core", "full"].includes(mode)) {
 
 let output;
 try {
-  output = execFileSync(
-    "npx",
-    ["supabase", "secrets", "list", "--project-ref", projectRef, "-o", "json"],
+  output = runSupabase(
+    ["secrets", "list", "--project-ref", projectRef, "-o", "json"],
     { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
   );
 } catch (error) {
@@ -73,6 +72,15 @@ try {
       );
       console.error(
         `Verify project ref (${projectRef}) and role permissions in Supabase Dashboard (Project Settings > Members / Access Control).`,
+      );
+    }
+    if (stderr.includes("package was not found and will be installed: supabase@")) {
+      console.error(
+        "Supabase CLI could not run from npx. This script auto-falls back to a standalone binary, but that fallback also failed.",
+      );
+      console.error("Install docs: https://github.com/supabase/cli#install-the-cli");
+      console.error(
+        "If needed, set secrets manually in Supabase Dashboard -> Edge Functions -> Secrets, then rerun this check.",
       );
     }
   }

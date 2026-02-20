@@ -63,9 +63,9 @@ Notes:
 ## Troubleshooting
 
 - `find-match` returns `500` with `matches_check`:
-  run `npx supabase db push --linked` to apply legacy constraint normalization migrations.
+  run `npm run supabase:cli -- db push --linked` to apply legacy constraint normalization migrations.
 - Message insert fails on `match_id` or `from_user` NOT NULL:
-  run `npx supabase db push --linked` to apply message compatibility trigger/constraint updates.
+  run `npm run supabase:cli -- db push --linked` to apply message compatibility trigger/constraint updates.
 - `supabase:secrets:check` returns `403`:
   your CLI account lacks access to the target project, or the target project ref is incorrect.
 - `supabase:secrets:check --mode full` fails on AI secret:

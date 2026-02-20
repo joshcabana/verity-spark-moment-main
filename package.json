@@ -15,6 +15,7 @@
     "audit:prod:baseline:update": "node scripts/check-prod-audit-baseline.mjs --baseline security/npm-audit-prod-baseline.json --report security/current-prod-audit.json --update-baseline",
     "alerts:runtime:check": "node scripts/check-runtime-alerts.mjs",
     "supabase:target:check": "node scripts/check-supabase-target.mjs",
+    "supabase:cli": "node scripts/run-supabase.mjs",
     "supabase:secrets:check": "node scripts/check-supabase-secrets.mjs",
     "security:live:smoke": "node scripts/live-security-smoke.mjs",
     "security:live:e2e": "node scripts/live-auth-e2e.mjs"

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Flame, MessageCircle, Clock, Sparkles, Lock } from "lucide-react";
+import { Flame, MessageCircle, Clock, Sparkles, Lock, Users, CheckCircle } from "lucide-react";
 import AppNav from "@/components/AppNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -66,22 +66,53 @@ const SparkHistory = () => {
           <p className="text-muted-foreground text-sm">Your mutual connections. Only sparks show here.</p>
         </motion.div>
 
-        {/* Verity Circle teaser */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
-          className="glass-card rounded-2xl p-4 mb-6 flex items-center gap-3"
-        >
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-            <Sparkles className="w-5 h-5 text-primary" />
-          </div>
-          <div className="flex-1">
-            <div className="text-sm font-medium text-foreground">Verity Circle</div>
-            <div className="text-xs text-muted-foreground">3+ mutual matches unlocks group video rooms</div>
-          </div>
-          <div className="flex items-center gap-1 text-primary text-xs font-medium">
-            <Lock className="w-3 h-3" />
-            {sparks.length}/3
-          </div>
-        </motion.div>
+        {/* Verity Circle */}
+        {sparks.length >= 3 ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1 }}
+            className="glass-card rounded-2xl p-4 mb-6 border-verity-success/30 glow-gold-sm"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-verity-success/10 flex items-center justify-center shrink-0">
+                <Users className="w-5 h-5 text-verity-success" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <div className="text-sm font-medium text-foreground">Verity Circle</div>
+                  <CheckCircle className="w-3.5 h-3.5 text-verity-success" />
+                </div>
+                <div className="text-xs text-verity-success font-medium">Unlocked! {sparks.length} mutual sparks</div>
+              </div>
+            </div>
+            <div className="bg-verity-success/5 border border-verity-success/15 rounded-xl p-3">
+              <div className="flex items-center gap-2 mb-1">
+                <Sparkles className="w-4 h-4 text-verity-success shrink-0" />
+                <span className="text-sm font-medium text-foreground">Group video rooms — coming soon</span>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                You've earned access to Verity Circle. Group calls with your mutual connections will be available in the next update.
+              </p>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
+            className="glass-card rounded-2xl p-4 mb-6 flex items-center gap-3"
+          >
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Sparkles className="w-5 h-5 text-primary" />
+            </div>
+            <div className="flex-1">
+              <div className="text-sm font-medium text-foreground">Verity Circle</div>
+              <div className="text-xs text-muted-foreground">3+ mutual matches unlocks group video rooms</div>
+            </div>
+            <div className="flex items-center gap-1 text-primary text-xs font-medium">
+              <Lock className="w-3 h-3" />
+              {sparks.length}/3
+            </div>
+          </motion.div>
+        )}
 
         {/* Sparks list */}
         <div className="space-y-3">

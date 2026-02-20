@@ -126,7 +126,11 @@ const VideoCall = () => {
           const videoEl = localVideoRef.current.querySelector("video");
           if (videoEl) {
             localVideoElRef.current = videoEl;
-            startModeration(videoEl);
+            // Pass audio MediaStream for audio moderation capture
+            const audioMediaStream = audioTrack.getMediaStreamTrack
+              ? new MediaStream([audioTrack.getMediaStreamTrack()])
+              : undefined;
+            startModeration(videoEl, audioMediaStream);
           }
         }
 
@@ -185,7 +189,10 @@ const VideoCall = () => {
       if (data?.success) {
         setTimeLeft((t) => t + data.extraSeconds);
         setExtended(true);
-        toast({ title: "Spark Extended! ✨", description: "+90 seconds added to your call." });
+        const description = data.freeExtension
+          ? "+90 seconds added — free with your Verity Pass!"
+          : "+90 seconds added to your call.";
+        toast({ title: "Spark Extended! ✨", description });
       } else {
         toast({ title: "Not enough tokens", description: "Get more tokens to extend.", variant: "destructive" });
       }

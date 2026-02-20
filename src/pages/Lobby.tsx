@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Video, Moon, Briefcase, Palette, Users, Clock, Heart, Zap, Shield, Phone } from "lucide-react";
+import { Video, Moon, Briefcase, Palette, Users, Clock, Heart, Zap, Shield, Phone, Crown } from "lucide-react";
 import AppNav from "@/components/AppNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,12 +10,12 @@ import { writeMatchSession } from "@/lib/match-session";
 import type { VerityMatchSession } from "@/lib/match-session";
 
 const themedRooms = [
-  { id: "general", name: "Open Room", icon: Heart, desc: "Anyone, anytime", color: "text-primary" },
-  { id: "night-owls", name: "Night Owls", icon: Moon, desc: "Late-night connections", color: "text-blue-400" },
-  { id: "tech", name: "Tech Professionals", icon: Briefcase, desc: "Industry insiders", color: "text-emerald-400" },
-  { id: "creatives", name: "Creatives & Makers", icon: Palette, desc: "Artists, writers, builders", color: "text-pink-400" },
-  { id: "over-35", name: "Over 35", icon: Users, desc: "Mature connections", color: "text-amber-400" },
-  { id: "introverts", name: "Introvert Hours", icon: Clock, desc: "Low-pressure vibes", color: "text-violet-400" },
+  { id: "general", name: "Open Room", icon: Heart, desc: "Anyone, anytime", color: "text-primary", premium: false },
+  { id: "night-owls", name: "Night Owls", icon: Moon, desc: "Late-night connections", color: "text-blue-400", premium: true },
+  { id: "tech", name: "Tech Professionals", icon: Briefcase, desc: "Industry insiders", color: "text-emerald-400", premium: true },
+  { id: "creatives", name: "Creatives & Makers", icon: Palette, desc: "Artists, writers, builders", color: "text-pink-400", premium: true },
+  { id: "over-35", name: "Over 35", icon: Users, desc: "Mature connections", color: "text-amber-400", premium: true },
+  { id: "introverts", name: "Introvert Hours", icon: Clock, desc: "Low-pressure vibes", color: "text-violet-400", premium: true },
 ];
 
 interface MatchmakingResponse {
@@ -52,7 +52,7 @@ const Lobby = () => {
   const [banReason, setBanReason] = useState("");
   const [phoneVerified, setPhoneVerified] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, subscribed } = useAuth();
 
   const pollIntervalRef = useRef<number | null>(null);
   const timeoutRef = useRef<number | null>(null);
@@ -178,6 +178,12 @@ const Lobby = () => {
       toast({ title: "Account suspended", description: "Your account cannot enter matchmaking.", variant: "destructive" });
       setIsSearching(false);
       navigate("/appeals");
+      return;
+    }
+
+    if (response.error === "premium_room_locked") {
+      toast({ title: "Premium room", description: "This room requires 1 token or a Verity Pass.", variant: "destructive" });
+      setIsSearching(false);
       return;
     }
 
@@ -315,10 +321,20 @@ const Lobby = () => {
                 key={room.id}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setSelectedRoom(room.id)}
-                className={`glass-card rounded-xl p-4 text-left transition-all ${
+                className={`relative glass-card rounded-xl p-4 text-left transition-all ${
                   selectedRoom === room.id ? "border-primary/50 glow-gold-sm" : "hover:border-border"
                 }`}
               >
+                {room.premium && !subscribed && (
+                  <span className="absolute top-2 right-2 flex items-center gap-1 bg-primary/10 text-primary text-[9px] font-medium px-1.5 py-0.5 rounded-full">
+                    <Crown className="w-2.5 h-2.5" />1 token
+                  </span>
+                )}
+                {room.premium && subscribed && (
+                  <span className="absolute top-2 right-2 flex items-center gap-1 bg-verity-success/10 text-verity-success text-[9px] font-medium px-1.5 py-0.5 rounded-full">
+                    <Crown className="w-2.5 h-2.5" />Pass
+                  </span>
+                )}
                 <room.icon className={`w-5 h-5 ${room.color} mb-2`} />
                 <div className="text-sm font-medium text-foreground">{room.name}</div>
                 <div className="text-xs text-muted-foreground">{room.desc}</div>

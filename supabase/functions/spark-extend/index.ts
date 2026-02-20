@@ -53,6 +53,42 @@ serve(async (req) => {
       });
     }
 
+    // Check if this user has an active Verity Pass subscription.
+    const today = new Date().toISOString().split("T")[0]; // UTC date YYYY-MM-DD
+
+    const { data: subscription } = await supabase
+      .from("subscriptions")
+      .select("status, current_period_end")
+      .eq("user_id", user.id)
+      .eq("status", "active")
+      .gt("current_period_end", new Date().toISOString())
+      .maybeSingle();
+
+    const isSubscriber = Boolean(subscription);
+
+    if (isSubscriber) {
+      // Attempt to claim today's free extension by inserting into the log.
+      // The unique index on (user_id, used_date) prevents double-claiming.
+      const { error: logError } = await supabase
+        .from("spark_extension_log")
+        .insert({ user_id: user.id, used_date: today });
+
+      if (!logError) {
+        // Successfully claimed today's free extension — no token charge.
+        return new Response(
+          JSON.stringify({
+            success: true,
+            extraSeconds: EXTEND_SECONDS,
+            freeExtension: true,
+          }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 },
+        );
+      }
+
+      // logError means unique constraint was violated (already used today) — fall through to token charge.
+    }
+
+    // Non-subscribers or subscribers who already used their free extension today: charge 1 token.
     const { data: newBalance, error: decrementError } = await supabase.rpc("increment_user_tokens", {
       p_user_id: user.id,
       p_delta: -EXTEND_COST,
@@ -90,9 +126,10 @@ serve(async (req) => {
       JSON.stringify({
         success: true,
         extraSeconds: EXTEND_SECONDS,
+        freeExtension: false,
         newBalance,
       }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 },
     );
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);

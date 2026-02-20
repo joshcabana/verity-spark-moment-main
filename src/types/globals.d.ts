@@ -9,6 +9,7 @@ declare module "react-router-dom" {
   export const Link: any;
   export const NavLink: any;
   export const Outlet: any;
+  export const useLocation: any;
 }
 
 declare module "framer-motion" {
@@ -39,6 +40,9 @@ declare module "lucide-react" {
   export const Phone: any;
   export const Zap: any;
   export const Search: any;
+  export const Home: any;
+  export const Flame: any;
+  export const Coins: any;
   export const Menu: any;
   export const User: any;
   export const Settings: any;

@@ -176,8 +176,9 @@ const MatchDecision = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="text-center max-w-sm w-full"
+            className="text-center max-w-sm w-full glass-card p-10 rounded-[2.5rem] shadow-xl relative overflow-hidden"
           >
+            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
               <Sparkles className="w-10 h-10 text-primary mx-auto mb-4" />
               <h2 className="font-display text-3xl font-bold text-foreground mb-2">Time&apos;s Up</h2>
@@ -217,8 +218,9 @@ const MatchDecision = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="text-center max-w-sm w-full"
+            className="text-center max-w-sm w-full glass-card p-10 rounded-[2.5rem] shadow-xl relative overflow-hidden"
           >
+            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
             <Heart className="w-10 h-10 text-primary mx-auto mb-4" />
             <h2 className="font-display text-2xl font-bold text-foreground mb-2">Send a Reaction Note</h2>
             <p className="text-muted-foreground text-sm mb-6">10 seconds — leave a quick note they&apos;ll only see if it&apos;s mutual.</p>
@@ -249,7 +251,8 @@ const MatchDecision = () => {
         )}
 
         {showResult && matchResult === "mutual" && (
-          <motion.div key="result" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+          <motion.div key="result" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center max-w-sm w-full glass-card p-12 rounded-[2.5rem] shadow-xl relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -273,7 +276,8 @@ const MatchDecision = () => {
         )}
 
         {((decision === "pass") || (showResult && matchResult === "no-match")) && (
-          <motion.div key="passed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
+          <motion.div key="passed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center max-w-sm w-full glass-card p-10 rounded-[2.5rem] shadow-xl relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
             <p className="text-muted-foreground text-lg">No worries. Your next spark awaits.</p>
           </motion.div>
         )}

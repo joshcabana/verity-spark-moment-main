@@ -166,6 +166,14 @@ serve(async (req) => {
               });
 
               if (incrementError) {
+                await supabase.rpc("log_runtime_alert_event", {
+                  p_event_source: "submit-appeal",
+                  p_event_type: "rpc_exception",
+                  p_severity: "error",
+                  p_status_code: 500,
+                  p_user_id: userId,
+                  p_details: { rpc: "increment_user_tokens", message: incrementError.message },
+                });
                 throw incrementError;
               }
 
@@ -195,6 +203,20 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("submit-appeal error:", e);
+
+    const errorMessage = e instanceof Error ? e.message : "Unknown error";
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
+    await supabase.rpc("log_runtime_alert_event", {
+      p_event_source: "submit-appeal",
+      p_event_type: "execution_error",
+      p_severity: "error",
+      p_status_code: 500,
+      p_details: { message: errorMessage },
+    });
+
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

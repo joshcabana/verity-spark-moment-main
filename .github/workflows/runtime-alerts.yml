@@ -1,0 +1,34 @@
+name: Runtime Alerts
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+jobs:
+  runtime-alert-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run runtime alert checks
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ALERT_LOOKBACK_MINUTES: "60"
+          STRIPE_WEBHOOK_FAILURE_THRESHOLD: "1"
+          RPC_EXCEPTION_THRESHOLD: "3"
+          MODERATION_STATUS_SPIKE_THRESHOLD: "20"
+        run: node scripts/check-runtime-alerts.mjs

@@ -180,6 +180,14 @@ serve(async (req) => {
             });
 
             if (incrementError) {
+              await adminClient.rpc("log_runtime_alert_event", {
+                p_event_source: "admin-moderation",
+                p_event_type: "rpc_exception",
+                p_severity: "error",
+                p_status_code: 500,
+                p_user_id: appeal.user_id,
+                p_details: { rpc: "increment_user_tokens", message: incrementError.message },
+              });
               throw incrementError;
             }
           }
@@ -268,6 +276,20 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("admin-moderation error:", e);
+
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    if (serviceKey && supabaseUrl) {
+      const alertClient = createClient(supabaseUrl, serviceKey);
+      await alertClient.rpc("log_runtime_alert_event", {
+        p_event_source: "admin-moderation",
+        p_event_type: "execution_error",
+        p_severity: "error",
+        p_status_code: 500,
+        p_details: { message: e instanceof Error ? e.message : "Unknown error" },
+      });
+    }
+
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

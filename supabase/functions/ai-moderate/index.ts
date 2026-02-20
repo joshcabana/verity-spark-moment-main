@@ -82,6 +82,8 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  let monitorClient: ReturnType<typeof createClient> | null = null;
+
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
@@ -98,6 +100,8 @@ serve(async (req) => {
       throw new Error("Supabase environment is not configured");
     }
 
+    monitorClient = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } });
+
     const authClient = createClient(supabaseUrl, anonKey, {
       global: { headers: { Authorization: authHeader } },
     });
@@ -108,6 +112,13 @@ serve(async (req) => {
     } = await authClient.auth.getUser();
 
     if (authError || !user) {
+      await monitorClient.rpc("log_runtime_alert_event", {
+        p_event_source: "ai-moderate",
+        p_event_type: "auth_rejected",
+        p_severity: "warning",
+        p_status_code: 401,
+        p_details: { reason: authError?.message ?? "No user from token" },
+      });
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -148,6 +159,14 @@ serve(async (req) => {
 
       const typedMatch = match as StoredMatch;
       if (typedMatch.user1_id !== offenderId && typedMatch.user2_id !== offenderId) {
+        await monitorClient.rpc("log_runtime_alert_event", {
+          p_event_source: "ai-moderate",
+          p_event_type: "auth_rejected",
+          p_severity: "warning",
+          p_status_code: 403,
+          p_user_id: offenderId,
+          p_details: { reason: "User is not a participant in provided matchId", matchId },
+        });
         return new Response(JSON.stringify({ error: "Forbidden" }), {
           status: 403,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -428,6 +447,16 @@ Be conservative. Passionate discussion ≠ aggression. Respond using the moderat
       },
     );
   } catch (error) {
+    if (monitorClient) {
+      await monitorClient.rpc("log_runtime_alert_event", {
+        p_event_source: "ai-moderate",
+        p_event_type: "execution_error",
+        p_severity: "error",
+        p_status_code: 500,
+        p_details: { message: error instanceof Error ? error.message : String(error) },
+      });
+    }
+
     console.error("ai-moderate error:", error);
     return new Response(
       JSON.stringify({

@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-02-20T09:19:07.555Z",
+  "summary": {
+    "high": 3,
+    "critical": 0,
+    "totalFindings": 3
+  },
+  "findings": [
+    "glob|high|unknown",
+    "minimatch|high|1113296",
+    "sucrase|high|unknown"
+  ]
+}

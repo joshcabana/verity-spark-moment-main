@@ -50,6 +50,16 @@ serve(async (req) => {
           { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 402 },
         );
       }
+
+      await supabase.rpc("log_runtime_alert_event", {
+        p_event_source: "spark-extend",
+        p_event_type: "rpc_exception",
+        p_severity: "error",
+        p_status_code: 500,
+        p_user_id: user.id,
+        p_details: { message: decrementError.message },
+      });
+
       throw decrementError;
     }
 
@@ -63,6 +73,15 @@ serve(async (req) => {
     );
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
+
+    await supabase.rpc("log_runtime_alert_event", {
+      p_event_source: "spark-extend",
+      p_event_type: "execution_error",
+      p_severity: "error",
+      p_status_code: 500,
+      p_details: { message: msg },
+    });
+
     return new Response(JSON.stringify({ error: msg }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,

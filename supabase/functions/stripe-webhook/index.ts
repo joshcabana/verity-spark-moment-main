@@ -204,6 +204,14 @@ serve(async (req) => {
         .eq("event_id", eventId);
     }
 
+    await supabase.rpc("log_runtime_alert_event", {
+      p_event_source: "stripe-webhook",
+      p_event_type: "webhook_failure",
+      p_severity: "error",
+      p_status_code: 400,
+      p_details: { message, eventId },
+    });
+
     return new Response(JSON.stringify({ error: message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 400,

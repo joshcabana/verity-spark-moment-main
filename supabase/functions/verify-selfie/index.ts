@@ -62,6 +62,8 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  let monitorClient: ReturnType<typeof createClient> | null = null;
+
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
@@ -78,6 +80,8 @@ serve(async (req) => {
       throw new Error("Supabase environment is not configured");
     }
 
+    monitorClient = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } });
+
     const authClient = createClient(supabaseUrl, anonKey, {
       global: { headers: { Authorization: authHeader } },
     });
@@ -88,6 +92,13 @@ serve(async (req) => {
     } = await authClient.auth.getUser();
 
     if (authError || !user) {
+      await monitorClient.rpc("log_runtime_alert_event", {
+        p_event_source: "verify-selfie",
+        p_event_type: "auth_rejected",
+        p_severity: "warning",
+        p_status_code: 401,
+        p_details: { reason: authError?.message ?? "No user from token" },
+      });
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -104,6 +115,14 @@ serve(async (req) => {
 
     const estimatedBytes = Math.ceil((imageBase64.length * 3) / 4);
     if (estimatedBytes > MAX_IMAGE_BYTES) {
+      await monitorClient.rpc("log_runtime_alert_event", {
+        p_event_source: "verify-selfie",
+        p_event_type: "payload_rejected",
+        p_severity: "warning",
+        p_status_code: 413,
+        p_user_id: user.id,
+        p_details: { estimatedBytes, maxBytes: MAX_IMAGE_BYTES },
+      });
       return new Response(JSON.stringify({ error: "Image too large. Maximum 5MB." }), {
         status: 413,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -124,6 +143,14 @@ serve(async (req) => {
     }
 
     if ((attemptsCount ?? 0) >= MAX_ATTEMPTS_PER_WINDOW) {
+      await monitorClient.rpc("log_runtime_alert_event", {
+        p_event_source: "verify-selfie",
+        p_event_type: "rate_limited",
+        p_severity: "warning",
+        p_status_code: 429,
+        p_user_id: user.id,
+        p_details: { attemptsCount, windowMinutes: WINDOW_MINUTES, maxAttempts: MAX_ATTEMPTS_PER_WINDOW },
+      });
       return new Response(
         JSON.stringify({
           error: `Rate limit exceeded. Try again in ${WINDOW_MINUTES} minutes.`,
@@ -261,6 +288,16 @@ You MUST respond using the verify_selfie tool.`,
       },
     );
   } catch (error) {
+    if (monitorClient) {
+      await monitorClient.rpc("log_runtime_alert_event", {
+        p_event_source: "verify-selfie",
+        p_event_type: "execution_error",
+        p_severity: "error",
+        p_status_code: 500,
+        p_details: { message: error instanceof Error ? error.message : String(error) },
+      });
+    }
+
     console.error("verify-selfie error:", error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),

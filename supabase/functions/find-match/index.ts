@@ -17,14 +17,20 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  let monitorClient: ReturnType<typeof createClient> | null = null;
+
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) throw new Error("No authorization header");
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
     if (!supabaseUrl || !anonKey) {
       throw new Error("Supabase environment is not configured");
+    }
+    if (supabaseUrl && serviceRoleKey) {
+      monitorClient = createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false } });
     }
 
     const userClient = createClient(supabaseUrl, anonKey, {
@@ -56,6 +62,17 @@ serve(async (req) => {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
+
+    if (monitorClient) {
+      await monitorClient.rpc("log_runtime_alert_event", {
+        p_event_source: "find-match",
+        p_event_type: "rpc_exception",
+        p_severity: "error",
+        p_status_code: 500,
+        p_details: { message },
+      });
+    }
+
     return new Response(JSON.stringify({ error: message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,

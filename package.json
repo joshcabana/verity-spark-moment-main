@@ -10,7 +10,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "audit:prod:check": "node scripts/check-prod-audit-baseline.mjs --baseline security/npm-audit-prod-baseline.json --report security/current-prod-audit.json",
+    "audit:prod:baseline:update": "node scripts/check-prod-audit-baseline.mjs --baseline security/npm-audit-prod-baseline.json --report security/current-prod-audit.json --update-baseline",
+    "alerts:runtime:check": "node scripts/check-runtime-alerts.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

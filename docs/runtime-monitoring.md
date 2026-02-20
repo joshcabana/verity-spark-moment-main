@@ -35,3 +35,23 @@ Current producers:
 - `spark-extend`
 - `submit-appeal`
 - `admin-moderation`
+
+## Deployment Secret Preflight
+
+Before any production rollout, run:
+
+```bash
+node scripts/check-supabase-secrets.mjs --project-ref <project_ref> --mode full
+```
+
+Required in `full` mode:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `LOVABLE_API_KEY`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+
+`scripts/deploy-supabase.sh` now runs this check automatically (`full` mode by default).
+Set `SUPABASE_SECRET_CHECK_MODE=core` only if you intentionally need a limited rollout.

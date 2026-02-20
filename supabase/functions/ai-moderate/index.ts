@@ -135,7 +135,18 @@ serve(async (req) => {
 
     const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!lovableApiKey) {
-      throw new Error("LOVABLE_API_KEY not configured");
+      await monitorClient.rpc("log_runtime_alert_event", {
+        p_event_source: "ai-moderate",
+        p_event_type: "misconfigured_env",
+        p_severity: "error",
+        p_status_code: 503,
+        p_user_id: user.id,
+        p_details: { missingSecret: "LOVABLE_API_KEY" },
+      });
+      return new Response(JSON.stringify({ error: "Moderation service is not configured" }), {
+        status: 503,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const supabase = createClient(supabaseUrl, serviceRoleKey);

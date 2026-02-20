@@ -2,6 +2,10 @@
 set -euo pipefail
 
 PROJECT_REF="${1:-dhtojyslsrnfopzwjbif}"
+SECRET_CHECK_MODE="${SUPABASE_SECRET_CHECK_MODE:-full}"
+
+echo "Checking Supabase secrets for project: ${PROJECT_REF} (mode: ${SECRET_CHECK_MODE})"
+node scripts/check-supabase-secrets.mjs --project-ref "${PROJECT_REF}" --mode "${SECRET_CHECK_MODE}"
 
 echo "Linking Supabase project: ${PROJECT_REF}"
 npx supabase link --project-ref "${PROJECT_REF}"

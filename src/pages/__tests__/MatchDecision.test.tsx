@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, useNavigate } from 'react-router-dom';
@@ -58,7 +58,7 @@ describe('MatchDecision Component', () => {
       </MemoryRouter>
     );
 
-    expect(mockNavigate).toHaveBeenCalledWith('/lobby', { replace: true });
+    expect(mockNavigate).toHaveBeenCalledWith('/lobby');
   });
 
   it('renders correctly with match session state', () => {
@@ -73,9 +73,9 @@ describe('MatchDecision Component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Did you feel a spark?')).toBeInTheDocument();
+    expect(screen.getByText(/Did you feel a spark/i)).toBeInTheDocument();
     expect(screen.getByText('Pass')).toBeInTheDocument();
-    expect(screen.getByText('Match')).toBeInTheDocument();
+    expect(screen.getByText('Spark!')).toBeInTheDocument();
   });
 
   it('calls decline RPC and routes back to lobby when "Pass" is tapped', async () => {
@@ -97,9 +97,10 @@ describe('MatchDecision Component', () => {
     const passButton = screen.getByText('Pass');
     await user.click(passButton);
 
-    expect(supabase.rpc).toHaveBeenCalledWith('rpc_submit_decision', {
+    expect(supabase.rpc).toHaveBeenCalledWith('rpc_submit_match_decision', {
       p_match_id: 'match-123',
-      p_is_spark: false
+      p_decision: 'pass',
+      p_note: null
     });
 
     // We expect it to redirect quickly on decline to spare ego

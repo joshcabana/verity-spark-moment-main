@@ -10,6 +10,7 @@ declare module "react-router-dom" {
   export const NavLink: any;
   export const Outlet: any;
   export const useLocation: any;
+  export const MemoryRouter: any;
 }
 
 declare module "framer-motion" {

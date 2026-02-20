@@ -6,6 +6,9 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const AI_DEFAULT_ENDPOINT = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_DEFAULT_MODEL = "google/gemini-3-flash-preview";
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -88,17 +91,19 @@ serve(async (req) => {
     if (appealError) throw appealError;
 
     // Use AI to auto-review the appeal for false positives
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (LOVABLE_API_KEY) {
+    const aiApiKey = Deno.env.get("AI_API_KEY") ?? Deno.env.get("LOVABLE_API_KEY");
+    if (aiApiKey) {
+      const aiEndpoint = Deno.env.get("AI_API_BASE_URL") ?? AI_DEFAULT_ENDPOINT;
+      const aiModel = Deno.env.get("AI_API_MODEL") ?? AI_DEFAULT_MODEL;
       try {
-        const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        const aiResponse = await fetch(aiEndpoint, {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            Authorization: `Bearer ${aiApiKey}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "google/gemini-3-flash-preview",
+            model: aiModel,
             messages: [
               {
                 role: "system",

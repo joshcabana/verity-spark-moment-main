@@ -50,7 +50,7 @@ Required in `full` mode:
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `LOVABLE_API_KEY`
+- `AI_API_KEY` (preferred) or `LOVABLE_API_KEY` (legacy alias)
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 

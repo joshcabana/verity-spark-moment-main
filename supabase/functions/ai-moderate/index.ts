@@ -7,6 +7,9 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const AI_DEFAULT_ENDPOINT = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_DEFAULT_MODEL = "google/gemini-3-flash-preview";
+
 type Tier = 0 | 1 | 2;
 type Action = "none" | "log" | "warning" | "terminate";
 
@@ -30,6 +33,12 @@ interface StoredMatch {
   id: string;
   user1_id: string;
   user2_id: string;
+}
+
+interface AiGatewayConfig {
+  apiKey: string;
+  endpoint: string;
+  model: string;
 }
 
 const parseToolResult = (raw: unknown): ModerationToolResult | null => {
@@ -63,11 +72,22 @@ const parseToolResult = (raw: unknown): ModerationToolResult | null => {
   return null;
 };
 
-const callLovableModeration = async (body: Record<string, unknown>, apiKey: string) => {
-  const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+const resolveAiGatewayConfig = (): AiGatewayConfig | null => {
+  const apiKey = Deno.env.get("AI_API_KEY") ?? Deno.env.get("LOVABLE_API_KEY");
+  if (!apiKey) return null;
+
+  return {
+    apiKey,
+    endpoint: Deno.env.get("AI_API_BASE_URL") ?? AI_DEFAULT_ENDPOINT,
+    model: Deno.env.get("AI_API_MODEL") ?? AI_DEFAULT_MODEL,
+  };
+};
+
+const callAiModeration = async (body: Record<string, unknown>, config: AiGatewayConfig) => {
+  const response = await fetch(config.endpoint, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${config.apiKey}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
@@ -133,15 +153,15 @@ serve(async (req) => {
       });
     }
 
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!lovableApiKey) {
+    const aiConfig = resolveAiGatewayConfig();
+    if (!aiConfig) {
       await monitorClient.rpc("log_runtime_alert_event", {
         p_event_source: "ai-moderate",
         p_event_type: "misconfigured_env",
         p_severity: "error",
         p_status_code: 503,
         p_user_id: user.id,
-        p_details: { missingSecret: "LOVABLE_API_KEY" },
+        p_details: { missingSecret: "AI_API_KEY|LOVABLE_API_KEY" },
       });
       return new Response(JSON.stringify({ error: "Moderation service is not configured" }), {
         status: 503,
@@ -190,9 +210,9 @@ serve(async (req) => {
     const startTime = Date.now();
 
     const videoResult = frameBase64
-      ? await callLovableModeration(
+      ? await callAiModeration(
           {
-            model: "google/gemini-3-flash-preview",
+            model: aiConfig.model,
             messages: [
               {
                 role: "system",
@@ -244,14 +264,14 @@ You MUST respond using the moderate_frame tool.`,
             ],
             tool_choice: { type: "function", function: { name: "moderate_frame" } },
           },
-          lovableApiKey,
+          aiConfig,
         )
       : null;
 
     const audioResult = audioBase64
-      ? await callLovableModeration(
+      ? await callAiModeration(
           {
-            model: "google/gemini-3-flash-preview",
+            model: aiConfig.model,
             messages: [
               {
                 role: "system",
@@ -308,7 +328,7 @@ Be conservative. Passionate discussion ≠ aggression. Respond using the moderat
             ],
             tool_choice: { type: "function", function: { name: "moderate_audio" } },
           },
-          lovableApiKey,
+          aiConfig,
         )
       : null;
 

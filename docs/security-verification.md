@@ -68,3 +68,5 @@ Notes:
   run `npx supabase db push --linked` to apply message compatibility trigger/constraint updates.
 - `supabase:secrets:check` returns `403`:
   your CLI account lacks access to the target project, or the target project ref is incorrect.
+- `supabase:secrets:check --mode full` fails on AI secret:
+  set `AI_API_KEY` (preferred) or legacy `LOVABLE_API_KEY`.

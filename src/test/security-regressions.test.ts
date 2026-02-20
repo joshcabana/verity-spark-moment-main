@@ -48,6 +48,16 @@ describe("security hardening regressions", () => {
     expect(source).toContain("Image too large. Maximum 5MB.");
   });
 
+  it("supports AI secret aliasing for moderation and selfie services", () => {
+    const moderate = readRepoFile("supabase/functions/ai-moderate/index.ts");
+    const selfie = readRepoFile("supabase/functions/verify-selfie/index.ts");
+    const secretCheck = readRepoFile("scripts/check-supabase-secrets.mjs");
+
+    expect(moderate).toContain('Deno.env.get("AI_API_KEY") ?? Deno.env.get("LOVABLE_API_KEY")');
+    expect(selfie).toContain('Deno.env.get("AI_API_KEY") ?? Deno.env.get("LOVABLE_API_KEY")');
+    expect(secretCheck).toContain("AI_API_KEY (or LOVABLE_API_KEY)");
+  });
+
   it("enforces explicit auth guards across all protected edge functions", () => {
     const guardedFunctions = [
       "supabase/functions/ai-moderate/index.ts",

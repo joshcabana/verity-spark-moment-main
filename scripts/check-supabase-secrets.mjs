@@ -9,9 +9,13 @@ const REQUIRED_CORE_SECRETS = [
 ];
 
 const REQUIRED_FEATURE_SECRETS = [
-  "LOVABLE_API_KEY",
   "STRIPE_SECRET_KEY",
   "STRIPE_WEBHOOK_SECRET",
+];
+
+const AI_SECRET_ALIASES = [
+  "AI_API_KEY",
+  "LOVABLE_API_KEY",
 ];
 
 const parseArgs = (argv) => {
@@ -87,12 +91,20 @@ const existing = new Set(
   Array.isArray(parsedSecrets) ? parsedSecrets.map((entry) => entry?.name).filter(Boolean) : [],
 );
 
+const hasAiSecret = AI_SECRET_ALIASES.some((name) => existing.has(name));
 const required = mode === "core"
   ? REQUIRED_CORE_SECRETS
   : [...REQUIRED_CORE_SECRETS, ...REQUIRED_FEATURE_SECRETS];
 
 const missingRequired = required.filter((name) => !existing.has(name));
-const missingFeature = REQUIRED_FEATURE_SECRETS.filter((name) => !existing.has(name));
+if (mode === "full" && !hasAiSecret) {
+  missingRequired.push("AI_API_KEY (or LOVABLE_API_KEY)");
+}
+
+const missingFeature = [
+  ...REQUIRED_FEATURE_SECRETS.filter((name) => !existing.has(name)),
+  ...(hasAiSecret ? [] : ["AI_API_KEY (or LOVABLE_API_KEY)"]),
+];
 
 if (missingRequired.length > 0) {
   console.error(`Missing required Supabase secrets for project ${projectRef}:`);
@@ -103,6 +115,10 @@ if (missingRequired.length > 0) {
 }
 
 console.log(`Supabase secret preflight passed for project ${projectRef} (mode: ${mode}).`);
+
+if (existing.has("LOVABLE_API_KEY") && !existing.has("AI_API_KEY")) {
+  console.warn("Using legacy AI secret name LOVABLE_API_KEY. Consider setting AI_API_KEY for portability.");
+}
 
 if (mode === "core" && missingFeature.length > 0) {
   console.warn("Feature secrets are missing (AI/Stripe flows will fail until configured):");

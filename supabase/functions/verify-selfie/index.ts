@@ -7,6 +7,9 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const AI_DEFAULT_ENDPOINT = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_DEFAULT_MODEL = "google/gemini-3-flash-preview";
+
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const MAX_ATTEMPTS_PER_WINDOW = 5;
 const WINDOW_MINUTES = 10;
@@ -166,15 +169,15 @@ serve(async (req) => {
       user_id: user.id,
     });
 
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!lovableApiKey) {
+    const aiApiKey = Deno.env.get("AI_API_KEY") ?? Deno.env.get("LOVABLE_API_KEY");
+    if (!aiApiKey) {
       await monitorClient.rpc("log_runtime_alert_event", {
         p_event_source: "verify-selfie",
         p_event_type: "misconfigured_env",
         p_severity: "error",
         p_status_code: 503,
         p_user_id: user.id,
-        p_details: { missingSecret: "LOVABLE_API_KEY" },
+        p_details: { missingSecret: "AI_API_KEY|LOVABLE_API_KEY" },
       });
       return new Response(JSON.stringify({ error: "Selfie verification service is not configured" }), {
         status: 503,
@@ -182,14 +185,17 @@ serve(async (req) => {
       });
     }
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiEndpoint = Deno.env.get("AI_API_BASE_URL") ?? AI_DEFAULT_ENDPOINT;
+    const aiModel = Deno.env.get("AI_API_MODEL") ?? AI_DEFAULT_MODEL;
+
+    const response = await fetch(aiEndpoint, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${lovableApiKey}`,
+        Authorization: `Bearer ${aiApiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: aiModel,
         messages: [
           {
             role: "system",

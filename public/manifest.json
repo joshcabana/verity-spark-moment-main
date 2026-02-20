@@ -1,0 +1,26 @@
+{
+  "name": "Verity — Real Eyes. Real Spark.",
+  "short_name": "Verity",
+  "description": "The anti-dating-app dating app. 45 seconds of anonymous live video. No profiles. No swipes. Just you, them, and whether it sparks.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#c9a96e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/verity-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/verity-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "lifestyle"],
+  "lang": "en-AU"
+}

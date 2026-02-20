@@ -1,0 +1,34 @@
+project_id = "dhtojyslsrnfopzwjbif"
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.agora-token]
+verify_jwt = true
+
+[functions.check-subscription]
+verify_jwt = true
+
+[functions.create-checkout]
+verify_jwt = true
+
+[functions.customer-portal]
+verify_jwt = true
+
+[functions.find-match]
+verify_jwt = true
+
+[functions.spark-extend]
+verify_jwt = true
+
+[functions.verify-selfie]
+verify_jwt = true
+
+[functions.ai-moderate]
+verify_jwt = true
+
+[functions.submit-appeal]
+verify_jwt = true
+
+[functions.admin-moderation]
+verify_jwt = true

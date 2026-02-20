@@ -1,3 +1,4 @@
+// cSpell:ignore supabase
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";

@@ -18,7 +18,7 @@ if (typeof window !== "undefined") {
   class IntersectionObserver {
     root = null;
     rootMargin = "";
-    thresholds = [];
+    thresholds: number[] = [];
     disconnect() {}
     observe() {}
     takeRecords() { return []; }
@@ -29,15 +29,9 @@ if (typeof window !== "undefined") {
     configurable: true,
     value: IntersectionObserver,
   });
-
-  const localStorageMock = {
-    getItem: () => null,
-    setItem: () => {},
-    removeItem: () => {},
-    clear: () => {},
-  };
-  Object.defineProperty(window, "localStorage", {
-    value: localStorageMock,
+  Object.defineProperty(global, "IntersectionObserver", {
     writable: true,
+    configurable: true,
+    value: IntersectionObserver,
   });
 }

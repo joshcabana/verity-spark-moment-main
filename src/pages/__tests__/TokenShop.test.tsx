@@ -11,7 +11,7 @@ vi.mock('@/hooks/useAuth', () => ({
 
 describe('TokenShop Component', () => {
   it('renders token balance correctly', () => {
-    (useAuth as any).mockReturnValue({
+    (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({
       user: { id: 'test-user' },
       tokens: { balance: 42 },
       subscribed: false,
@@ -28,7 +28,7 @@ describe('TokenShop Component', () => {
   });
 
   it('displays Verity Pass as active when subscribed', () => {
-    (useAuth as any).mockReturnValue({
+    (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({
       user: { id: 'test-user' },
       tokens: { balance: 10 },
       subscribed: true,
@@ -44,7 +44,7 @@ describe('TokenShop Component', () => {
   });
 
   it('displays Verity Pass purchase option when not subscribed', () => {
-    (useAuth as any).mockReturnValue({
+    (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({
       user: { id: 'test-user' },
       tokens: { balance: 10 },
       subscribed: false,

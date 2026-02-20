@@ -12,6 +12,28 @@ interface FindMatchRequest {
   isWarmup?: boolean;
 }
 
+const errorMessage = (error: unknown): string => {
+  if (error instanceof Error && error.message) return error.message;
+
+  if (typeof error === "object" && error !== null) {
+    const maybeError = error as { message?: unknown; details?: unknown; code?: unknown };
+    if (typeof maybeError.message === "string" && maybeError.message.length > 0) {
+      return maybeError.message;
+    }
+
+    try {
+      return JSON.stringify({
+        code: maybeError.code ?? null,
+        details: maybeError.details ?? null,
+      });
+    } catch {
+      return "[unknown error object]";
+    }
+  }
+
+  return String(error);
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -87,7 +109,7 @@ serve(async (req) => {
       status: 200,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = errorMessage(error);
 
     if (monitorClient) {
       await monitorClient.rpc("log_runtime_alert_event", {

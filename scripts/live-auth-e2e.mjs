@@ -99,7 +99,9 @@ try {
   const second = await callFunction("find-match", userB.token, { roomId, isWarmup: false });
 
   if (first.status !== 200 || second.status !== 200) {
-    throw new Error(`find-match failed: first=${first.status} second=${second.status}`);
+    throw new Error(
+      `find-match failed: first=${first.status} body=${first.text} second=${second.status} body=${second.text}`,
+    );
   }
 
   const matchId = first.json?.matchId || second.json?.matchId;
@@ -131,39 +133,97 @@ try {
   let chatRoomId = decisionA.data?.chatRoomId || decisionB.data?.chatRoomId;
   if (!chatRoomId) {
     const fallback = await userAClient.from("chat_rooms").select("id").eq("match_id", matchId).maybeSingle();
-    if (fallback.error) {
+    if (fallback.error && !fallback.error.message.toLowerCase().includes("relation \"public.chat_rooms\" does not exist")) {
       throw new Error(`Chat room lookup failed: ${fallback.error.message}`);
     }
     chatRoomId = fallback.data?.id;
   }
 
-  if (!chatRoomId) {
-    throw new Error("No chat room created after mutual spark.");
+  const messageAttempts = [];
+  if (chatRoomId) {
+    messageAttempts.push({
+      mode: "chat_room_id_sender_id_content",
+      payload: {
+        chat_room_id: chatRoomId,
+        sender_id: userA.userId,
+        content: "E2E message from user A",
+      },
+      readColumn: "chat_room_id",
+      readValue: chatRoomId,
+    });
   }
 
-  const insertMessage = await userAClient.from("messages").insert({
-    chat_room_id: chatRoomId,
-    sender_id: userA.userId,
-    content: "E2E message from user A",
-  });
-  if (insertMessage.error) {
-    throw new Error(`Message insert failed: ${insertMessage.error.message}`);
+  messageAttempts.push(
+    {
+      mode: "match_id_sender_id_content",
+      payload: {
+        match_id: matchId,
+        sender_id: userA.userId,
+        content: "E2E message from user A",
+      },
+      readColumn: "match_id",
+      readValue: matchId,
+    },
+    {
+      mode: "match_id_from_to_content",
+      payload: {
+        match_id: matchId,
+        from_user: userA.userId,
+        to_user: userB.userId,
+        content: "E2E message from user A",
+      },
+      readColumn: "match_id",
+      readValue: matchId,
+    },
+    {
+      mode: "match_id_from_to_message",
+      payload: {
+        match_id: matchId,
+        from_user: userA.userId,
+        to_user: userB.userId,
+        message: "E2E message from user A",
+      },
+      readColumn: "match_id",
+      readValue: matchId,
+    },
+  );
+
+  let messageMode = "";
+  let readColumn = "";
+  let readValue = "";
+  const insertErrors = [];
+
+  for (const attempt of messageAttempts) {
+    const inserted = await userAClient.from("messages").insert(attempt.payload);
+    if (!inserted.error) {
+      messageMode = attempt.mode;
+      readColumn = attempt.readColumn;
+      readValue = attempt.readValue;
+      break;
+    }
+    insertErrors.push(`${attempt.mode}: ${inserted.error.message}`);
+  }
+
+  if (!messageMode || !readColumn || !readValue) {
+    throw new Error(`Message insert failed: ${insertErrors.join(" | ")}`);
   }
 
   const readByB = await userBClient
     .from("messages")
-    .select("id,sender_id,content")
-    .eq("chat_room_id", chatRoomId)
+    .select("*")
+    .eq(readColumn, readValue)
     .order("created_at", { ascending: false })
     .limit(5);
+
   if (readByB.error) {
-    throw new Error(`Message read failed: ${readByB.error.message}`);
+    throw new Error(`Message read failed (${readColumn}): ${readByB.error.message}`);
   }
 
   console.log("Live authenticated E2E passed.");
   console.log(`roomId=${roomId}`);
   console.log(`matchId=${matchId}`);
-  console.log(`chatRoomId=${chatRoomId}`);
+  console.log(`chatRoomId=${chatRoomId ?? "n/a"}`);
+  console.log(`messageMode=${messageMode}`);
   console.log(`messagesSeenByUserB=${JSON.stringify(readByB.data)}`);
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));

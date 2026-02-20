@@ -43,6 +43,7 @@ declare module "lucide-react" {
   export const Home: any;
   export const Flame: any;
   export const Coins: any;
+  export const RefreshCw: any;
   export const Menu: any;
   export const User: any;
   export const Settings: any;

@@ -40,7 +40,7 @@ describe('TokenShop Component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Active Pass')).toBeInTheDocument();
+    expect(screen.getByText('Manage Subscription')).toBeInTheDocument();
   });
 
   it('displays Verity Pass purchase option when not subscribed', () => {
@@ -56,6 +56,6 @@ describe('TokenShop Component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Get Verity Pass')).toBeInTheDocument();
+    expect(screen.getByText('Subscribe to Verity Pass')).toBeInTheDocument();
   });
 });

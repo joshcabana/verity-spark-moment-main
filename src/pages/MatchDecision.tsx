@@ -5,6 +5,7 @@ import { Heart, X, Sparkles, Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
+import { readMatchSession } from "@/lib/match-session";
 
 interface DecisionResponse {
   awaitingOther?: boolean;
@@ -58,21 +59,13 @@ const MatchDecision = () => {
   }, []);
 
   useEffect(() => {
-    const raw = sessionStorage.getItem("verity_match");
-    if (!raw) {
+    const session = readMatchSession();
+    if (!session) {
       toast({ title: "Match session missing", description: "Starting a new session.", variant: "destructive" });
       navigate("/lobby");
       return;
     }
-
-    const parsed = JSON.parse(raw) as { matchId?: string };
-    if (!parsed.matchId) {
-      toast({ title: "Match session invalid", description: "Please reconnect from lobby.", variant: "destructive" });
-      navigate("/lobby");
-      return;
-    }
-
-    setMatchId(parsed.matchId);
+    setMatchId(session.matchId);
   }, [navigate]);
 
   useEffect(() => {

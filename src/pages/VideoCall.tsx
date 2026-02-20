@@ -16,23 +16,7 @@ import ModerationWarning from "@/components/ModerationWarning";
 import CallControls from "@/components/CallControls";
 import TimerRing from "@/components/TimerRing";
 import SafeExitModal from "@/components/SafeExitModal";
-
-interface MatchSession {
-  matchId?: string;
-  matchedWith?: string;
-  roomId?: string;
-  queueId?: string;
-}
-
-const parseMatchSession = (): MatchSession => {
-  const raw = sessionStorage.getItem("verity_match");
-  if (!raw) return {};
-  try {
-    return JSON.parse(raw) as MatchSession;
-  } catch {
-    return {};
-  }
-};
+import { readMatchSession } from "@/lib/match-session";
 
 const VideoCall = () => {
   const [timeLeft, setTimeLeft] = useState(45);
@@ -56,8 +40,8 @@ const VideoCall = () => {
   });
 
   // Get match info
-  const matchInfo = useRef<MatchSession>(parseMatchSession());
-  const isSessionValid = Boolean(matchInfo.current.matchId && matchInfo.current.matchedWith);
+  const matchInfo = useRef(readMatchSession());
+  const isSessionValid = Boolean(matchInfo.current);
 
   useEffect(() => {
     if (!isSessionValid) {
@@ -68,8 +52,8 @@ const VideoCall = () => {
 
   // Live AI moderation
   const { startModeration, stopModeration, warningVisible, setWarningVisible, lastResult } = useModeration({
-    matchId: matchInfo.current.matchId,
-    victimId: matchInfo.current.matchedWith,
+    matchId: matchInfo.current?.matchId,
+    victimId: matchInfo.current?.matchedWith,
     onWarning: () => {
       // Warning is shown via warningVisible state
     },
@@ -90,7 +74,7 @@ const VideoCall = () => {
 
   // Join Agora channel
   useEffect(() => {
-    if (!matchInfo.current.matchedWith || !user) return;
+    if (!matchInfo.current?.matchedWith || !user) return;
 
     const { matchId, matchedWith } = matchInfo.current;
     const channelName = matchId || [user.id, matchedWith].sort().join("-").slice(0, 48);

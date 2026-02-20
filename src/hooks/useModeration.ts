@@ -18,6 +18,8 @@ interface UseModerationOptions {
 
 export const useModeration = ({ matchId, victimId, onWarning, onTerminate }: UseModerationOptions) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const initialTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const warningTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const videoElementRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [lastResult, setLastResult] = useState<ModerationResult | null>(null);
@@ -59,8 +61,11 @@ export const useModeration = ({ matchId, victimId, onWarning, onTerminate }: Use
       if (result.action === "warning") {
         setWarningVisible(true);
         onWarning?.(result);
-        // Auto-hide warning after 5s
-        setTimeout(() => setWarningVisible(false), 5000);
+        if (warningTimeoutRef.current) {
+          clearTimeout(warningTimeoutRef.current);
+        }
+        // Auto-hide warning after 5s.
+        warningTimeoutRef.current = setTimeout(() => setWarningVisible(false), 5000);
       } else if (result.action === "terminate") {
         onTerminate?.(result);
       }
@@ -72,6 +77,13 @@ export const useModeration = ({ matchId, victimId, onWarning, onTerminate }: Use
   }, [captureFrame, matchId, victimId, onWarning, onTerminate]);
 
   const startModeration = useCallback((videoElement: HTMLVideoElement) => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    if (initialTimeoutRef.current) {
+      clearTimeout(initialTimeoutRef.current);
+    }
+
     // Create a hidden canvas for frame capture
     if (!canvasRef.current) {
       canvasRef.current = document.createElement("canvas");
@@ -80,7 +92,7 @@ export const useModeration = ({ matchId, victimId, onWarning, onTerminate }: Use
 
     // Sample every 5 seconds (spec says 5-10 fps but we use lower for cost)
     // First check at 3s, then every 8s
-    setTimeout(() => moderateFrame(), 3000);
+    initialTimeoutRef.current = setTimeout(() => moderateFrame(), 3000);
     intervalRef.current = setInterval(moderateFrame, 8000);
   }, [moderateFrame]);
 
@@ -88,6 +100,14 @@ export const useModeration = ({ matchId, victimId, onWarning, onTerminate }: Use
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
+    }
+    if (initialTimeoutRef.current) {
+      clearTimeout(initialTimeoutRef.current);
+      initialTimeoutRef.current = null;
+    }
+    if (warningTimeoutRef.current) {
+      clearTimeout(warningTimeoutRef.current);
+      warningTimeoutRef.current = null;
     }
   }, []);
 

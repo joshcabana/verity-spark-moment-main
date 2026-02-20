@@ -6,6 +6,8 @@ import AppNav from "@/components/AppNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
+import { writeMatchSession } from "@/lib/match-session";
+import type { VerityMatchSession } from "@/lib/match-session";
 
 const themedRooms = [
   { id: "general", name: "Open Room", icon: Heart, desc: "Anyone, anytime", color: "text-primary" },
@@ -127,10 +129,10 @@ const Lobby = () => {
   }, [user]);
 
   const commitMatchAndNavigate = useCallback(
-    (payload: { matchId: string; matchedWith: string; roomId: string; queueId: string }) => {
+    (payload: VerityMatchSession) => {
       queueIdRef.current = null;
       clearSearchWatchers();
-      sessionStorage.setItem("verity_match", JSON.stringify(payload));
+      writeMatchSession(payload);
       navigate("/call");
     },
     [clearSearchWatchers, navigate],

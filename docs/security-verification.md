@@ -2,6 +2,16 @@
 
 Use these commands to verify live security posture against a deployed Supabase project.
 
+## 0) Deployment Target Preflight
+
+Run this before deploy/verification to avoid cross-project mistakes:
+
+```bash
+npm run supabase:target:check -- --project-ref <project-ref>
+```
+
+If this fails, your local `.env`/`supabase/config.toml` points to a different project than your deployment target.
+
 ## 1) Unauthenticated / Invalid JWT Smoke Tests
 
 This checks all protected edge functions reject unauthenticated callers with `401`, and checks that unsigned Stripe webhooks are rejected.
@@ -48,3 +58,13 @@ Notes:
 
 - Users must be confirmed accounts.
 - If email confirmation is enabled, create/confirm these users via dashboard first.
+- On legacy projects, users may also require seeded `profiles` rows before matchmaking RPCs succeed.
+
+## Troubleshooting
+
+- `find-match` returns `500` with `matches_check`:
+  run `npx supabase db push --linked` to apply legacy constraint normalization migrations.
+- Message insert fails on `match_id` or `from_user` NOT NULL:
+  run `npx supabase db push --linked` to apply message compatibility trigger/constraint updates.
+- `supabase:secrets:check` returns `403`:
+  your CLI account lacks access to the target project, or the target project ref is incorrect.

@@ -41,6 +41,7 @@ Current producers:
 Before any production rollout, run:
 
 ```bash
+node scripts/check-supabase-target.mjs --project-ref <project_ref>
 node scripts/check-supabase-secrets.mjs --project-ref <project_ref> --mode full
 ```
 
@@ -53,5 +54,5 @@ Required in `full` mode:
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 
-`scripts/deploy-supabase.sh` now runs this check automatically (`full` mode by default).
+`scripts/deploy-supabase.sh` now runs both target-alignment + secrets preflight checks automatically (`full` mode by default).
 Set `SUPABASE_SECRET_CHECK_MODE=core` only if you intentionally need a limited rollout.

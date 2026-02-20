@@ -63,6 +63,14 @@ try {
   if (error instanceof Error && "stderr" in error) {
     const stderr = String(error.stderr ?? "").trim();
     if (stderr) console.error(stderr);
+    if (stderr.includes("status 403")) {
+      console.error(
+        "Supabase API returned 403. This usually means the CLI account does not have access to this project ref, or the wrong project ref is being targeted.",
+      );
+      console.error(
+        `Verify project ref (${projectRef}) and role permissions in Supabase Dashboard (Project Settings > Members / Access Control).`,
+      );
+    }
   }
   process.exit(1);
 }

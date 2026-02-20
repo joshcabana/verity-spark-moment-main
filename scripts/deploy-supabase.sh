@@ -3,6 +3,10 @@ set -euo pipefail
 
 PROJECT_REF="${1:-dhtojyslsrnfopzwjbif}"
 SECRET_CHECK_MODE="${SUPABASE_SECRET_CHECK_MODE:-full}"
+ENV_FILE="${SUPABASE_ENV_FILE:-.env}"
+
+echo "Checking Supabase target alignment for project: ${PROJECT_REF}"
+node scripts/check-supabase-target.mjs --project-ref "${PROJECT_REF}" --env-file "${ENV_FILE}"
 
 echo "Checking Supabase secrets for project: ${PROJECT_REF} (mode: ${SECRET_CHECK_MODE})"
 node scripts/check-supabase-secrets.mjs --project-ref "${PROJECT_REF}" --mode "${SECRET_CHECK_MODE}"

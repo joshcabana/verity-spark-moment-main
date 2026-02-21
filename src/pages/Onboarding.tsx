@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import SelfieCapture from "@/components/SelfieCapture";
 import PhoneVerification from "@/components/PhoneVerification";
+import { trackEvent } from "@/lib/analytics";
 
 const genderOptions = [
   { value: "male", label: "Man" },
@@ -37,6 +38,7 @@ const Onboarding = () => {
   const handleComplete = async () => {
     if (!user) return;
     setLoading(true);
+    trackEvent("onboarding_completed", { withSelfie: selfieVerified });
 
     const updates: Record<string, string | boolean> = {
       display_name: displayName,
@@ -69,7 +71,7 @@ const Onboarding = () => {
       <h2 className="font-display text-3xl font-bold text-foreground mb-3">Welcome to Verity</h2>
       <p className="text-muted-foreground mb-2">No profiles. No swiping. No bios upfront.</p>
       <p className="text-muted-foreground text-sm mb-8">Just 45 seconds of real connection — face to face.</p>
-      <button onClick={() => setStep(1)} className="w-full bg-gradient-gold text-primary-foreground font-semibold py-4 rounded-full glow-gold flex items-center justify-center gap-2">
+      <button onClick={() => { trackEvent("onboarding_started"); setStep(1); }} className="w-full bg-gradient-gold text-primary-foreground font-semibold py-4 rounded-full glow-gold flex items-center justify-center gap-2">
         Let's Go <ArrowRight className="w-4 h-4" />
       </button>
     </motion.div>,

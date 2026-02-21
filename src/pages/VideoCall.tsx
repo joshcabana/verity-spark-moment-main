@@ -17,6 +17,7 @@ import CallControls from "@/components/CallControls";
 import TimerRing from "@/components/TimerRing";
 import SafeExitModal from "@/components/SafeExitModal";
 import { readMatchSession } from "@/lib/match-session";
+import { trackEvent } from "@/lib/analytics";
 
 const VideoCall = () => {
   const [timeLeft, setTimeLeft] = useState(45);
@@ -192,6 +193,7 @@ const VideoCall = () => {
   }, [timeLeft, navigate, cleanup, isSessionValid, connectionState]);
 
   const handleSafeExit = useCallback(() => {
+    trackEvent("safe_exit_used");
     cleanup();
     navigate("/lobby");
   }, [navigate, cleanup]);
@@ -219,6 +221,7 @@ const VideoCall = () => {
       const { data, error } = await supabase.functions.invoke("spark-extend");
       if (error) throw error;
       if (data?.success) {
+        trackEvent("call_extended", { freeExtension: !!data.freeExtension });
         setTimeLeft((t) => t + data.extraSeconds);
         setExtended(true);
         const description = data.freeExtension

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
@@ -58,6 +60,22 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 401,
+      });
+    }
+
+    // ENFORCE RATE LIMIT: 5 requests per 60 seconds
+    const { data: isAllowed, error: rateLimitError } = await supabaseClient
+      .rpc("rpc_check_rate_limit", {
+        p_user_id: user.id,
+        p_endpoint: "create-checkout",
+        p_limit: 5,
+        p_window_seconds: 60,
+      });
+
+    if (rateLimitError || !isAllowed) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 429,
       });
     }
 

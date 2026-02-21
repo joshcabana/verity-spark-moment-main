@@ -53,6 +53,22 @@ serve(async (req) => {
       });
     }
 
+    // ENFORCE RATE LIMIT: 10 requests per 60 seconds
+    const { data: isAllowed, error: rateLimitError } = await supabaseClient
+      .rpc("rpc_check_rate_limit", {
+        p_user_id: user.id,
+        p_endpoint: "agora-token",
+        p_limit: 10,
+        p_window_seconds: 60,
+      });
+
+    if (rateLimitError || !isAllowed) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 429,
+      });
+    }
+
     // ENFORCE SECURITY: Support both 1v1 match UUIDs and circle_<uuid> rooms
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     let isAuthorized = false;

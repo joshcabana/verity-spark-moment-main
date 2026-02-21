@@ -6,7 +6,7 @@ import { Heart, X, Sparkles, Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
-import { readMatchSession } from "@/lib/match-session";
+import { clearMatchSession, readMatchSession } from "@/lib/match-session";
 
 interface DecisionResponse {
   awaitingOther?: boolean;
@@ -26,12 +26,13 @@ const toDecisionResponse = (value: unknown): DecisionResponse => {
 };
 
 const MatchDecision = () => {
+  const sessionRef = useRef(readMatchSession());
   const [decision, setDecision] = useState<"spark" | "pass" | null>(null);
   const [showReaction, setShowReaction] = useState(false);
   const [reactionNote, setReactionNote] = useState("");
   const [showResult, setShowResult] = useState(false);
   const [matchResult, setMatchResult] = useState<"mutual" | "no-match" | null>(null);
-  const [matchId, setMatchId] = useState<string | null>(null);
+  const [matchId] = useState<string | null>(sessionRef.current?.matchId ?? null);
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -60,13 +61,11 @@ const MatchDecision = () => {
   }, []);
 
   useEffect(() => {
-    const session = readMatchSession();
+    const session = sessionRef.current;
     if (!session) {
       toast({ title: "Match session missing", description: "Starting a new session.", variant: "destructive" });
       navigate("/lobby");
-      return;
     }
-    setMatchId(session.matchId);
   }, [navigate]);
 
   useEffect(() => {
@@ -118,6 +117,7 @@ const MatchDecision = () => {
     timeoutRef.current = window.setTimeout(() => {
       clearTimersAndChannel();
       if (!showResultRef.current) {
+        clearMatchSession();
         navigate("/lobby");
       }
     }, 30000);
@@ -140,10 +140,6 @@ const MatchDecision = () => {
       }
       setShowResult(true);
       setMatchResult("no-match");
-      if (navTimerRef.current !== null) {
-        window.clearTimeout(navTimerRef.current);
-      }
-      navTimerRef.current = window.setTimeout(() => navigate("/lobby"), 1500);
     })();
   };
 
@@ -164,7 +160,10 @@ const MatchDecision = () => {
     }
 
     if (matchResult === "no-match") {
-      navTimerRef.current = window.setTimeout(() => navigate("/lobby"), 2000);
+      navTimerRef.current = window.setTimeout(() => {
+        clearMatchSession();
+        navigate("/lobby");
+      }, 2000);
     }
   }, [showResult, matchResult, matchId, navigate]);
 
@@ -191,6 +190,7 @@ const MatchDecision = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => handleDecision("pass")}
+                aria-label="Pass"
                 className="w-20 h-20 rounded-full bg-secondary border border-border flex items-center justify-center transition-colors hover:bg-destructive/10 hover:border-destructive/30"
               >
                 <X className="w-8 h-8 text-muted-foreground" />
@@ -200,6 +200,7 @@ const MatchDecision = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => handleDecision("spark")}
+                aria-label="Spark!"
                 className="w-24 h-24 rounded-full bg-gradient-gold glow-gold flex items-center justify-center"
               >
                 <Heart className="w-10 h-10 text-primary-foreground" />

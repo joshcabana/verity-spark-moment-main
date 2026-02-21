@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Flame, MessageCircle, Clock, Sparkles, Lock, Users, CheckCircle } from "lucide-react";
+import { Flame, MessageCircle, Clock, Sparkles, Lock, Users, CheckCircle, BarChart3 } from "lucide-react";
 import AppNav from "@/components/AppNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -64,6 +64,13 @@ const SparkHistory = () => {
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="font-display text-3xl font-bold text-gradient-gold mb-1">Spark History</h1>
           <p className="text-muted-foreground text-sm">Your mutual connections. Only sparks show here.</p>
+          <button
+            onClick={() => navigate("/analytics")}
+            className="mt-2 flex items-center gap-1.5 text-primary text-xs font-medium hover:underline"
+          >
+            <BarChart3 className="w-3.5 h-3.5" />
+            View Spark Analytics
+          </button>
         </motion.div>
 
         {/* Verity Circle */}

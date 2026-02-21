@@ -75,6 +75,7 @@ const MatchDecision = () => {
 
   const submitDecision = async (choice: "spark" | "pass", note?: string): Promise<boolean> => {
     if (!user || !matchId) return false;
+    trackEvent("match_decision_made", { decision: choice, hasNote: !!note });
 
     const { data, error } = await supabase.rpc("rpc_submit_match_decision", {
       p_match_id: matchId,

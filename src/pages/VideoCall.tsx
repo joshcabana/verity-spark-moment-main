@@ -177,6 +177,7 @@ const VideoCall = () => {
     init();
 
     return () => { cleanup(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, startModeration, cleanup]);
 
   // Timer countdown — paused during reconnection

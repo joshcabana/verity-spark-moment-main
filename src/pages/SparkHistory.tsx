@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Flame, MessageCircle, Clock, Sparkles, Lock, Users, CheckCircle } from "lucide-react";
+import { Flame, MessageCircle, Clock, Sparkles, Lock, Users, CheckCircle, Video } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import AppNav from "@/components/AppNav";
 import { supabase } from "@/integrations/supabase/client";
@@ -83,15 +83,13 @@ const SparkHistory = () => {
                 <div className="text-xs text-verity-success font-medium">Unlocked! {sparks.length} mutual sparks</div>
               </div>
             </div>
-            <div className="bg-verity-success/5 border border-verity-success/15 rounded-xl p-3">
-              <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="w-4 h-4 text-verity-success shrink-0" />
-                <span className="text-sm font-medium text-foreground">Group video rooms — coming soon</span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                You've earned access to Verity Circle. Group calls with your mutual connections will be available in the next update.
-              </p>
-            </div>
+            <button
+              onClick={() => navigate(`/circle/${user?.id}`)}
+              className="w-full bg-verity-success/10 text-verity-success font-medium py-3 rounded-xl border border-verity-success/30 flex items-center justify-center gap-2 hover:bg-verity-success/20 transition-colors"
+            >
+              <Video className="w-4 h-4" />
+              Enter My Circle Room
+            </button>
           </motion.div>
         ) : (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
@@ -147,13 +145,22 @@ const SparkHistory = () => {
                   </div>
                 )}
 
-                <button
-                  onClick={() => navigate(`/chat/${spark.id}`)}
-                  className="mt-3 w-full flex items-center justify-center gap-2 text-primary text-sm font-medium py-2 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  Open Chat
-                </button>
+                <div className="flex items-center gap-2 mt-3">
+                  <button
+                    onClick={() => navigate(`/chat/${spark.id}`)}
+                    className="flex-1 flex items-center justify-center gap-2 text-primary text-sm font-medium py-2 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Chat
+                  </button>
+                  <button
+                    onClick={() => navigate(`/circle/${spark.user1_id === user?.id ? spark.user2_id : spark.user1_id}`)}
+                    className="flex-1 flex items-center justify-center gap-2 text-verity-success text-sm font-medium py-2 rounded-lg bg-verity-success/5 border border-verity-success/20 hover:bg-verity-success/10 transition-colors"
+                  >
+                    <Video className="w-4 h-4" />
+                    Join Circle
+                  </button>
+                </div>
               </motion.div>
             );
           })}

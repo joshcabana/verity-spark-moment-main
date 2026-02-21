@@ -53,24 +53,58 @@ serve(async (req) => {
       });
     }
 
-    // ENFORCE SECURITY: verify the user is a participant in this exact match
+    // ENFORCE SECURITY: Support both 1v1 match UUIDs and circle_<uuid> rooms
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(channelName)) {
-      return new Response(JSON.stringify({ error: "Invalid channelName format (must be matchId)" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 400,
-      });
+    let isAuthorized = false;
+
+    if (channelName.startsWith("circle_")) {
+      const targetUserId = channelName.replace("circle_", "");
+      if (!uuidRegex.test(targetUserId)) {
+        return new Response(JSON.stringify({ error: "Invalid Circle format (must be circle_uuid)" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        });
+      }
+
+      // Owner joining their own circle
+      if (user.id === targetUserId) {
+        isAuthorized = true;
+      } else {
+        // Guest joining: must have a mutual match with the circle owner
+        const { data: mutualMatch, error: mutualError } = await supabaseClient
+          .from("matches")
+          .select("id")
+          .eq("is_mutual", true)
+          .or(`and(user1_id.eq.${user.id},user2_id.eq.${targetUserId}),and(user1_id.eq.${targetUserId},user2_id.eq.${user.id})`)
+          .maybeSingle();
+
+        if (!mutualError && mutualMatch) {
+          isAuthorized = true;
+        }
+      }
+    } else {
+      // Standard 1v1 Match Logic
+      if (!uuidRegex.test(channelName)) {
+        return new Response(JSON.stringify({ error: "Invalid channelName format (must be matchId)" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        });
+      }
+
+      const { data: matchData, error: matchError } = await supabaseClient
+        .from("matches")
+        .select("id")
+        .eq("id", channelName)
+        .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
+        .maybeSingle();
+
+      if (!matchError && matchData) {
+        isAuthorized = true;
+      }
     }
 
-    const { data: matchData, error: matchError } = await supabaseClient
-      .from("matches")
-      .select("id")
-      .eq("id", channelName)
-      .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
-      .maybeSingle();
-
-    if (matchError || !matchData) {
-      return new Response(JSON.stringify({ error: "Forbidden: Not a participant in this match" }), {
+    if (!isAuthorized) {
+      return new Response(JSON.stringify({ error: "Forbidden: Not a participant in this room" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 403,
       });

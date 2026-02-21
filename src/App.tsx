@@ -21,6 +21,8 @@ const Appeal = lazy(() => import("./pages/Appeal"));
 const Admin = lazy(() => import("./pages/Admin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const VerityCircle = lazy(() => import("./pages/VerityCircle"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
 
 const queryClient = new QueryClient();
 
@@ -65,6 +67,8 @@ const AppRoutes = () => (
         <Route path="/appeals" element={<ProtectedRoute><Appeal /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         <Route path="/circle/:ownerId" element={<ProtectedRoute><VerityCircle /></ProtectedRoute>} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

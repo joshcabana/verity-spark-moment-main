@@ -20,6 +20,7 @@ const Transparency = lazy(() => import("./pages/Transparency"));
 const Chat = lazy(() => import("./pages/Chat"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Appeal = lazy(() => import("./pages/Appeal"));
+const SparkAnalytics = lazy(() => import("./pages/SparkAnalytics"));
 const Admin = lazy(() => import("./pages/Admin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -76,6 +77,7 @@ const AppRoutes = () => {
           <Route path="/transparency" element={<PageWrapper><Transparency /></PageWrapper>} />
           <Route path="/chat/:matchId" element={<PageWrapper><ProtectedRoute><Chat /></ProtectedRoute></PageWrapper>} />
           <Route path="/profile" element={<PageWrapper><ProtectedRoute><Profile /></ProtectedRoute></PageWrapper>} />
+          <Route path="/analytics" element={<PageWrapper><ProtectedRoute><SparkAnalytics /></ProtectedRoute></PageWrapper>} />
           <Route path="/appeals" element={<PageWrapper><ProtectedRoute><Appeal /></ProtectedRoute></PageWrapper>} />
           <Route path="/admin" element={<PageWrapper><ProtectedRoute><Admin /></ProtectedRoute></PageWrapper>} />
           <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />

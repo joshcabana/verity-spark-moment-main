@@ -18,6 +18,10 @@
     "supabase:cli": "node scripts/run-supabase.mjs",
     "supabase:secrets:check": "node scripts/check-supabase-secrets.mjs",
     "seed:pilot:users": "node scripts/seed-pilot-users.mjs",
+    "seed:pilot:wave1": "node scripts/seed-pilot-users.mjs --wave1 --wave wave-1 --count-per-city 20",
+    "pilot:invites:wave1": "node scripts/generate-pilot-wave1-invites.mjs --start-date 2026-02-24 --count-per-city 20 --daily-intake-cap 10 --out docs/pilot/wave1-invites.csv",
+    "pilot:ops:daily": "node scripts/pilot-daily-ops-check.mjs --lookback-hours 24",
+    "pilot:gate": "node scripts/pilot-decision-gate.mjs",
     "security:live:smoke": "node scripts/live-security-smoke.mjs",
     "security:live:e2e": "node scripts/live-auth-e2e.mjs"
   },

@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Coins, Zap, Crown, Star, Check, Sparkles } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import AppNav from "@/components/AppNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -73,9 +74,25 @@ const getErrorMessage = (error: unknown) => {
 
 const TokenShop = () => {
   const [selectedPack, setSelectedPack] = useState(2);
-  const [balance, setBalance] = useState(0);
-  const [freeEntries, setFreeEntries] = useState(0);
   const { user, subscribed } = useAuth();
+
+  const { data: tokenData } = useQuery({
+    queryKey: ["user-tokens", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("user_tokens")
+        .select("balance, free_entries_remaining")
+        .eq("user_id", user!.id)
+        .single();
+      return data ?? { balance: 0, free_entries_remaining: 0 };
+    },
+    enabled: Boolean(user),
+    staleTime: 15_000, // Refresh balance after 15s on revisit
+    refetchOnWindowFocus: true, // Refetch when user returns from Stripe checkout tab
+  });
+
+  const balance = tokenData?.balance ?? 0;
+  const freeEntries = tokenData?.free_entries_remaining ?? 0;
 
   const handleManageSubscription = async () => {
     try {
@@ -86,22 +103,6 @@ const TokenShop = () => {
       toast({ title: "Error", description: getErrorMessage(error), variant: "destructive" });
     }
   };
-
-  useEffect(() => {
-    if (!user) return;
-    const load = async () => {
-      const { data } = await supabase
-        .from("user_tokens")
-        .select("balance, free_entries_remaining")
-        .eq("user_id", user.id)
-        .single();
-      if (data) {
-        setBalance(data.balance);
-        setFreeEntries(data.free_entries_remaining);
-      }
-    };
-    load();
-  }, [user]);
 
   const handlePurchase = async (priceId: string) => {
     if (!user) {

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Flame, MessageCircle, Clock, Sparkles, Lock, Users, CheckCircle } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import AppNav from "@/components/AppNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -19,24 +19,21 @@ interface SparkMatch {
 const SparkHistory = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [sparks, setSparks] = useState<SparkMatch[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!user) return;
-    const load = async () => {
+  const { data: sparks = [], isLoading: loading } = useQuery({
+    queryKey: ["sparks", user?.id],
+    queryFn: async () => {
       const { data } = await supabase
         .from("matches")
         .select("*")
         .eq("is_mutual", true)
-        .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
+        .or(`user1_id.eq.${user!.id},user2_id.eq.${user!.id}`)
         .order("created_at", { ascending: false });
-
-      setSparks((data as SparkMatch[]) || []);
-      setLoading(false);
-    };
-    load();
-  }, [user]);
+      return (data as SparkMatch[]) || [];
+    },
+    enabled: Boolean(user),
+    staleTime: 30_000, // Cache for 30 seconds on re-visits
+  });
 
   const getNote = (spark: SparkMatch) => {
     if (!user) return null;

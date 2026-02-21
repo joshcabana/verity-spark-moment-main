@@ -3,8 +3,90 @@
 import { createHash } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
-const args = new Set(process.argv.slice(2));
+const argv = process.argv.slice(2);
+const args = new Set(argv);
+
+const readArg = (flag, fallback) => {
+  const index = argv.indexOf(flag);
+  if (index === -1) return fallback;
+  const value = argv[index + 1];
+  if (!value || value.startsWith("--")) return fallback;
+  return value;
+};
+
 const includeE2EUsers = args.has("--include-e2e-users");
+const dryRun = args.has("--dry-run");
+const wave1 = args.has("--wave1");
+
+const countPerCityRaw = Number(readArg("--count-per-city", wave1 ? "20" : "4"));
+if (!Number.isFinite(countPerCityRaw) || countPerCityRaw <= 0) {
+  console.error("Invalid --count-per-city value. Use a positive number.");
+  process.exit(1);
+}
+
+const countPerCity = Math.trunc(countPerCityRaw);
+const cohort = readArg("--cohort", "pilot-2026q1");
+const wave = readArg("--wave", wave1 ? "wave-1" : "seed-default");
+const defaultPassword = readArg("--password", "VerityPilot!2026");
+const domain = readArg("--domain", "verity.date");
+
+const cityConfig = [
+  { city: "Canberra", slug: "canberra" },
+  { city: "Sydney", slug: "sydney" },
+];
+
+const femaleNames = ["Ava", "Mia", "Zoe", "Ruby", "Ella", "Chloe", "Lily", "Grace", "Sophie", "Isla"];
+const maleNames = ["Noah", "Liam", "Ethan", "Jack", "Lucas", "Oliver", "Mason", "Henry", "James", "Leo"];
+const neutralNames = ["Sam", "Alex", "Jordan", "Taylor", "Kai", "Casey", "Riley", "Morgan", "Ari", "Quinn"];
+
+const buildCandidate = (city, slug, index) => {
+  const number = String(index).padStart(2, "0");
+  const mode = index % 3;
+  const gender = mode === 1 ? "female" : mode === 2 ? "male" : "non-binary";
+  const nameSource = gender === "female" ? femaleNames : gender === "male" ? maleNames : neutralNames;
+  const name = `${nameSource[(index - 1) % nameSource.length]} ${number}`;
+  const seeking = index % 5 === 0 ? "everyone" : gender === "female" ? "male" : "female";
+
+  return {
+    email: `pilot.${slug}${number}@${domain}`,
+    password: defaultPassword,
+    name,
+    gender,
+    seeking,
+    city,
+  };
+};
+
+const buildPilotUsers = () =>
+  cityConfig.flatMap(({ city, slug }) =>
+    Array.from({ length: countPerCity }, (_, idx) => buildCandidate(city, slug, idx + 1)),
+  );
+
+const pilotUsers = buildPilotUsers();
+const e2eUsers = [
+  { email: "test1@example.com", password: "password123", name: "TestOne", gender: "female", seeking: "male", city: "Canberra" },
+  { email: "test2@example.com", password: "password123", name: "TestTwo", gender: "male", seeking: "female", city: "Sydney" },
+];
+
+const usersToSeed = includeE2EUsers ? [...pilotUsers, ...e2eUsers] : pilotUsers;
+
+if (dryRun) {
+  const byCity = usersToSeed.reduce((acc, user) => {
+    acc[user.city] = (acc[user.city] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  console.log(`Dry run only. Cohort=${cohort} Wave=${wave}`);
+  console.log(`Total users: ${usersToSeed.length}`);
+  for (const [city, count] of Object.entries(byCity)) {
+    console.log(`- ${city}: ${count}`);
+  }
+  console.log("First 10 users:");
+  for (const user of usersToSeed.slice(0, 10)) {
+    console.log(`- ${user.email} | ${user.name} | ${user.gender} | seeks ${user.seeking}`);
+  }
+  process.exit(0);
+}
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -18,27 +100,7 @@ const admin = createClient(supabaseUrl, serviceRoleKey, {
   auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
 });
 
-const pilotUsers = [
-  { email: "pilot.canberra1@verity.date", password: "VerityPilot!2026", name: "Ava", gender: "female", seeking: "male", city: "Canberra" },
-  { email: "pilot.canberra2@verity.date", password: "VerityPilot!2026", name: "Mia", gender: "female", seeking: "male", city: "Canberra" },
-  { email: "pilot.sydney1@verity.date", password: "VerityPilot!2026", name: "Noah", gender: "male", seeking: "female", city: "Sydney" },
-  { email: "pilot.sydney2@verity.date", password: "VerityPilot!2026", name: "Liam", gender: "male", seeking: "female", city: "Sydney" },
-  { email: "pilot.canberra3@verity.date", password: "VerityPilot!2026", name: "Zoe", gender: "female", seeking: "everyone", city: "Canberra" },
-  { email: "pilot.sydney3@verity.date", password: "VerityPilot!2026", name: "Ethan", gender: "male", seeking: "everyone", city: "Sydney" },
-  { email: "pilot.canberra4@verity.date", password: "VerityPilot!2026", name: "Ruby", gender: "female", seeking: "male", city: "Canberra" },
-  { email: "pilot.sydney4@verity.date", password: "VerityPilot!2026", name: "Jack", gender: "male", seeking: "female", city: "Sydney" },
-];
-
-const e2eUsers = [
-  { email: "test1@example.com", password: "password123", name: "TestOne", gender: "female", seeking: "male", city: "Canberra" },
-  { email: "test2@example.com", password: "password123", name: "TestTwo", gender: "male", seeking: "female", city: "Sydney" },
-];
-
-const usersToSeed = includeE2EUsers ? [...pilotUsers, ...e2eUsers] : pilotUsers;
-
-const hashPhone = (email) => {
-  return createHash("sha256").update(`+61400000000:${email.toLowerCase()}`).digest("hex");
-};
+const hashPhone = (email) => createHash("sha256").update(`+61400000000:${email.toLowerCase()}`).digest("hex");
 
 const getUserByEmail = async (email) => {
   const { data, error } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
@@ -53,7 +115,8 @@ const ensureUser = async (candidate) => {
     email_confirm: true,
     user_metadata: {
       city: candidate.city,
-      cohort: "pilot-2026q1",
+      cohort,
+      wave,
       source: "seed-pilot-users",
     },
   };
@@ -74,7 +137,8 @@ const ensureUser = async (candidate) => {
     user_metadata: {
       ...(existing.user_metadata ?? {}),
       city: candidate.city,
-      cohort: "pilot-2026q1",
+      cohort,
+      wave,
       source: "seed-pilot-users",
     },
   });
@@ -85,48 +149,49 @@ const ensureUser = async (candidate) => {
   return updated.user;
 };
 
+const upsertProfile = async (payload, onConflict) => {
+  return admin.from("profiles").upsert(payload, { onConflict });
+};
+
 const ensureProfile = async (candidate, userId) => {
-  const profilePayload = {
+  const baseProfilePayload = {
     id: userId,
     user_id: userId,
-    name: candidate.name,
-    age: 30,
     display_name: candidate.name,
     gender: candidate.gender,
     bio: `Pilot user from ${candidate.city}`,
-    looking_for: [candidate.seeking],
-    photos: [],
-    verified: true,
-    banned: false,
-    city: candidate.city,
     seeking_gender: candidate.seeking,
     verified_phone: true,
     verification_status: "verified",
   };
 
-  const upsertById = await admin.from("profiles").upsert(profilePayload, { onConflict: "id" });
-  if (!upsertById.error) return;
+  const payloadWithCity = {
+    ...baseProfilePayload,
+    city: candidate.city,
+  };
 
-  const fallbackUpdate = await admin
-    .from("profiles")
-    .update({
-      name: candidate.name,
-      age: 30,
-      display_name: candidate.name,
-      gender: candidate.gender,
-      bio: `Pilot user from ${candidate.city}`,
-      looking_for: [candidate.seeking],
-      photos: [],
-      verified: true,
-      banned: false,
-      city: candidate.city,
-      seeking_gender: candidate.seeking,
-      verified_phone: true,
-      verification_status: "verified",
-    })
-    .eq("user_id", userId);
-  if (fallbackUpdate.error) {
-    throw new Error(`Profile upsert failed for ${candidate.email}: ${fallbackUpdate.error.message}`);
+  let result = await upsertProfile(payloadWithCity, "user_id");
+  if (result.error && result.error.message.toLowerCase().includes("city")) {
+    result = await upsertProfile(baseProfilePayload, "user_id");
+  }
+  if (result.error) {
+    result = await upsertProfile(baseProfilePayload, "id");
+  }
+  if (result.error) {
+    const fallbackUpdate = await admin
+      .from("profiles")
+      .update({
+        display_name: candidate.name,
+        gender: candidate.gender,
+        bio: `Pilot user from ${candidate.city}`,
+        seeking_gender: candidate.seeking,
+        verified_phone: true,
+        verification_status: "verified",
+      })
+      .eq("user_id", userId);
+    if (fallbackUpdate.error) {
+      throw new Error(`Profile upsert failed for ${candidate.email}: ${fallbackUpdate.error.message}`);
+    }
   }
 };
 
@@ -140,7 +205,6 @@ const ensurePhoneVerification = async (candidate, userId) => {
     { onConflict: "user_id" },
   );
   if (error && error.message.includes("Could not find the table")) {
-    // Legacy projects may not have this table yet; profile.verified_phone is still the primary gate.
     return;
   }
   if (error) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, AlertTriangle, Mic, MicOff, VideoOff, Video, Sparkles, WifiOff } from "lucide-react";
@@ -17,7 +17,7 @@ import CallControls from "@/components/CallControls";
 import TimerRing from "@/components/TimerRing";
 import SafeExitModal from "@/components/SafeExitModal";
 import { readMatchSession } from "@/lib/match-session";
-import { trackEvent } from "@/lib/analytics";
+import { getPilotMetadata, trackEvent, trackPilotEvent } from "@/lib/analytics";
 
 const VideoCall = () => {
   const [timeLeft, setTimeLeft] = useState(45);
@@ -31,6 +31,7 @@ const VideoCall = () => {
   const [connectionState, setConnectionState] = useState<"CONNECTED" | "RECONNECTING" | "DISCONNECTED">("CONNECTED");
   const navigate = useNavigate();
   const { user } = useAuth();
+  const pilotMetadata = useMemo(() => getPilotMetadata(user?.user_metadata), [user?.user_metadata]);
 
   const clientRef = useRef<IAgoraRTCClient | null>(null);
   const localVideoRef = useRef<HTMLDivElement>(null);
@@ -40,6 +41,9 @@ const VideoCall = () => {
     video: null,
     audio: null,
   });
+  const callStartedAtRef = useRef<number | null>(null);
+  const callStartedTrackedRef = useRef(false);
+  const callCompletedTrackedRef = useRef(false);
 
   // Get match info
   const matchInfo = useRef(readMatchSession());
@@ -167,6 +171,15 @@ const VideoCall = () => {
         }
 
         await client.publish([audioTrack, videoTrack]);
+        if (!callStartedTrackedRef.current && matchInfo.current?.matchId) {
+          callStartedTrackedRef.current = true;
+          callStartedAtRef.current = Date.now();
+          trackPilotEvent("call_started", {
+            ...pilotMetadata,
+            matchId: matchInfo.current.matchId,
+            roomId: matchInfo.current.roomId,
+          });
+        }
         setJoined(true);
       } catch (err) {
         console.error("Agora init error:", err);
@@ -178,20 +191,33 @@ const VideoCall = () => {
 
     return () => { cleanup(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, startModeration, cleanup]);
+  }, [user, startModeration, cleanup, pilotMetadata]);
 
   // Timer countdown — paused during reconnection
   useEffect(() => {
     if (!isSessionValid) return;
     if (connectionState === "RECONNECTING") return; // Freeze timer while reconnecting
     if (timeLeft <= 0) {
+      if (!callCompletedTrackedRef.current && matchInfo.current?.matchId) {
+        const elapsedSeconds = callStartedAtRef.current
+          ? Math.max(0, Math.round((Date.now() - callStartedAtRef.current) / 1000))
+          : 45;
+        callCompletedTrackedRef.current = true;
+        trackPilotEvent("call_completed", {
+          ...pilotMetadata,
+          matchId: matchInfo.current.matchId,
+          roomId: matchInfo.current.roomId,
+          durationSeconds: elapsedSeconds,
+          extended,
+        });
+      }
       cleanup();
       navigate("/match");
       return;
     }
     const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearInterval(timer);
-  }, [timeLeft, navigate, cleanup, isSessionValid, connectionState]);
+  }, [timeLeft, navigate, cleanup, isSessionValid, connectionState, extended, pilotMetadata]);
 
   const handleSafeExit = useCallback(() => {
     trackEvent("safe_exit_used");

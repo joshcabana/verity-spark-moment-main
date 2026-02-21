@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Send, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
+import { getPilotMetadata, trackPilotEvent } from "@/lib/analytics";
 
 interface Message {
   id: string;
@@ -16,6 +17,7 @@ interface Message {
 const Chat = () => {
   const { matchId } = useParams<{ matchId: string }>();
   const { user } = useAuth();
+  const pilotMetadata = useMemo(() => getPilotMetadata(user?.user_metadata), [user?.user_metadata]);
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -82,6 +84,11 @@ const Chat = () => {
         return;
       }
       setChatRoomId(room.id);
+      trackPilotEvent("chat_started", {
+        ...pilotMetadata,
+        matchId,
+        chatRoomId: room.id,
+      });
 
       // Load messages
       const { data: msgs } = await supabase
@@ -94,7 +101,7 @@ const Chat = () => {
     };
 
     void loadChat();
-  }, [matchId, user, navigate]);
+  }, [matchId, user, navigate, pilotMetadata]);
 
   // Realtime subscription
   useEffect(() => {

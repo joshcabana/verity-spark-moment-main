@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Video, Moon, Briefcase, Palette, Users, Clock, Heart, Zap, Shield, Phone, Crown } from "lucide-react";
 import AppNav from "@/components/AppNav";
@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { writeMatchSession } from "@/lib/match-session";
 import type { VerityMatchSession } from "@/lib/match-session";
-import { trackEvent } from "@/lib/analytics";
+import { getPilotMetadata, trackEvent, trackPilotEvent } from "@/lib/analytics";
 
 const themedRooms = [
   { id: "general", name: "Open Room", icon: Heart, desc: "Anyone, anytime", color: "text-primary", premium: false },
@@ -53,7 +53,9 @@ const Lobby = () => {
   const [banReason, setBanReason] = useState("");
   const [phoneVerified, setPhoneVerified] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, subscribed } = useAuth();
+  const pilotMetadata = useMemo(() => getPilotMetadata(user?.user_metadata), [user?.user_metadata]);
 
   const pollIntervalRef = useRef<number | null>(null);
   const timeoutRef = useRef<number | null>(null);
@@ -129,6 +131,21 @@ const Lobby = () => {
     load();
   }, [user]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("checkout") !== "success") return;
+
+    trackPilotEvent("purchase_completed", {
+      ...pilotMetadata,
+      source: "stripe_checkout_redirect",
+    });
+
+    params.delete("checkout");
+    const nextQuery = params.toString();
+    const nextUrl = `${location.pathname}${nextQuery ? `?${nextQuery}` : ""}`;
+    window.history.replaceState({}, "", nextUrl);
+  }, [location.pathname, location.search, pilotMetadata]);
+
   const commitMatchAndNavigate = useCallback(
     (payload: VerityMatchSession) => {
       queueIdRef.current = null;
@@ -181,6 +198,14 @@ const Lobby = () => {
       setIsSearching(false);
       navigate("/appeals");
       return;
+    }
+
+    if (response.queueId) {
+      trackPilotEvent("queue_entered", {
+        ...pilotMetadata,
+        roomId: response.roomId ?? selectedRoom,
+        isWarmup: warmupEnabled,
+      });
     }
 
     if (response.error === "premium_room_locked") {

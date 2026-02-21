@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, X, Sparkles, Send } from "lucide-react";
@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { readMatchSession } from "@/lib/match-session";
-import { trackEvent } from "@/lib/analytics";
+import { getPilotMetadata, trackEvent, trackPilotEvent } from "@/lib/analytics";
 
 interface DecisionResponse {
   awaitingOther?: boolean;
@@ -34,6 +34,7 @@ const MatchDecision = () => {
   const [matchId, setMatchId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const pilotMetadata = useMemo(() => getPilotMetadata(user?.user_metadata), [user?.user_metadata]);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const timeoutRef = useRef<number | null>(null);
@@ -91,7 +92,13 @@ const MatchDecision = () => {
     const result = toDecisionResponse(data);
     if (!result.awaitingOther) {
       setMatchResult(result.isMutual ? "mutual" : "no-match");
-      if (result.isMutual) trackEvent("mutual_match_success", { matchId });
+      if (result.isMutual) {
+        trackEvent("mutual_match_success", { matchId });
+        trackPilotEvent("spark_created", {
+          ...pilotMetadata,
+          matchId,
+        });
+      }
       setShowResult(true);
       return true;
     }
@@ -111,7 +118,13 @@ const MatchDecision = () => {
           if (updated.user1_decision && updated.user2_decision) {
             clearTimersAndChannel();
             setMatchResult(updated.is_mutual ? "mutual" : "no-match");
-            if (updated.is_mutual) trackEvent("mutual_match_success", { matchId });
+            if (updated.is_mutual) {
+              trackEvent("mutual_match_success", { matchId });
+              trackPilotEvent("spark_created", {
+                ...pilotMetadata,
+                matchId,
+              });
+            }
             setShowResult(true);
           }
         },

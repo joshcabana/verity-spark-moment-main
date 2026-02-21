@@ -20,6 +20,14 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Verify npm lockfile
+        run: |
+          test -f package-lock.json || {
+            echo "package-lock.json is required for CI (npm ci + setup-node npm cache)."
+            exit 1
+          }
 
       - name: Install dependencies
         run: npm ci

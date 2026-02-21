@@ -192,7 +192,7 @@ const VideoCall = () => {
     init();
 
     return () => { cleanup(); };
-  }, [user, startModeration, cleanup, pilotMetadata]);
+  }, [user, startModeration, cleanup, pilotMetadata, connectionState, navigate]);
 
   // Timer countdown — paused during reconnection
   useEffect(() => {

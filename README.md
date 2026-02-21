@@ -21,6 +21,11 @@ npm install
 npm run dev
 ```
 
+## CI Package Manager Contract
+
+GitHub Actions in this repository are standardized on npm (`npm ci`) and require a root `package-lock.json`.
+If dependencies change, update and commit `package-lock.json` with your PR.
+
 ## Quality Checks
 
 ```bash

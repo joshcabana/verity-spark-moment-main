@@ -8,10 +8,20 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// Map price IDs to modes
-const SUBSCRIPTION_PRICES = new Set([
-  "price_1T2B9NHHJNu8TYH7nFtB11O8", // Verity Pass
-]);
+const DEFAULT_VERITY_PASS_PRICE_ID = "price_1T2B9NHHJNu8TYH7nFtB11O8";
+
+const buildSubscriptionPriceSet = (): Set<string> => {
+  const base = Deno.env.get("STRIPE_PRICE_VERITY_PASS") ?? DEFAULT_VERITY_PASS_PRICE_ID;
+  const additional = (Deno.env.get("STRIPE_SUBSCRIPTION_PRICE_IDS") ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter((id) => id.length > 0);
+
+  return new Set([base, ...additional]);
+};
+
+// Map price IDs to checkout modes.
+const SUBSCRIPTION_PRICES = buildSubscriptionPriceSet();
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -70,7 +80,8 @@ serve(async (req) => {
     }
 
     const mode = SUBSCRIPTION_PRICES.has(priceId) ? "subscription" : "payment";
-    const origin = req.headers.get("origin") || "https://verity-spark-moment.lovable.app";
+    const fallbackOrigin = Deno.env.get("APP_BASE_URL") || "https://verity-spark-moment.lovable.app";
+    const origin = req.headers.get("origin") || fallbackOrigin;
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,

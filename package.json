@@ -17,6 +17,7 @@
     "supabase:target:check": "node scripts/check-supabase-target.mjs",
     "supabase:cli": "node scripts/run-supabase.mjs",
     "supabase:secrets:check": "node scripts/check-supabase-secrets.mjs",
+    "seed:pilot:users": "node scripts/seed-pilot-users.mjs",
     "security:live:smoke": "node scripts/live-security-smoke.mjs",
     "security:live:e2e": "node scripts/live-auth-e2e.mjs"
   },

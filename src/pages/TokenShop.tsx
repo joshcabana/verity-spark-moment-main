@@ -5,13 +5,57 @@ import AppNav from "@/components/AppNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
-const tokenPacks = [
-  { id: 1, tokens: 10, price: "$12.99", perToken: "$1.30", popular: false, priceId: "price_1T2B8ZHHJNu8TYH7wfh5fdNv" },
-  { id: 2, tokens: 15, price: "$19.99", perToken: "$1.33", popular: true, priceId: "price_1T2B8rHHJNu8TYH7lnqB0oGV" },
-  { id: 3, tokens: 30, price: "$34.99", perToken: "$1.17", popular: false, priceId: "price_1T2B96HHJNu8TYH7e2Tikj7C" },
-];
+const env = import.meta.env as Record<string, string | undefined>;
+const DISPLAY_CURRENCY = (env.VITE_DISPLAY_CURRENCY ?? "AUD").toUpperCase();
 
-const VERITY_PASS_PRICE_ID = "price_1T2B9NHHJNu8TYH7nFtB11O8";
+const getEnvString = (key: string, fallback: string): string => {
+  const value = env[key];
+  return value && value.trim().length > 0 ? value.trim() : fallback;
+};
+
+const getEnvNumber = (key: string, fallback: number): number => {
+  const raw = env[key];
+  if (!raw) return fallback;
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+
+const formatMoney = (amount: number): string =>
+  new Intl.NumberFormat("en-AU", {
+    style: "currency",
+    currency: DISPLAY_CURRENCY,
+  }).format(amount);
+
+const tokenPacks = [
+  {
+    id: 1,
+    tokens: 10,
+    amount: getEnvNumber("VITE_PRICE_PACK_10_AMOUNT", 12.99),
+    popular: false,
+    priceId: getEnvString("VITE_STRIPE_PRICE_TOKENS_10", "price_1T2B8ZHHJNu8TYH7wfh5fdNv"),
+  },
+  {
+    id: 2,
+    tokens: 15,
+    amount: getEnvNumber("VITE_PRICE_PACK_15_AMOUNT", 19.99),
+    popular: true,
+    priceId: getEnvString("VITE_STRIPE_PRICE_TOKENS_15", "price_1T2B8rHHJNu8TYH7lnqB0oGV"),
+  },
+  {
+    id: 3,
+    tokens: 30,
+    amount: getEnvNumber("VITE_PRICE_PACK_30_AMOUNT", 34.99),
+    popular: false,
+    priceId: getEnvString("VITE_STRIPE_PRICE_TOKENS_30", "price_1T2B96HHJNu8TYH7e2Tikj7C"),
+  },
+].map((pack) => ({
+  ...pack,
+  price: formatMoney(pack.amount),
+  perToken: formatMoney(pack.amount / pack.tokens),
+}));
+
+const VERITY_PASS_PRICE_ID = getEnvString("VITE_STRIPE_PRICE_VERITY_PASS", "price_1T2B9NHHJNu8TYH7nFtB11O8");
+const VERITY_PASS_AMOUNT = getEnvNumber("VITE_PRICE_VERITY_PASS_AMOUNT", 19.99);
 
 const passFeatures = [
   "Unlimited entries",
@@ -169,7 +213,7 @@ const TokenShop = () => {
             </div>
           </div>
           <div className="text-3xl font-bold text-foreground mb-1">
-            $19.99<span className="text-sm text-muted-foreground font-normal">/month</span>
+            {formatMoney(VERITY_PASS_AMOUNT)}<span className="text-sm text-muted-foreground font-normal">/month</span>
           </div>
           <ul className="space-y-2 my-5">
             {passFeatures.map((feature) => (

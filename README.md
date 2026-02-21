@@ -1,73 +1,138 @@
-# Welcome to your Lovable project
+# Verity
 
-## Project info
+Verity is an anti-swipe dating app built around short, anonymous live video calls.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+- Production app: <https://verity-spark-moment.lovable.app/>
+- Supabase project ref: `nhpbxlvogqnqutmflwlk`
 
-## How can I edit this code?
+## Stack
 
-There are several ways of editing your application.
+- Vite + React + TypeScript
+- Tailwind + shadcn/ui
+- Supabase (Auth, Postgres, Realtime, Edge Functions, Storage)
+- Agora RTC
+- Stripe Checkout + Billing Portal
 
-**Use Lovable**
+## Local Development
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+cd /Users/joshcabana/Downloads/verity-spark-moment-main
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Quality Checks
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+npm run lint
+npm run test
+npm run build
+npm run audit:prod:check
+```
 
-**Use GitHub Codespaces**
+## Supabase Rollout Flow
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### 1) Preflight
 
-## What technologies are used for this project?
+```bash
+npm run supabase:target:check -- --project-ref nhpbxlvogqnqutmflwlk
+npm run supabase:secrets:check -- --project-ref nhpbxlvogqnqutmflwlk --mode full
+```
 
-This project is built with:
+### 2) Deploy DB + Edge Functions
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+bash scripts/deploy-supabase.sh nhpbxlvogqnqutmflwlk
+```
 
-## How can I deploy this project?
+### 3) Security Verification
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```bash
+npm run security:live:smoke -- \
+  --project-url https://nhpbxlvogqnqutmflwlk.supabase.co \
+  --anon-key "$VITE_SUPABASE_PUBLISHABLE_KEY"
 
-## Can I connect a custom domain to my Lovable project?
+npm run security:live:e2e -- \
+  --project-url https://nhpbxlvogqnqutmflwlk.supabase.co \
+  --anon-key "$VITE_SUPABASE_PUBLISHABLE_KEY" \
+  --user-a-email "$LIVE_USER_A_EMAIL" \
+  --user-a-password "$LIVE_USER_A_PASSWORD" \
+  --user-b-email "$LIVE_USER_B_EMAIL" \
+  --user-b-password "$LIVE_USER_B_PASSWORD"
+```
 
-Yes, you can!
+See `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/security-verification.md` and `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/runtime-monitoring.md` for full runbooks.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Required Supabase Edge Function Secrets
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Core
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+### AI moderation
+
+- `AI_API_KEY` (preferred)
+- `LOVABLE_API_KEY` (legacy alias accepted)
+- Optional:
+  - `AI_API_BASE_URL`
+  - `AI_API_MODEL`
+
+### Stripe
+
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- Optional for price/config cutover:
+  - `STRIPE_PRICE_TOKENS_10`
+  - `STRIPE_PRICE_TOKENS_15`
+  - `STRIPE_PRICE_TOKENS_30`
+  - `STRIPE_PRICE_VERITY_PASS`
+  - `STRIPE_SUBSCRIPTION_PRICE_IDS` (comma-separated)
+  - `STRIPE_TOKENS_10_AMOUNT`
+  - `STRIPE_TOKENS_15_AMOUNT`
+  - `STRIPE_TOKENS_30_AMOUNT`
+  - `STRIPE_TOKEN_PACK_MAP_JSON` (JSON map override)
+  - `APP_BASE_URL` (domain fallback for checkout/portal redirects)
+
+## Frontend Environment Variables
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `VITE_SUPABASE_PROJECT_ID`
+- Optional Stripe UI configuration:
+  - `VITE_DISPLAY_CURRENCY` (default `AUD`)
+  - `VITE_STRIPE_PRICE_TOKENS_10`
+  - `VITE_STRIPE_PRICE_TOKENS_15`
+  - `VITE_STRIPE_PRICE_TOKENS_30`
+  - `VITE_STRIPE_PRICE_VERITY_PASS`
+  - `VITE_PRICE_PACK_10_AMOUNT`
+  - `VITE_PRICE_PACK_15_AMOUNT`
+  - `VITE_PRICE_PACK_30_AMOUNT`
+  - `VITE_PRICE_VERITY_PASS_AMOUNT`
+
+## Pilot Seeding
+
+Seed Canberra/Sydney pilot users:
+
+```bash
+SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+node scripts/seed-pilot-users.mjs
+```
+
+## Launch Checklist
+
+1. `supabase:secrets:check --mode full` passes.
+2. `scripts/deploy-supabase.sh` succeeds.
+3. Live smoke + live auth E2E pass.
+4. Manual two-device call flow passes (`onboarding -> call -> spark -> chat -> purchase`).
+5. Stripe live-mode keys/webhook configured and validated.
+6. Custom domain connected and verified.
+
+## Rollback Defaults
+
+1. Re-deploy last known-good function bundle.
+2. Restore prior Stripe key/webhook secrets.
+3. Disable promotional traffic and keep pilot-only access.
+4. Review `runtime_alert_events` and `stripe_events` before re-attempting rollout.

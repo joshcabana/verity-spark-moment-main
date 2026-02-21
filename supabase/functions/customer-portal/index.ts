@@ -56,7 +56,8 @@ serve(async (req) => {
       throw new Error("No billing account found. Subscribe to Verity Pass first.");
     }
 
-    const origin = req.headers.get("origin") || "https://verity-spark-moment.lovable.app";
+    const fallbackOrigin = Deno.env.get("APP_BASE_URL") || "https://verity-spark-moment.lovable.app";
+    const origin = req.headers.get("origin") || fallbackOrigin;
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: customers.data[0].id,
       return_url: `${origin}/tokens`,

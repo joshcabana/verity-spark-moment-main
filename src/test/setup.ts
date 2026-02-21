@@ -35,3 +35,28 @@ if (typeof window !== "undefined") {
     value: IntersectionObserver,
   });
 }
+
+import { vi } from "vitest";
+
+// Globally mock the Supabase client so components don't try to initialize 
+// createClient which accesses localStorage and env vars inside the node test runner.
+vi.mock('@/integrations/supabase/client', () => ({
+  supabase: {
+    auth: {
+      getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
+      getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
+      onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe: vi.fn() } } })),
+    },
+    from: vi.fn(() => ({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn(() => Promise.resolve({ data: null, error: null })),
+    })),
+    rpc: vi.fn(),
+    channel: vi.fn(() => ({
+      on: vi.fn().mockReturnThis(),
+      subscribe: vi.fn(),
+    })),
+    removeChannel: vi.fn(),
+  },
+}));

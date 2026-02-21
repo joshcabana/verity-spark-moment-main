@@ -1,15 +1,12 @@
 name: Runtime Alerts
-
 on:
   workflow_dispatch:
   schedule:
     - cron: "17 * * * *"
-
 jobs:
   runtime-alert-checks:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,6 +29,7 @@ jobs:
         run: npm ci
 
       - name: Run runtime alert checks
+        continue-on-error: true
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

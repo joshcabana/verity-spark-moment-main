@@ -43,26 +43,30 @@ const PublicRoute = ({ children }: { children: ReactNode }) => {
   return <>{children}</>;
 };
 
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+
 const AppRoutes = () => (
-  <Suspense fallback={<FullScreenLoader />}>
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/auth" element={<PublicRoute><Auth /></PublicRoute>} />
-      <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
-      <Route path="/lobby" element={<ProtectedRoute><Lobby /></ProtectedRoute>} />
-      <Route path="/call" element={<ProtectedRoute><VideoCall /></ProtectedRoute>} />
-      <Route path="/match" element={<ProtectedRoute><MatchDecision /></ProtectedRoute>} />
-      <Route path="/sparks" element={<ProtectedRoute><SparkHistory /></ProtectedRoute>} />
-      <Route path="/tokens" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />
-      <Route path="/shop" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />
-      <Route path="/transparency" element={<Transparency />} />
-      <Route path="/chat/:matchId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/appeals" element={<ProtectedRoute><Appeal /></ProtectedRoute>} />
-      <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </Suspense>
+  <ErrorBoundary>
+    <Suspense fallback={<FullScreenLoader />}>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/auth" element={<PublicRoute><Auth /></PublicRoute>} />
+        <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+        <Route path="/lobby" element={<ProtectedRoute><Lobby /></ProtectedRoute>} />
+        <Route path="/call" element={<ProtectedRoute><VideoCall /></ProtectedRoute>} />
+        <Route path="/match" element={<ProtectedRoute><MatchDecision /></ProtectedRoute>} />
+        <Route path="/sparks" element={<ProtectedRoute><SparkHistory /></ProtectedRoute>} />
+        <Route path="/tokens" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />
+        <Route path="/shop" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />
+        <Route path="/transparency" element={<Transparency />} />
+        <Route path="/chat/:matchId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/appeals" element={<ProtectedRoute><Appeal /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
+  </ErrorBoundary>
 );
 
 const App = () => (

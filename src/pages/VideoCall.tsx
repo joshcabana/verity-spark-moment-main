@@ -67,8 +67,20 @@ const VideoCall = () => {
 
   const cleanup = useCallback(() => {
     stopModeration();
+    
+    // Rigorously close all Agora tracks
+    localTracksRef.current.video?.stop();
     localTracksRef.current.video?.close();
+    localTracksRef.current.audio?.stop();
     localTracksRef.current.audio?.close();
+
+    // Force-stop any underlying MediaStream tracks to release hardware indicators immediately
+    if (localVideoElRef.current?.srcObject) {
+      const stream = localVideoElRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+      localVideoElRef.current.srcObject = null;
+    }
+
     clientRef.current?.leave().catch(console.error);
   }, [stopModeration]);
 

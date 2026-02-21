@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { writeMatchSession } from "@/lib/match-session";
 import type { VerityMatchSession } from "@/lib/match-session";
+import { trackEvent } from "@/lib/analytics";
 
 const themedRooms = [
   { id: "general", name: "Open Room", icon: Heart, desc: "Anyone, anytime", color: "text-primary", premium: false },
@@ -158,6 +159,7 @@ const Lobby = () => {
     }
 
     setIsSearching(true);
+    trackEvent("go_live_clicked", { roomId: selectedRoom, isWarmup: warmupEnabled });
 
     const { data, error } = await supabase.rpc("rpc_enter_matchmaking", {
       p_room_id: selectedRoom,

@@ -51,6 +51,29 @@ serve(async (req) => {
       });
     }
 
+    // ENFORCE SECURITY: verify the user is a participant in this exact match
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(channelName)) {
+      return new Response(JSON.stringify({ error: "Invalid channelName format (must be matchId)" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
+    }
+
+    const { data: matchData, error: matchError } = await supabaseClient
+      .from("matches")
+      .select("id")
+      .eq("id", channelName)
+      .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
+      .maybeSingle();
+
+    if (matchError || !matchData) {
+      return new Response(JSON.stringify({ error: "Forbidden: Not a participant in this match" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 403,
+      });
+    }
+
     const appId = Deno.env.get("AGORA_APP_ID");
     const appCertificate = Deno.env.get("AGORA_APP_CERTIFICATE");
     if (!appId || !appCertificate) throw new Error("Agora credentials not configured");

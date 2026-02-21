@@ -93,48 +93,39 @@ serve(async (req) => {
     eventId = event.id;
     log("Event received", { type: event.type, id: event.id });
 
-    const { data: existingEvent } = await supabase
-      .from("stripe_events")
-      .select("event_id,status")
-      .eq("event_id", event.id)
+    // Fully Idempotent - use ON CONFLICT DO NOTHING pattern via single insert
+    const { data: claimData, error: claimError } = await supabase
+      .from("processed_events")
+      .insert({ event_id: event.id })
+      .select()
       .maybeSingle();
 
-    if (existingEvent?.status === "processed") {
-      log("Duplicate event ignored", { id: event.id, status: existingEvent.status });
+    if (claimError) {
+      // 23505 is PostgreSQL unique_violation
+      if (claimError.code === '23505') {
+        log("Duplicate event ignored via ON CONFLICT DO NOTHING", { id: event.id });
+        return new Response(JSON.stringify({ received: true, duplicate: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        });
+      }
+      throw claimError;
+    }
+
+    if (!claimData) {
+      log("Duplicate event ignored natively", { id: event.id });
       return new Response(JSON.stringify({ received: true, duplicate: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       });
     }
 
-    if (existingEvent?.status === "processing") {
-      log("Event already processing", { id: event.id });
-      return new Response(JSON.stringify({ received: true, duplicate: true }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      });
-    }
-
-    if (!existingEvent) {
-      const { error: claimError } = await supabase.from("stripe_events").insert({
-        event_id: event.id,
-        event_type: event.type,
-        status: "processing",
-        payload: JSON.parse(body),
-      });
-
-      if (claimError) throw claimError;
-    } else {
-      await supabase
-        .from("stripe_events")
-        .update({
-          status: "processing",
-          error: null,
-          event_type: event.type,
-          payload: JSON.parse(body),
-        })
-        .eq("event_id", event.id);
-    }
+    await supabase.from("stripe_events").insert({
+      event_id: event.id,
+      event_type: event.type,
+      status: "processing",
+      payload: JSON.parse(body),
+    });
 
     switch (event.type) {
       case "checkout.session.completed": {

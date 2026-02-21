@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { readMatchSession } from "@/lib/match-session";
+import { trackEvent } from "@/lib/analytics";
 
 interface DecisionResponse {
   awaitingOther?: boolean;
@@ -89,6 +90,7 @@ const MatchDecision = () => {
     const result = toDecisionResponse(data);
     if (!result.awaitingOther) {
       setMatchResult(result.isMutual ? "mutual" : "no-match");
+      if (result.isMutual) trackEvent("mutual_match_success", { matchId });
       setShowResult(true);
       return true;
     }
@@ -108,6 +110,7 @@ const MatchDecision = () => {
           if (updated.user1_decision && updated.user2_decision) {
             clearTimersAndChannel();
             setMatchResult(updated.is_mutual ? "mutual" : "no-match");
+            if (updated.is_mutual) trackEvent("mutual_match_success", { matchId });
             setShowResult(true);
           }
         },

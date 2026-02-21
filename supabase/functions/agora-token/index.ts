@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { RtcTokenBuilder, RtcRole } from "npm:agora-token@2.0.4";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";

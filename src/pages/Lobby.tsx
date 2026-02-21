@@ -302,6 +302,8 @@ const Lobby = () => {
             <div className="text-xs text-muted-foreground">First 3 calls are platonic practice rounds</div>
           </div>
           <button
+            title="Toggle warm-up mode"
+            aria-label="Toggle warm-up mode"
             onClick={() => setWarmupEnabled(!warmupEnabled)}
             className={`w-10 h-6 rounded-full border flex items-center p-0.5 transition-colors ${
               warmupEnabled ? "bg-primary/20 border-primary/30" : "bg-secondary border-border"

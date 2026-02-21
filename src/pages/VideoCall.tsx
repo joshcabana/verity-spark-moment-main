@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, AlertTriangle, Mic, MicOff, VideoOff, Video, Sparkles } from "lucide-react";
+import { Shield, AlertTriangle, Mic, MicOff, VideoOff, Video, Sparkles, WifiOff } from "lucide-react";
 import AgoraRTC, {
   IAgoraRTCClient,
   ICameraVideoTrack,
@@ -27,6 +27,7 @@ const VideoCall = () => {
   const [joined, setJoined] = useState(false);
   const [extended, setExtended] = useState(false);
   const [extending, setExtending] = useState(false);
+  const [connectionState, setConnectionState] = useState<"CONNECTED" | "RECONNECTING" | "DISCONNECTED">("CONNECTED");
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -127,6 +128,24 @@ const VideoCall = () => {
           if (remoteVideoRef.current) remoteVideoRef.current.innerHTML = "";
         });
 
+        // Connection state tracking for reconnection UX
+        client.on("connection-state-change", (curState, _revState, reason) => {
+          if (curState === "RECONNECTING") {
+            setConnectionState("RECONNECTING");
+            toast({ title: "Reconnecting...", description: "Your connection dropped briefly. Trying to reconnect." });
+          } else if (curState === "CONNECTED") {
+            if (connectionState === "RECONNECTING") {
+              toast({ title: "Reconnected", description: "Your call is back." });
+            }
+            setConnectionState("CONNECTED");
+          } else if (curState === "DISCONNECTED" && reason !== "LEAVE") {
+            setConnectionState("DISCONNECTED");
+            toast({ title: "Connection lost", description: "Could not reconnect. Returning to lobby.", variant: "destructive" });
+            cleanup();
+            navigate("/lobby");
+          }
+        });
+
         await client.join(tokenData.appId, channelName, tokenData.token, tokenData.uid);
 
         const [audioTrack, videoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
@@ -159,9 +178,10 @@ const VideoCall = () => {
     return () => { cleanup(); };
   }, [user, startModeration, cleanup]);
 
-  // Timer countdown
+  // Timer countdown — paused during reconnection
   useEffect(() => {
     if (!isSessionValid) return;
+    if (connectionState === "RECONNECTING") return; // Freeze timer while reconnecting
     if (timeLeft <= 0) {
       cleanup();
       navigate("/match");
@@ -169,7 +189,7 @@ const VideoCall = () => {
     }
     const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearInterval(timer);
-  }, [timeLeft, navigate, cleanup, isSessionValid]);
+  }, [timeLeft, navigate, cleanup, isSessionValid, connectionState]);
 
   const handleSafeExit = useCallback(() => {
     cleanup();
@@ -264,6 +284,22 @@ const VideoCall = () => {
         >
           <span className="text-[10px] text-muted-foreground">Anonymous · No recording</span>
         </motion.div>
+
+        {/* Reconnection overlay */}
+        <AnimatePresence>
+          {connectionState === "RECONNECTING" && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-16 left-4 right-4 flex items-center justify-center gap-2 bg-amber-500/90 backdrop-blur-md text-white text-sm font-medium px-4 py-2.5 rounded-xl z-10"
+            >
+              <WifiOff className="w-4 h-4" />
+              Reconnecting... Timer paused.
+              <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Moderation Warning Overlay (Tier 1 - shown to offender only) */}
         <ModerationWarning

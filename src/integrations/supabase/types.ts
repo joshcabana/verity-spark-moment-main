@@ -557,6 +557,60 @@ export type Database = {
         }
         Relationships: []
       }
+      runtime_alert_events: {
+        Row: {
+          id: string
+          event_source: string
+          event_type: string
+          severity: string
+          status_code: number | null
+          user_id: string | null
+          details: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          event_source: string
+          event_type: string
+          severity?: string
+          status_code?: number | null
+          user_id?: string | null
+          details?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          event_source?: string
+          event_type?: string
+          severity?: string
+          status_code?: number | null
+          user_id?: string | null
+          details?: Json | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      spark_extension_log: {
+        Row: {
+          id: string
+          user_id: string
+          used_date: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          used_date?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          used_date?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -690,6 +744,21 @@ export type Database = {
       }
       is_chat_participant: { Args: { _chat_room_id: string }; Returns: boolean }
       is_match_participant: { Args: { _match_id: string }; Returns: boolean }
+      cleanup_stale_queue_entries: {
+        Args: Record<string, never>
+        Returns: number
+      }
+      log_runtime_alert_event: {
+        Args: {
+          p_event_source: string
+          p_event_type: string
+          p_severity?: string
+          p_status_code?: number
+          p_user_id?: string
+          p_details?: Json
+        }
+        Returns: undefined
+      }
       rpc_cancel_matchmaking: {
         Args: { p_queue_id?: string }
         Returns: Json

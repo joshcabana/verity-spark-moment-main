@@ -111,14 +111,56 @@ See `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/security-verifica
   - `VITE_PRICE_PACK_30_AMOUNT`
   - `VITE_PRICE_VERITY_PASS_AMOUNT`
 
-## Pilot Seeding
+## Pilot Operations (Canberra + Sydney)
 
-Seed Canberra/Sydney pilot users:
+### Launch packet + tracker
+
+- Launch packet: `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/pilot/launch-packet.md`
+- Shared tracker: `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/pilot/tracker.md`
+- Anti-gravity output template: `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/pilot/anti-gravity-output.md`
+
+### Build Wave 1 invite plan (20 users/city, 10/day cap)
+
+```bash
+npm run pilot:invites:wave1
+```
+
+### Seed Wave 1 pilot users
 
 ```bash
 SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co" \
 SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
-node scripts/seed-pilot-users.mjs
+npm run seed:pilot:wave1
+```
+
+Dry-run preview without writing to Supabase:
+
+```bash
+node scripts/seed-pilot-users.mjs --wave1 --count-per-city 20 --dry-run
+```
+
+### Daily pilot ops checks
+
+```bash
+SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:ops:daily
+```
+
+### Decision gates
+
+```bash
+SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:gate -- --gate A
+
+SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:gate -- --gate B
+
+SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:gate -- --gate FINAL
 ```
 
 ## Launch Checklist
@@ -129,6 +171,8 @@ node scripts/seed-pilot-users.mjs
 4. Manual two-device call flow passes (`onboarding -> call -> spark -> chat -> purchase`).
 5. Stripe live-mode keys/webhook configured and validated.
 6. Custom domain connected and verified.
+7. Pilot daily ops report saved under `reports/pilot/`.
+8. Gate A/B/Final decision reports generated and reviewed.
 
 ## Rollback Defaults
 

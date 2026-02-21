@@ -1,6 +1,7 @@
 # Runtime Monitoring Setup
 
 This repository includes a scheduled workflow (`.github/workflows/runtime-alerts.yml`) that runs `scripts/check-runtime-alerts.mjs`.
+For pilot operations, use `scripts/pilot-daily-ops-check.mjs` for a broader readiness report (queue health, completion/conversion, moderation backlog, Stripe failures, intake cap).
 
 ## Required GitHub Secrets
 
@@ -19,6 +20,18 @@ The script checks a rolling window (`ALERT_LOOKBACK_MINUTES`, default `60`) for:
    Threshold env: `MODERATION_STATUS_SPIKE_THRESHOLD` (default `20`)
 
 If any threshold is met/exceeded, the workflow exits non-zero.
+
+## Pilot Daily Ops Command
+
+Run this once per day during gated rollout:
+
+```bash
+SUPABASE_URL="https://<project-ref>.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:ops:daily
+```
+
+The command writes a JSON report to `reports/pilot/daily-ops-YYYY-MM-DD.json` and exits non-zero when reliability/safety/intake thresholds are breached.
 
 ## Runtime Event Logging
 

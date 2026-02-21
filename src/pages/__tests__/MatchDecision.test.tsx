@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, useNavigate } from 'react-router-dom';
 import MatchDecision from '../MatchDecision';
 import { useAuth } from '@/hooks/useAuth';
@@ -79,32 +78,44 @@ describe('MatchDecision Component', () => {
   });
 
   it('calls decline RPC and routes back to lobby when "Pass" is tapped', async () => {
-    const user = userEvent.setup();
-    (readMatchSession as ReturnType<typeof vi.fn>).mockReturnValue({
-      matchedWith: 'target-id',
-      matchId: 'match-123'
-    });
+    vi.useFakeTimers();
+    try {
+      (readMatchSession as ReturnType<typeof vi.fn>).mockReturnValue({
+        matchedWith: 'target-id',
+        matchId: 'match-123'
+      });
 
-    // Mock successful RPC execution
-    (supabase.rpc as ReturnType<typeof vi.fn>).mockResolvedValue({ data: null, error: null });
+      // Mock successful RPC execution
+      (supabase.rpc as ReturnType<typeof vi.fn>).mockResolvedValue({ data: null, error: null });
 
-    render(
-      <MemoryRouter>
-        <MatchDecision />
-      </MemoryRouter>
-    );
+      render(
+        <MemoryRouter>
+          <MatchDecision />
+        </MemoryRouter>
+      );
 
-    const passButton = screen.getByText('Pass');
-    await user.click(passButton);
+      const passButton = screen.getByRole('button', { name: /pass/i });
+      await act(async () => {
+        fireEvent.click(passButton);
+        await Promise.resolve();
+      });
 
-    expect(supabase.rpc).toHaveBeenCalledWith('rpc_submit_match_decision', {
-      p_match_id: 'match-123',
-      p_decision: 'pass',
-      p_note: null
-    });
+      expect(supabase.rpc).toHaveBeenCalledWith('rpc_submit_match_decision', {
+        p_match_id: 'match-123',
+        p_decision: 'pass',
+        p_note: null
+      });
 
-    // We expect it to redirect quickly on decline to spare ego
-    expect(mockNavigate).toHaveBeenCalledWith('/lobby');
-    expect(clearMatchSession).toHaveBeenCalled();
+      expect(mockNavigate).not.toHaveBeenCalledWith('/lobby');
+
+      await act(async () => {
+        vi.advanceTimersByTime(2000);
+      });
+
+      expect(mockNavigate).toHaveBeenCalledWith('/lobby');
+      expect(clearMatchSession).toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

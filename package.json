@@ -22,6 +22,10 @@
     "pilot:invites:wave1": "node scripts/generate-pilot-wave1-invites.mjs --start-date 2026-02-24 --count-per-city 20 --daily-intake-cap 10 --out docs/pilot/wave1-invites.csv",
     "pilot:ops:daily": "node scripts/pilot-daily-ops-check.mjs --lookback-hours 24",
     "pilot:gate": "node scripts/pilot-decision-gate.mjs",
+    "pilot:tracker:update": "node scripts/pilot-update-tracker.mjs",
+    "pilot:run:daily": "node scripts/pilot-run-daily.mjs",
+    "pilot:run:gate": "node scripts/pilot-run-gate.mjs",
+    "pilot:reports:validate": "node scripts/validate-pilot-reports.mjs",
     "security:live:smoke": "node scripts/live-security-smoke.mjs",
     "security:live:e2e": "node scripts/live-auth-e2e.mjs"
   },

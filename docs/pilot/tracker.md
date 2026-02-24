@@ -22,7 +22,9 @@ Daily intake cap: 10
 
 | Date | New Profiles | Intake Cap | Cap Status | Onboarding Start Rate | Notes |
 | --- | ---: | ---: | --- | ---: | --- |
-| 2026-02-24 | 0 | 10 | pending | 0% | |
+<!-- pilot:auto:activations:start -->
+| 2026-02-24 | 0 | 10 | ok | 0.0% | status=PASS; stripe=0; rpc=0; critical=0 |
+<!-- pilot:auto:activations:end -->
 
 ## Incidents
 
@@ -36,7 +38,9 @@ SLA: triage in 30 minutes.
 
 | Date | Matches Created | Call Completion % | Spark Conversion % | Chat Activation % | Purchases | Notes |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| 2026-02-24 | 0 | 0% | 0% | 0% | 0 | |
+<!-- pilot:auto:funnel:start -->
+| 2026-02-24 | 0 | 100.0% | 0.0% | 0.0% | 0 | status=PASS; chats=0; messages=0 |
+<!-- pilot:auto:funnel:end -->
 
 ## Learnings
 
@@ -48,6 +52,8 @@ SLA: triage in 30 minutes.
 
 | Gate | Date | Required Condition | Result | Decision |
 | --- | --- | --- | --- | --- |
+<!-- pilot:auto:gates:start -->
 | Gate A | 2026-02-27 | Reliability stable + zero unresolved critical incidents | pending | pending |
 | Gate B | 2026-03-03 | Spark/chat conversion directionally healthy | pending | pending |
 | Final | 2026-03-07 | Expand or harden or pause | pending | pending |
+<!-- pilot:auto:gates:end -->

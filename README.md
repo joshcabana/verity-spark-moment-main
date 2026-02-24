@@ -160,6 +160,14 @@ SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
 npm run pilot:ops:daily
 ```
 
+Recommended wrapper (writes report + updates tracker in one command):
+
+```bash
+SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:run:daily
+```
+
 ### Decision gates
 
 ```bash
@@ -174,6 +182,27 @@ npm run pilot:gate -- --gate B
 SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co" \
 SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
 npm run pilot:gate -- --gate FINAL
+```
+
+Recommended wrapper (writes gate report + updates tracker):
+
+```bash
+SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:run:gate -- --gate A
+```
+
+Manual tracker sync:
+
+```bash
+npm run pilot:tracker:update -- --daily-report reports/pilot/daily-ops-YYYY-MM-DD.json --date YYYY-MM-DD
+npm run pilot:tracker:update -- --gate-report reports/pilot/gate-a-YYYY-MM-DD.json --gate A
+```
+
+Pilot report artifact validation (manual/local):
+
+```bash
+npm run pilot:reports:validate -- --date YYYY-MM-DD
 ```
 
 ## Launch Checklist

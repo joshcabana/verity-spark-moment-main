@@ -33,6 +33,20 @@ npm run pilot:ops:daily
 
 The command writes a JSON report to `reports/pilot/daily-ops-YYYY-MM-DD.json` and exits non-zero when reliability/safety/intake thresholds are breached.
 
+To keep `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/pilot/tracker.md` in sync with report outputs, run:
+
+```bash
+npm run pilot:tracker:update -- --daily-report reports/pilot/daily-ops-YYYY-MM-DD.json --date YYYY-MM-DD
+```
+
+Or use the daily wrapper command:
+
+```bash
+SUPABASE_URL="https://<project-ref>.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:run:daily
+```
+
 ## Runtime Event Logging
 
 Runtime events are written by `public.log_runtime_alert_event(...)` and stored in:
@@ -79,3 +93,11 @@ Redirect origin behavior in checkout/portal functions:
 
 `scripts/deploy-supabase.sh` now runs both target-alignment + secrets preflight checks automatically (`full` mode by default).
 Set `SUPABASE_SECRET_CHECK_MODE=core` only if you intentionally need a limited rollout.
+
+## Manual Artifact Guard
+
+Use the manual GitHub workflow `.github/workflows/pilot-reports.yml` (or local CLI) to validate that:
+
+1. expected daily report files exist and include required metrics fields,
+2. tracker rows for the selected date are updated,
+3. due gate reports are present after gate dates.

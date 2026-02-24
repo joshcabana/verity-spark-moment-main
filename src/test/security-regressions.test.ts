@@ -95,4 +95,30 @@ describe("security hardening regressions", () => {
     expect(lobby).toContain('rpc_cancel_matchmaking');
     expect(lobby).not.toContain('"expired"');
   });
+
+  it("enforces trusted origin allowlisting for billing redirects", () => {
+    const checkout = readRepoFile("supabase/functions/create-checkout/index.ts");
+    const portal = readRepoFile("supabase/functions/customer-portal/index.ts");
+
+    expect(checkout).toContain("APP_ALLOWED_ORIGINS");
+    expect(checkout).toContain("resolveTrustedOrigin");
+    expect(portal).toContain("APP_ALLOWED_ORIGINS");
+    expect(portal).toContain("resolveTrustedOrigin");
+  });
+
+  it("binds rate-limit checks to authenticated caller identity", () => {
+    const migration = readRepoFile("supabase/migrations/20260224010000_harden_rate_limit_identity.sql");
+
+    expect(migration).toContain("v_auth_user_id uuid := auth.uid()");
+    expect(migration).toContain("Rate limit identity mismatch");
+    expect(migration).toContain("v_effective_user_id := v_auth_user_id");
+  });
+
+  it("initializes video call session only once per mount", () => {
+    const videoCall = readRepoFile("src/pages/VideoCall.tsx");
+    const initInvocations = videoCall.match(/\binit\(\);/g) ?? [];
+
+    expect(initInvocations.length).toBe(1);
+    expect(videoCall).not.toContain("pilotMetadata, connectionState, navigate");
+  });
 });

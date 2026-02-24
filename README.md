@@ -2,7 +2,7 @@
 
 Verity is an anti-swipe dating app built around short, anonymous live video calls.
 
-- Production app: <https://verity-spark-moment.lovable.app/>
+- Production app: <https://verity-spark-moment-main.vercel.app/>
 - Supabase project ref: `nhpbxlvogqnqutmflwlk`
 
 ## Stack
@@ -28,34 +28,30 @@ npm run dev
 GitHub Actions in this repository are standardized on npm (`npm ci`) and require a root `package-lock.json`.
 If dependencies change, update and commit `package-lock.json` with your PR.
 
-## Website Deploy (GitHub Pages + GoDaddy)
+## Website Deploy (Vercel Auto-Deploy)
 
-This repo publishes the frontend automatically from `main` via `.github/workflows/deploy-pages.yml`.
-Every push to `main` builds and deploys the site to GitHub Pages.
+This repo publishes the frontend automatically from `main` via `.github/workflows/deploy-vercel.yml`.
+Every push to `main` builds and deploys the site to Vercel production.
 
 One-time setup in GitHub:
 
-1. Go to `Settings -> Pages` and set `Source` to `GitHub Actions`.
+1. Add repository secrets in `Settings -> Secrets and variables -> Actions -> Secrets`:
+   - `VERCEL_TOKEN`
+   - `VERCEL_ORG_ID`
+   - `VERCEL_PROJECT_ID`
 2. Add repository variables in `Settings -> Secrets and variables -> Actions -> Variables`:
    - `VITE_SUPABASE_URL`
    - `VITE_SUPABASE_PUBLISHABLE_KEY`
    - Optional pricing/project vars used by the build (`VITE_*` in workflow).
 
-One-time setup in GoDaddy DNS (`getverity.com.au`):
+Current production host:
 
-1. Add these `A` records for host `@`:
-   - `185.199.108.153`
-   - `185.199.109.153`
-   - `185.199.110.153`
-   - `185.199.111.153`
-2. Add `CNAME` record for host `www` pointing to `joshcabana.github.io`.
-3. Remove conflicting parking/website-builder forwarding records.
+- `https://verity-spark-moment-main.vercel.app`
 
-The custom domain is configured through `public/CNAME` (`getverity.com.au`).
-After domain cutover, set Supabase Edge Function env values:
+Set Supabase Edge Function redirect secrets to keep Stripe return URLs on this host:
 
-- `APP_BASE_URL=https://getverity.com.au`
-- `APP_ALLOWED_ORIGINS=https://getverity.com.au,https://www.getverity.com.au`
+- `APP_BASE_URL=https://verity-spark-moment-main.vercel.app`
+- `APP_ALLOWED_ORIGINS=https://verity-spark-moment-main.vercel.app`
 
 ## Quality Checks
 
@@ -135,7 +131,7 @@ See `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/security-verifica
 Redirect origin behavior:
 - If request `Origin` is in `APP_ALLOWED_ORIGINS`, Stripe return URLs use that origin.
 - If request `Origin` is missing or untrusted, functions fall back to `APP_BASE_URL`.
-- If `APP_BASE_URL` is unset/invalid, functions fall back to `https://verity-spark-moment.lovable.app`.
+- If `APP_BASE_URL` is unset/invalid, functions fall back to `https://verity-spark-moment-main.vercel.app`.
 
 ## Frontend Environment Variables
 

@@ -18,7 +18,7 @@ The project follows a modern, scalable serverless stack:
 - **Backend/Database:** Supabase (PostgreSQL, Auth, Edge Functions, Realtime, Storage).
 - **Video Infrastructure:** Agora RTC SDK.
 - **Payments:** Stripe Checkout and Billing Portal.
-- **Infrastructure:** Vercel/Lovable for frontend hosting, GitHub Actions/Scripts for Security deployment.
+- **Infrastructure:** Vercel for frontend hosting, GitHub Actions/Scripts for security deployment.
 
 ### Key Architectural Pillars
 We leverage Supabase heavily to minimize backend boilerplate:

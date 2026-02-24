@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Send, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { getPilotMetadata, trackPilotEvent } from "@/lib/analytics";
+import { ChatPrefillStateSchema } from "@/lib/post-spark";
 
 interface Message {
   id: string;
@@ -19,12 +20,23 @@ const Chat = () => {
   const { user } = useAuth();
   const pilotMetadata = useMemo(() => getPilotMetadata(user?.user_metadata), [user?.user_metadata]);
   const navigate = useNavigate();
+  const location = useLocation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [chatRoomId, setChatRoomId] = useState<string | null>(null);
   const [otherName, setOtherName] = useState("Your Spark");
   const [reactionNote, setReactionNote] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const prefillAppliedRef = useRef(false);
+
+  useEffect(() => {
+    if (prefillAppliedRef.current) return;
+    const parsed = ChatPrefillStateSchema.safeParse(location.state);
+    if (!parsed.success || !parsed.data.prefillMessage) return;
+
+    setInput(parsed.data.prefillMessage);
+    prefillAppliedRef.current = true;
+  }, [location.state]);
 
   useEffect(() => {
     if (!matchId) {

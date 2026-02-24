@@ -9,6 +9,10 @@ export type PilotEventName =
   | "call_started"
   | "call_completed"
   | "spark_created"
+  | "post_spark_viewed"
+  | "post_spark_feedback_submitted"
+  | "spark_again_requested"
+  | "identity_reveal_requested"
   | "chat_started"
   | "purchase_completed";
 
@@ -29,6 +33,14 @@ interface PilotEventPropertiesMap {
     extended: boolean;
   };
   spark_created: PilotBaseProperties & { matchId: string };
+  post_spark_viewed: PilotBaseProperties & { matchId: string; firstTimeSpark: boolean };
+  post_spark_feedback_submitted: PilotBaseProperties & {
+    matchId: string;
+    sparkOutcome: "continue_chat" | "end_spark" | "spark_again";
+    rating: "up" | "down";
+  };
+  spark_again_requested: PilotBaseProperties & { matchId: string; usedPass: boolean };
+  identity_reveal_requested: PilotBaseProperties & { matchId: string };
   chat_started: PilotBaseProperties & { matchId: string; chatRoomId: string };
   purchase_completed: PilotBaseProperties & { source: "stripe_checkout_redirect" };
 }

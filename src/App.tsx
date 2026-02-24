@@ -12,6 +12,7 @@ const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Lobby = lazy(() => import("./pages/Lobby"));
 const VideoCall = lazy(() => import("./pages/VideoCall"));
 const MatchDecision = lazy(() => import("./pages/MatchDecision"));
+const PostSparkScreen = lazy(() => import("./pages/PostSparkScreen"));
 const SparkHistory = lazy(() => import("./pages/SparkHistory"));
 const TokenShop = lazy(() => import("./pages/TokenShop"));
 const Transparency = lazy(() => import("./pages/Transparency"));
@@ -58,6 +59,7 @@ const AppRoutes = () => (
         <Route path="/lobby" element={<ProtectedRoute><Lobby /></ProtectedRoute>} />
         <Route path="/call" element={<ProtectedRoute><VideoCall /></ProtectedRoute>} />
         <Route path="/match" element={<ProtectedRoute><MatchDecision /></ProtectedRoute>} />
+        <Route path="/post-spark/:matchId" element={<ProtectedRoute><PostSparkScreen /></ProtectedRoute>} />
         <Route path="/sparks" element={<ProtectedRoute><SparkHistory /></ProtectedRoute>} />
         <Route path="/tokens" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />
         <Route path="/shop" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />

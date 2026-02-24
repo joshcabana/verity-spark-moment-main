@@ -144,47 +144,120 @@ export type Database = {
           },
         ]
       }
+      match_post_spark_feedback: {
+        Row: {
+          created_at: string
+          id: string
+          match_id: string
+          note: string | null
+          rating: string
+          spark_outcome: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          match_id: string
+          note?: string | null
+          rating: string
+          spark_outcome?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          match_id?: string
+          note?: string | null
+          rating?: string
+          spark_outcome?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_post_spark_feedback_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       matches: {
         Row: {
           call_id: string | null
           created_at: string
           id: string
+          identity_revealed_at: string | null
           is_mutual: boolean | null
+          rematch_match_id: string | null
           room_id: string
+          spark_outcome: string
+          spark_outcome_updated_at: string | null
           user1_decision: string | null
           user1_id: string
           user1_note: string | null
+          user1_reveal_requested_at: string | null
+          user1_spark_again_requested_at: string | null
           user2_decision: string | null
           user2_id: string
           user2_note: string | null
+          user2_reveal_requested_at: string | null
+          user2_spark_again_requested_at: string | null
         }
         Insert: {
           call_id?: string | null
           created_at?: string
           id?: string
+          identity_revealed_at?: string | null
           is_mutual?: boolean | null
+          rematch_match_id?: string | null
           room_id?: string
+          spark_outcome?: string
+          spark_outcome_updated_at?: string | null
           user1_decision?: string | null
           user1_id: string
           user1_note?: string | null
+          user1_reveal_requested_at?: string | null
+          user1_spark_again_requested_at?: string | null
           user2_decision?: string | null
           user2_id: string
           user2_note?: string | null
+          user2_reveal_requested_at?: string | null
+          user2_spark_again_requested_at?: string | null
         }
         Update: {
           call_id?: string | null
           created_at?: string
           id?: string
+          identity_revealed_at?: string | null
           is_mutual?: boolean | null
+          rematch_match_id?: string | null
           room_id?: string
+          spark_outcome?: string
+          spark_outcome_updated_at?: string | null
           user1_decision?: string | null
           user1_id?: string
           user1_note?: string | null
+          user1_reveal_requested_at?: string | null
+          user1_spark_again_requested_at?: string | null
           user2_decision?: string | null
           user2_id?: string
           user2_note?: string | null
+          user2_reveal_requested_at?: string | null
+          user2_spark_again_requested_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "matches_rematch_match_id_fkey"
+            columns: ["rematch_match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       messages: {
         Row: {
@@ -765,6 +838,23 @@ export type Database = {
       }
       rpc_enter_matchmaking: {
         Args: { p_is_warmup?: boolean; p_room_id: string }
+        Returns: Json
+      }
+      rpc_request_identity_reveal: {
+        Args: { p_match_id: string }
+        Returns: Json
+      }
+      rpc_request_spark_again: {
+        Args: { p_match_id: string }
+        Returns: Json
+      }
+      rpc_submit_post_spark_feedback: {
+        Args: {
+          p_match_id: string
+          p_note?: string
+          p_rating: string
+          p_spark_outcome?: string
+        }
         Returns: Json
       }
       rpc_submit_match_decision: {

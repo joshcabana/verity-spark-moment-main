@@ -1,0 +1,39 @@
+name: Pilot Reports Validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "AEST date override in YYYY-MM-DD format (optional)"
+        required: false
+        type: string
+      gate:
+        description: "Optional gate to enforce (A, B, FINAL)"
+        required: false
+        type: string
+
+jobs:
+  validate-pilot-reports:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate pilot report artifacts and tracker sync
+        run: |
+          if [ -n "${{ inputs.date }}" ] && [ -n "${{ inputs.gate }}" ]; then
+            node scripts/validate-pilot-reports.mjs --date "${{ inputs.date }}" --gate "${{ inputs.gate }}"
+          elif [ -n "${{ inputs.date }}" ]; then
+            node scripts/validate-pilot-reports.mjs --date "${{ inputs.date }}"
+          elif [ -n "${{ inputs.gate }}" ]; then
+            node scripts/validate-pilot-reports.mjs --gate "${{ inputs.gate }}"
+          else
+            node scripts/validate-pilot-reports.mjs
+          fi

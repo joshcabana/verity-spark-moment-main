@@ -11,7 +11,7 @@ const corsHeaders = {
 };
 
 const DEFAULT_VERITY_PASS_PRICE_ID = "price_1T2B9NHHJNu8TYH7nFtB11O8";
-const DEFAULT_APP_BASE_URL = "https://verity-spark-moment.lovable.app";
+const DEFAULT_APP_BASE_URL = "https://verity-spark-moment-main.vercel.app";
 
 const buildSubscriptionPriceSet = (): Set<string> => {
   const base = Deno.env.get("STRIPE_PRICE_VERITY_PASS") ?? DEFAULT_VERITY_PASS_PRICE_ID;

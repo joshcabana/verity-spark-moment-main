@@ -8,6 +8,16 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+type AppealOutcome = "overturned" | "upheld";
+
+const normalizeAppealOutcome = (value: unknown): AppealOutcome | null => {
+  if (typeof value !== "string") return null;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "approved" || normalized === "overturned") return "overturned";
+  if (normalized === "rejected" || normalized === "upheld") return "upheld";
+  return null;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -145,34 +155,34 @@ serve(async (req) => {
     // ─── OVERRIDE APPEAL ───
     if (action === "override-appeal" && req.method === "POST") {
       const { appealId, outcome, tokensAwarded } = await req.json();
-      if (!appealId || !outcome) {
+      const normalizedOutcome = normalizeAppealOutcome(outcome);
+
+      if (!appealId || !normalizedOutcome) {
         return new Response(JSON.stringify({ error: "Missing appealId or outcome" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
+      const { data: appeal } = await adminClient
+        .from("appeals")
+        .select("user_id, moderation_event_id")
+        .eq("id", appealId)
+        .single();
+
       await adminClient.from("appeals").update({
-        status: outcome, // 'approved' or 'rejected'
+        status: normalizedOutcome,
         resolved_at: new Date().toISOString(),
         resolution_text: `Reviewed by admin`,
         apology_tokens_awarded: tokensAwarded || 0,
       }).eq("id", appealId);
 
-      // If appeal approved, lift ban
-      if (outcome === "approved") {
-        const { data: appeal } = await adminClient
-          .from("appeals")
-          .select("user_id, moderation_event_id")
-          .eq("id", appealId)
-          .single();
-
-        if (appeal) {
-          // Lift related bans
+      if (appeal) {
+        // If appeal is overturned, lift ban and optionally issue apology tokens.
+        if (normalizedOutcome === "overturned") {
           await adminClient.from("user_bans").update({
             lifted_at: new Date().toISOString(),
           }).eq("user_id", appeal.user_id).is("lifted_at", null);
 
-          // Award apology tokens
           if (tokensAwarded && tokensAwarded > 0) {
             const { error: incrementError } = await adminClient.rpc("increment_user_tokens", {
               p_user_id: appeal.user_id,
@@ -193,20 +203,20 @@ serve(async (req) => {
               throw incrementError;
             }
           }
+        }
 
-          // Update moderation event
-          if (appeal.moderation_event_id) {
-            await adminClient.from("moderation_events").update({
-              reviewed: true,
-              reviewed_at: new Date().toISOString(),
-              reviewed_by: userId,
-              review_outcome: "appeal_approved",
-            }).eq("id", appeal.moderation_event_id);
-          }
+        // Always update moderation review status when an appeal is resolved.
+        if (appeal.moderation_event_id) {
+          await adminClient.from("moderation_events").update({
+            reviewed: true,
+            reviewed_at: new Date().toISOString(),
+            reviewed_by: userId,
+            review_outcome: normalizedOutcome === "overturned" ? "appeal_overturned" : "appeal_upheld",
+          }).eq("id", appeal.moderation_event_id);
         }
       }
 
-      return new Response(JSON.stringify({ success: true }), {
+      return new Response(JSON.stringify({ success: true, status: normalizedOutcome }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

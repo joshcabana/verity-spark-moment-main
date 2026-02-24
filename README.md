@@ -15,6 +15,8 @@ Verity is an anti-swipe dating app built around short, anonymous live video call
 
 ## Local Development
 
+This repository uses npm as the canonical package manager. Keep `package-lock.json` committed and use `npm ci` in CI.
+
 ```bash
 cd /Users/joshcabana/Downloads/verity-spark-moment-main
 npm install
@@ -99,6 +101,12 @@ See `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/security-verifica
   - `STRIPE_TOKENS_30_AMOUNT`
   - `STRIPE_TOKEN_PACK_MAP_JSON` (JSON map override)
   - `APP_BASE_URL` (domain fallback for checkout/portal redirects)
+  - `APP_ALLOWED_ORIGINS` (comma-separated redirect allowlist for checkout/portal)
+
+Redirect origin behavior:
+- If request `Origin` is in `APP_ALLOWED_ORIGINS`, Stripe return URLs use that origin.
+- If request `Origin` is missing or untrusted, functions fall back to `APP_BASE_URL`.
+- If `APP_BASE_URL` is unset/invalid, functions fall back to `https://verity-spark-moment.lovable.app`.
 
 ## Frontend Environment Variables
 

@@ -29,6 +29,7 @@ const VideoCall = () => {
   const [extended, setExtended] = useState(false);
   const [extending, setExtending] = useState(false);
   const [connectionState, setConnectionState] = useState<"CONNECTED" | "RECONNECTING" | "DISCONNECTED">("CONNECTED");
+  const connectionStateRef = useRef<"CONNECTED" | "RECONNECTING" | "DISCONNECTED">("CONNECTED");
   const navigate = useNavigate();
   const { user } = useAuth();
   const pilotMetadata = useMemo(() => getPilotMetadata(user?.user_metadata), [user?.user_metadata]);
@@ -135,15 +136,19 @@ const VideoCall = () => {
 
         // Connection state tracking for reconnection UX
         client.on("connection-state-change", (curState, _revState, reason) => {
+          const previousState = connectionStateRef.current;
           if (curState === "RECONNECTING") {
+            connectionStateRef.current = "RECONNECTING";
             setConnectionState("RECONNECTING");
             toast({ title: "Reconnecting...", description: "Your connection dropped briefly. Trying to reconnect." });
           } else if (curState === "CONNECTED") {
-            if (connectionState === "RECONNECTING") {
+            if (previousState === "RECONNECTING") {
               toast({ title: "Reconnected", description: "Your call is back." });
             }
+            connectionStateRef.current = "CONNECTED";
             setConnectionState("CONNECTED");
           } else if (curState === "DISCONNECTED" && reason !== "LEAVE") {
+            connectionStateRef.current = "DISCONNECTED";
             setConnectionState("DISCONNECTED");
             toast({ title: "Connection lost", description: "Could not reconnect. Returning to lobby.", variant: "destructive" });
             cleanup();
@@ -189,10 +194,8 @@ const VideoCall = () => {
 
     init();
 
-    init();
-
     return () => { cleanup(); };
-  }, [user, startModeration, cleanup, pilotMetadata, connectionState, navigate]);
+  }, [user, startModeration, cleanup, pilotMetadata, navigate]);
 
   // Timer countdown — paused during reconnection
   useEffect(() => {

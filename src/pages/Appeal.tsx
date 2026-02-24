@@ -168,15 +168,19 @@ const AppealPage = () => {
                   {/* Appeal status */}
                   {appeal ? (
                     <div className={`rounded-xl p-3 ${
-                      appeal.status === "overturned" ? "bg-verity-success/10 border border-verity-success/20" :
-                      appeal.status === "upheld" ? "bg-destructive/10 border border-destructive/20" :
-                      "bg-primary/10 border border-primary/20"
+                      appeal.status === "overturned"
+                        ? "bg-verity-success/10 border border-verity-success/20"
+                        : appeal.status === "upheld"
+                          ? "bg-destructive/10 border border-destructive/20"
+                          : "bg-primary/10 border border-primary/20"
                     }`}>
                       <div className="flex items-center gap-2 mb-1">
                         {appeal.status === "overturned" ? (
                           <CheckCircle className="w-4 h-4 text-verity-success" />
                         ) : appeal.status === "upheld" ? (
                           <XCircle className="w-4 h-4 text-destructive" />
+                        ) : appeal.status === "reviewing" ? (
+                          <Clock className="w-4 h-4 text-primary" />
                         ) : (
                           <Clock className="w-4 h-4 text-primary" />
                         )}

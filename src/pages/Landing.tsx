@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Shield, Clock, Eye, Users, Sparkles, Video } from "lucide-react";
-import heroImage from "@/assets/hero-image.jpg";
 import AppNav from "@/components/AppNav";
 
 const stats = [
@@ -48,15 +47,20 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen h-[100dvh] flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
-          <img
-            src={heroImage}
+          <motion.img
+            src="/Verity_Hero.webp"
             alt="Two people connecting"
-            className="w-full h-full object-cover opacity-40"
+            loading="eager"
+            fetchPriority="high"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9, ease: "easeOut" }}
+            className="w-full h-full object-cover object-[52%_24%] sm:object-[52%_22%] md:object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/70" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">

@@ -62,7 +62,31 @@ serve(async (req) => {
         p_window_seconds: 60,
       });
 
-    if (rateLimitError || !isAllowed) {
+    if (rateLimitError) {
+      const message = String(rateLimitError.message ?? "");
+      if (message.includes("Rate limit identity mismatch")) {
+        console.error("Rate limit identity mismatch detected during agora-token request", {
+          userId: user.id,
+          endpoint: "agora-token",
+        });
+        return new Response(JSON.stringify({ error: "Forbidden" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 403,
+        });
+      }
+
+      console.error("Rate limit check failed for agora-token", {
+        userId: user.id,
+        endpoint: "agora-token",
+        message,
+      });
+      return new Response(JSON.stringify({ error: "Rate limit check failed" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+      });
+    }
+
+    if (!isAllowed) {
       return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 429,

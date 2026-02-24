@@ -1,0 +1,87 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Validate public build variables
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          test -n "$VITE_SUPABASE_URL" || {
+            echo "Missing repository variable: VITE_SUPABASE_URL"
+            exit 1
+          }
+          test -n "$VITE_SUPABASE_PUBLISHABLE_KEY" || {
+            echo "Missing repository variable: VITE_SUPABASE_PUBLISHABLE_KEY"
+            exit 1
+          }
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_PROJECT_ID: ${{ vars.VITE_SUPABASE_PROJECT_ID }}
+          VITE_DISPLAY_CURRENCY: ${{ vars.VITE_DISPLAY_CURRENCY }}
+          VITE_STRIPE_PRICE_TOKENS_10: ${{ vars.VITE_STRIPE_PRICE_TOKENS_10 }}
+          VITE_STRIPE_PRICE_TOKENS_15: ${{ vars.VITE_STRIPE_PRICE_TOKENS_15 }}
+          VITE_STRIPE_PRICE_TOKENS_30: ${{ vars.VITE_STRIPE_PRICE_TOKENS_30 }}
+          VITE_STRIPE_PRICE_VERITY_PASS: ${{ vars.VITE_STRIPE_PRICE_VERITY_PASS }}
+          VITE_PRICE_PACK_10_AMOUNT: ${{ vars.VITE_PRICE_PACK_10_AMOUNT }}
+          VITE_PRICE_PACK_15_AMOUNT: ${{ vars.VITE_PRICE_PACK_15_AMOUNT }}
+          VITE_PRICE_PACK_30_AMOUNT: ${{ vars.VITE_PRICE_PACK_30_AMOUNT }}
+          VITE_PRICE_VERITY_PASS_AMOUNT: ${{ vars.VITE_PRICE_VERITY_PASS_AMOUNT }}
+        run: npm run build
+
+      - name: Add SPA fallback
+        run: cp dist/index.html dist/404.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

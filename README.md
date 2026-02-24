@@ -28,6 +28,35 @@ npm run dev
 GitHub Actions in this repository are standardized on npm (`npm ci`) and require a root `package-lock.json`.
 If dependencies change, update and commit `package-lock.json` with your PR.
 
+## Website Deploy (GitHub Pages + GoDaddy)
+
+This repo publishes the frontend automatically from `main` via `.github/workflows/deploy-pages.yml`.
+Every push to `main` builds and deploys the site to GitHub Pages.
+
+One-time setup in GitHub:
+
+1. Go to `Settings -> Pages` and set `Source` to `GitHub Actions`.
+2. Add repository variables in `Settings -> Secrets and variables -> Actions -> Variables`:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_PUBLISHABLE_KEY`
+   - Optional pricing/project vars used by the build (`VITE_*` in workflow).
+
+One-time setup in GoDaddy DNS (`getverity.com.au`):
+
+1. Add these `A` records for host `@`:
+   - `185.199.108.153`
+   - `185.199.109.153`
+   - `185.199.110.153`
+   - `185.199.111.153`
+2. Add `CNAME` record for host `www` pointing to `joshcabana.github.io`.
+3. Remove conflicting parking/website-builder forwarding records.
+
+The custom domain is configured through `public/CNAME` (`getverity.com.au`).
+After domain cutover, set Supabase Edge Function env values:
+
+- `APP_BASE_URL=https://getverity.com.au`
+- `APP_ALLOWED_ORIGINS=https://getverity.com.au,https://www.getverity.com.au`
+
 ## Quality Checks
 
 ```bash

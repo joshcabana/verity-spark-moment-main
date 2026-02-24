@@ -175,7 +175,7 @@ const MatchDecision = () => {
     }
 
     if (matchResult === "mutual" && matchId) {
-      navTimerRef.current = window.setTimeout(() => navigate(`/chat/${matchId}`), 3000);
+      navTimerRef.current = window.setTimeout(() => navigate(`/post-spark/${matchId}`), 3000);
       return;
     }
 

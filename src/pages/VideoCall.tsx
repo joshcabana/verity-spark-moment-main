@@ -216,7 +216,7 @@ const VideoCall = () => {
         });
       }
       cleanup();
-      navigate("/match");
+      navigate("/match", { state: { from: "video_call" } });
       return;
     }
     const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);

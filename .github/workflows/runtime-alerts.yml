@@ -30,12 +30,10 @@ jobs:
 
       - name: Run runtime alert checks
         env:
-          GH_SECRETS_JSON: ${{ toJson(secrets) }}
+          SUPABASE_URL: ${{ secrets['SUPABASE_URL'] }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets['SUPABASE_SERVICE_ROLE_KEY'] }}
           ALERT_LOOKBACK_MINUTES: "60"
           STRIPE_WEBHOOK_FAILURE_THRESHOLD: "1"
           RPC_EXCEPTION_THRESHOLD: "3"
           MODERATION_STATUS_SPIKE_THRESHOLD: "20"
-        run: |
-          export SUPABASE_URL="$(node -e \"const s=JSON.parse(process.env.GH_SECRETS_JSON||'{}'); process.stdout.write(s.SUPABASE_URL||'');\")"
-          export SUPABASE_SERVICE_ROLE_KEY="$(node -e \"const s=JSON.parse(process.env.GH_SECRETS_JSON||'{}'); process.stdout.write(s.SUPABASE_SERVICE_ROLE_KEY||'');\")"
-          node scripts/check-runtime-alerts.mjs
+        run: node scripts/check-runtime-alerts.mjs

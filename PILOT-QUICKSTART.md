@@ -172,7 +172,7 @@ When you run `npm run pilot:onboard`:
 npm run pilot:bulk:email -- --input participants.csv --output docs/pilot/wave1-invites.csv --confirm
 
 # 2. Re-seed accounts
-npm run seed:pilot:users -- --wave1 --domain gmail.com
+npm run seed:pilot:users -- --wave1 --invites-csv docs/pilot/wave1-invites.csv
 
 # 3. Generate credentials
 npm run pilot:invite:creds -- --invites docs/pilot/wave1-invites.csv --out reports/pilot/invite-credentials.csv --confirm

@@ -35,17 +35,22 @@ const parseArgs = (argv) => {
   return args;
 };
 
-const run = (command, args, description) => {
+const run = (command, args, description, options = {}) => {
+  const { allowFailure = false } = options;
   console.log(`\n→ ${description}`);
   const result = spawnSync(command, args, {
     stdio: "inherit",
-    shell: true,
   });
   if (result.status !== 0) {
+    if (allowFailure) {
+      console.warn(`⚠ ${description} (non-blocking in this mode)`);
+      return false;
+    }
     console.error(`✗ Failed: ${description}`);
     process.exit(1);
   }
   console.log(`✓ ${description}`);
+  return true;
 };
 
 const args = parseArgs(process.argv);
@@ -106,6 +111,7 @@ run(
     finalFlag,
   ].filter(Boolean),
   "Step 3: Generate shareable invite credentials",
+  { allowFailure: Boolean(finalFlag) },
 );
 
 // Step 4: Summary

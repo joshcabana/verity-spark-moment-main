@@ -65,7 +65,7 @@ Hey [Name],
 
 You're in! Here are your login details for the private beta:
 
-- **Login URL:** <https://verity.date/auth>
+- **Login URL:** <https://verity-spark-moment-main.vercel.app/auth>
 - **Email:** [their email]
 - **Password:** `VerityPilot!2026`
 
@@ -116,4 +116,4 @@ Fastest sources (reach out to these first):
 
 Target: **20 outreach contacts → 10 confirmed participants** (50% conversion is realistic for personal outreach)
 
-**Timing:** Send all outreach on 2026-02-25 (today). Follow up on 2026-02-26. Accounts need to be active before Gate A on 2026-02-27.
+**Timing:** Send outreach immediately. Follow up within 24 hours. Accounts need to be active before Gate A on 2026-02-27.

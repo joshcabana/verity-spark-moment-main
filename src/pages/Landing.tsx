@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -17,13 +16,9 @@ import AppNav from "@/components/AppNav";
 import { trackEvent } from "@/lib/analytics";
 import HeroSection from "@/components/HeroSection"; // Import the new HeroSection
 import HowSparksWork from "@/components/HowSparksWork"; // Import the new HowSparksWork
+import SparkCallHero from "@/components/SparkCallHero"; // Import the new SparkCallHero
 
-const trustPills = [
-  { icon: Shield, label: "Live trust + safety" },
-  { icon: EyeOff, label: "Anonymous first 45 seconds" },
-  { icon: LockKeyhole, label: "Mutual-only reveal" },
-  { icon: UserCheck, label: "Identity controls" },
-];
+
 
 
 
@@ -52,39 +47,7 @@ const Landing = () => {
 
       <HowSparksWork />
 
-      <section className="border-b border-white/10 bg-[#0b0b0b] px-6 py-20">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
-          <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1 text-xs uppercase tracking-[0.2em] text-white/65">
-              <Clock3 className="h-3.5 w-3.5 text-[#34d399]" />
-              Cinematic Spark Call
-            </p>
-            <h2 className="mt-4 font-display text-3xl font-semibold text-white md:text-5xl">
-              The 45-second moment that decides everything
-            </h2>
-            <p className="mt-5 text-base leading-relaxed text-white/75 md:text-lg">
-              Orb convergence at 15 seconds triggers a reveal flash and confetti burst. The flow is designed to
-              reduce anxiety, increase clarity, and create one decisive mutual yes/no outcome.
-            </p>
-
-            <ul className="mt-6 space-y-3 text-sm text-white/80">
-              {[
-                "Circular gradient timer with high-contrast readability",
-                "Orb explosion + reveal flash sequence at 15 seconds",
-                "Confetti burst on successful reveal to reinforce positive signal",
-                "Glassmorphism interaction layer with reduced-motion safety",
-              ].map((item) => (
-                <li key={item} className="inline-flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#34d399]" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <SparkCallInterface className="h-full" />
-        </div>
-      </section>
+      <SparkCallHero />
 
       <section className="px-6 py-20">
         <div className="mx-auto max-w-6xl rounded-3xl border border-white/15 bg-[linear-gradient(135deg,rgba(52,211,153,0.14),rgba(217,70,239,0.14))] p-8 md:p-12">

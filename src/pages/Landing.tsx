@@ -2,11 +2,12 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Shield, Clock, Eye, Users, Sparkles, Video } from "lucide-react";
 import AppNav from "@/components/AppNav";
+import { trackEvent } from "@/lib/analytics";
 
 const stats = [
   { value: "78%", label: "of users burned out on dating apps" },
   { value: "45s", label: "is all you need for a real spark" },
-  { value: "99.8%", label: "of calls are violation-free" },
+  { value: "Pilot data pending", label: "for violation-free call rate" },
   { value: "0", label: "profiles. Zero swipes. Just you." },
 ];
 
@@ -106,7 +107,8 @@ const Landing = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link
-              to="/auth"
+              to="/auth?mode=signup"
+              onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "hero" })}
               className="group relative inline-flex items-center gap-3 bg-gradient-gold text-primary-foreground font-semibold text-lg px-10 py-4 rounded-full glow-gold transition-all hover:scale-105"
             >
               Go Live
@@ -114,6 +116,7 @@ const Landing = () => {
             </Link>
             <Link
               to="/transparency"
+              onClick={() => trackEvent("landing_safety_clicked")}
               className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors px-6 py-4"
             >
               <Shield className="w-4 h-4" />
@@ -235,7 +238,8 @@ const Landing = () => {
             45 seconds. Real eyes. Real spark. Because real connection doesn't need a bio.
           </p>
           <Link
-            to="/auth"
+            to="/auth?mode=signup"
+            onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "footer" })}
             className="group inline-flex items-center gap-3 bg-gradient-gold text-primary-foreground font-semibold text-lg px-12 py-5 rounded-full glow-gold transition-all hover:scale-105"
           >
             Go Live Now

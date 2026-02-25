@@ -45,4 +45,20 @@ describe("release hygiene", () => {
     expect(adminFunction).toContain('"overturned"');
     expect(adminFunction).toContain('"upheld"');
   });
+
+  it("keeps trust and conversion copy guardrails in key landing flows", () => {
+    const landingPage = readRepoFile("src/pages/Landing.tsx");
+    const transparencyPage = readRepoFile("src/pages/Transparency.tsx");
+    const lobbyPage = readRepoFile("src/pages/Lobby.tsx");
+    const tokenShopPage = readRepoFile("src/pages/TokenShop.tsx");
+
+    for (const content of [landingPage, transparencyPage, lobbyPage, tokenShopPage]) {
+      expect(content).not.toContain("99.8%");
+      expect(content).not.toContain("No screenshots or recording possible");
+      expect(content).not.toContain("Unlimited entries");
+      expect(content).not.toContain("Priority queue matching");
+    }
+
+    expect(landingPage).toContain('to="/auth?mode=signup"');
+  });
 });

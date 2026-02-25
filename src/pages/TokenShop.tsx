@@ -59,8 +59,8 @@ const VERITY_PASS_PRICE_ID = getEnvString("VITE_STRIPE_PRICE_VERITY_PASS", "pric
 const VERITY_PASS_AMOUNT = getEnvNumber("VITE_PRICE_VERITY_PASS_AMOUNT", 19.99);
 
 const passFeatures = [
-  "Unlimited entries",
-  "Priority queue matching",
+  "More weekly entries (daily caps still apply)",
+  "Room access and premium features without bypassing safety limits",
   "1 free Spark Extension daily",
   "All themed room access",
   "Spark analytics & insights",
@@ -185,7 +185,7 @@ const TokenShop = () => {
           <div className="space-y-2">
             {[
               { icon: Zap, label: "Extra entries beyond free limit", cost: "1 token" },
-              { icon: Star, label: "Priority queue — match faster", cost: "2 tokens" },
+              { icon: Star, label: "Room access or extensions within safety limits", cost: "2 tokens" },
               { icon: Sparkles, label: "90-second Spark Extension", cost: "1 token" },
               { icon: Crown, label: "Premium themed rooms", cost: "1 token" },
             ].map((item) => (

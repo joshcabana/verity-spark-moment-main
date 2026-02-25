@@ -17,6 +17,8 @@ export default {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         display: ["Montserrat", "Inter", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
+        nunito: ["Nunito", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -52,6 +54,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Electric Bloom colors
+        'dark-charcoal': '#1C1C1C',
+        'electric-violet': '#8A2BE2',
+        'neon-green': '#39FF14',
+        'fiery-orange': '#FF4500',
+        'text-light': '#E0E0E0',
+        'text-medium': '#C5C5C5',
+        'text-dark': '#A0A0A0',
         verity: {
           gold: "hsl(var(--verity-gold))",
           "gold-dim": "hsl(var(--verity-gold-dim))",
@@ -132,6 +142,10 @@ export default {
         "reveal-flash": "reveal-flash 0.8s ease-out forwards",
         confetti: "confetti 1.6s ease-out forwards",
       },
+      dropShadow: {
+        neon: '0 0 25px rgba(57,255,20,0.9)',
+        electric: '0 0 15px rgba(138,43,226,0.7)',
+      }
     },
   },
   plugins: [tailwindcssAnimate],

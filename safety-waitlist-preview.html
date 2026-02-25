@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERITY - Safety, Trust & Waitlist Preview (Electric Bloom)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-dark-charcoal: #1C1C1C;
+            --color-electric-violet: #8A2BE2;
+            --color-neon-green: #39FF14;
+            --color-fiery-orange: #FF4500;
+            --color-text-light: #E0E0E0;
+            --color-text-medium: #C5C5C5;
+            --color-text-dark: #A0A0A0;
+            --color-glass-bg: rgba(255, 255, 255, 0.08);
+            --color-glass-border: rgba(255, 255, 255, 0.15);
+            --color-alert-red: #FF4444;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--color-dark-charcoal);
+            color: var(--color-text-light);
+            overflow-x: hidden;
+            padding: 40px;
+        }
+
+        .section-wrapper {
+            background: var(--color-dark-charcoal);
+            border-radius: 20px;
+            padding: 40px 20px;
+            margin: 40px auto;
+            max-width: 1000px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3em;
+            color: var(--color-neon-green);
+            text-shadow: 0 0 15px rgba(57,255,20,0.6);
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            color: var(--color-fiery-orange);
+            text-shadow: 0 0 8px rgba(255,69,0,0.4);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: var(--color-text-medium);
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            text-align: center;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .info-card {
+            background: var(--color-glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid var(--color-glass-border);
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(138,43,226,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.3);
+        }
+
+        .card-icon {
+            font-size: 3em;
+            color: var(--color-neon-green);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(57,255,20,0.5);
+        }
+
+        .card-icon.red { color: var(--color-alert-red); text-shadow: 0 0 10px rgba(255,69,0,0.5);}
+        .card-icon.violet { color: var(--color-electric-violet); text-shadow: 0 0 10px rgba(138,43,226,0.5);}
+
+        .info-card h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5em;
+            color: var(--color-text-light);
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, var(--color-electric-violet) 0%, var(--color-fiery-orange) 100%);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 40px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 69, 0, 0.4);
+            text-decoration: none;
+            margin-top: 25px;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 9px 25px rgba(255, 69, 0, 0.6);
+        }
+
+        .waitlist-section {
+            margin-top: 80px;
+            padding-top: 60px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .fomo-countdown {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5em;
+            color: var(--color-fiery-orange);
+            text-shadow: 0 0 15px rgba(255,69,0,0.7);
+            margin-top: 30px;
+            margin-bottom: 20px;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); opacity: 1; }
+            to { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .waitlist-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .waitlist-form input[type="email"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--color-electric-violet);
+            background-color: rgba(0,0,0,0.5);
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            outline: none;
+            box-shadow: 0 0 10px rgba(138,43,226,0.3);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .waitlist-form input[type="email"]:focus {
+            border-color: var(--color-neon-green);
+            box-shadow: 0 0 15px rgba(57,255,20,0.5);
+        }
+
+        .small-text {
+            font-size: 0.9em;
+            color: var(--color-text-dark);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 2.5em;
+            }
+            h3 {
+                font-size: 1.8em;
+            }
+            p {
+                font-size: 1em;
+            }
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            .fomo-countdown {
+                font-size: 2em;
+            }
+            .waitlist-form input[type="email"] {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="section-wrapper">
+        <h2>Your Safety, Our Priority</h2>
+        <p>At VERITY, we're committed to creating a secure and authentic environment for every Spark. Our robust safety architecture and privacy controls ensure your peace of mind.</p>
+
+        <div class="card-grid">
+            <div class="info-card">
+                <div class="card-icon">🛡️</div>
+                <h4>Anonymous First 45 Seconds</h4>
+                <p>Your identity remains private until a mutual reveal. Focus on genuine connection, not first impressions.</p>
+            </div>
+            <div class="info-card">
+                <div class="card-icon red">🚨</div>
+                <h4>Real-time Moderation</h4>
+                <p>Advanced AI and human oversight monitor every Spark for inappropriate behavior, ensuring a respectful space.</p>
+            </div>
+            <div class="info-card">
+                <div class="card-icon violet">🔒</div>
+                <h4>Identity Controls</h4>
+                <p>You're in control. Set your preferences and manage who you connect with after a mutual Spark.</p>
+            </div>
+            <div class="info-card">
+                <div class="card-icon">✨</div>
+                <h4>Mutual-Only Reveals</h4>
+                <p>No unsolicited access. Reveals only happen when both participants feel a genuine spark and opt-in.</p>
+            </div>
+        </div>
+
+        <div class="waitlist-section">
+            <h2>Join the Inner Circle. Spark Early.</h2>
+            <p>Verity is currently in a private beta, accepting pilot users in Sydney and Canberra. Limited invitation windows unlock in waves. Secure your priority access now and be part of the anti-swipe revolution before public launch.</p>
+
+            <div class="fomo-countdown">Next Wave Opens In: <span id="countdown-timer">48:00:00</span></div>
+            <p class="small-text">*Limited spots available. Don't miss your chance for early access.*</p>
+
+            <div class="waitlist-form">
+                <input type="email" placeholder="Enter your email for priority access" required>
+                <a href="#" class="btn">Secure My Spot</a>
+            </div>
+        </div>
+    </div>
+
+    <!--
+        Framer Motion Integration Plan:
+        - Use `useInView` for `info-card` and `waitlist-section` to trigger staggered entrance animations.
+        - `initial={{ opacity: 0, scale: 0.95 }}` and `animate={{ opacity: 1, scale: 1 }}`.
+        - `fomo-countdown` can have a subtle scale/pulse animation (already simulated with CSS).
+        - Input fields can have a small `whileFocus` scale effect.
+        - Button hover effects as implemented in previous sections.
+
+        Dynamic Countdown (JavaScript):
+        - Implement client-side JavaScript to power the `countdown-timer` element.
+        - Calculate remaining time until the next wave opens, display in HH:MM:SS format.
+        - Consider fetching the next wave's opening time from a backend API for real-time accuracy.
+
+        Backend Integration (Waitlist):
+        - Connect the email submission form to a backend service (e.g., Supabase, custom API) to manage waitlist registrations.
+        - Implement email validation and confirmation.
+        - Consider a referral system for increased FOMO and organic growth.
+    -->
+</body>
+</html>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -88,20 +89,46 @@ const faqs = [
 ];
 
 const Landing = () => {
+  const [videoEnabled, setVideoEnabled] = useState(true);
+
+  useEffect(() => {
+    trackEvent("landing_view", { page: "landing" });
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mediaQuery.matches) {
+      setVideoEnabled(false);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <section className="relative min-h-screen h-[100dvh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <motion.img
-            src="/Verity_Hero.webp"
-            alt="Two people connecting"
-            loading="eager"
-            fetchPriority="high"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-            className="w-full h-full object-cover object-[52%_24%] sm:object-[52%_22%] md:object-center"
-          />
+          {videoEnabled ? (
+            <video
+              className="w-full h-full object-cover object-[52%_24%] sm:object-[52%_22%] md:object-center"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/Verity_Hero.webp"
+              onError={() => setVideoEnabled(false)}
+            >
+              <source src="/hero-loop.mp4" type="video/mp4" />
+            </video>
+          ) : (
+            <motion.img
+              src="/Verity_Hero.webp"
+              alt="Two people connecting"
+              loading="eager"
+              fetchPriority="high"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9, ease: "easeOut" }}
+              className="w-full h-full object-cover object-[52%_24%] sm:object-[52%_22%] md:object-center"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/65 to-black/85" />
         </div>
 
@@ -281,10 +308,21 @@ const Landing = () => {
           </h2>
           <div className="grid gap-4">
             {faqs.map((faq) => (
-              <div key={faq.q} className="rounded-2xl border border-border/50 bg-verity-surface/60 p-5">
-                <h3 className="text-foreground font-semibold mb-2">{faq.q}</h3>
+              <details
+                key={faq.q}
+                className="rounded-2xl border border-border/50 bg-verity-surface/60 p-5"
+                onToggle={(event) => {
+                  const isOpen = (event.currentTarget as HTMLDetailsElement).open;
+                  if (isOpen) {
+                    trackEvent("landing_faq_opened", { question: faq.q });
+                  }
+                }}
+              >
+                <summary className="text-foreground font-semibold mb-2 cursor-pointer list-none">
+                  {faq.q}
+                </summary>
                 <p className="text-muted-foreground text-sm leading-relaxed">{faq.a}</p>
-              </div>
+              </details>
             ))}
           </div>
         </div>

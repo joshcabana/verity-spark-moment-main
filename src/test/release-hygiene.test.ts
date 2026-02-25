@@ -27,6 +27,14 @@ describe("release hygiene", () => {
     expect(serviceWorker).not.toContain("verity-icon-192.png");
   });
 
+  it("keeps Vercel SPA rewrites configured for direct route access", () => {
+    const vercelPath = resolve(process.cwd(), "vercel.json");
+    expect(existsSync(vercelPath)).toBe(true);
+
+    const vercelConfig = readRepoFile("vercel.json");
+    expect(vercelConfig).toContain('"/index.html"');
+  });
+
   it("keeps local worktree artifacts out of lint and git noise", () => {
     const eslintConfig = readRepoFile("eslint.config.js");
     const gitignore = readRepoFile(".gitignore");

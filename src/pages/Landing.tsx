@@ -61,7 +61,7 @@ const Landing = () => {
             transition={{ duration: 0.9, ease: "easeOut" }}
             className="w-full h-full object-cover object-[52%_24%] sm:object-[52%_22%] md:object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/65 to-black/80" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
@@ -75,7 +75,7 @@ const Landing = () => {
               <span className="text-gradient-gold">Verity</span>
             </h1>
             <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-10">
-              The Anti-Dating-App Dating App
+              The Anti-Dating App
             </p>
           </motion.div>
 
@@ -248,7 +248,23 @@ const Landing = () => {
         </motion.div>
       </section>
 
-      <div className="pb-20" />
+      <section className="px-6 py-12 border-t border-border/30 bg-verity-surface">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+          <p className="text-muted-foreground">Verity</p>
+          <div className="flex items-center gap-5">
+            <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+              Privacy
+            </Link>
+            <Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+              Terms
+            </Link>
+            <Link to="/transparency" className="text-muted-foreground hover:text-foreground transition-colors">
+              Transparency
+            </Link>
+          </div>
+        </div>
+      </section>
+      <div className="pb-20 md:pb-0" />
       <AppNav />
     </div>
   );

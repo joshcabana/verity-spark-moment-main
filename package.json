@@ -27,6 +27,7 @@
     "pilot:run:gate": "node scripts/pilot-run-gate.mjs",
     "pilot:reports:validate": "node scripts/validate-pilot-reports.mjs",
     "pilot:onboard": "node scripts/pilot-onboard-workflow.mjs",
+    "pilot:participants:validate": "node scripts/validate-participants-csv.mjs",
     "pilot:bulk:email": "node scripts/pilot-bulk-email-update.mjs",
     "pilot:invite:creds": "node scripts/pilot-generate-invite-credentials.mjs",
     "security:live:smoke": "node scripts/live-security-smoke.mjs",
@@ -110,5 +111,26 @@
     "typescript-eslint": "^8.38.0",
     "vite": "^7.3.1",
     "vitest": "^3.2.4"
+  },
+  "cspell": {
+    "words": [
+      "nhpbxlvogqnqutmflwlk",
+      "coworking",
+      "cutover",
+      "creds",
+      "joshcabana",
+      "verity",
+      "supabase",
+      "mixpanel",
+      "agora",
+      "deno",
+      "esm",
+      "vitest",
+      "vite",
+      "shadcn",
+      "icebreakers",
+      "icebreaker",
+      "warmup"
+    ]
   }
 }

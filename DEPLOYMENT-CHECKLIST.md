@@ -15,7 +15,13 @@
 
 - [ ] **Create participants.csv** with columns: `email`, `city`, `name`, `notes`
   - Example template: `participants-EXAMPLE.csv`
-  - Validate email format before saving
+  - Invite message templates: [docs/pilot/invite-message-templates.md](docs/pilot/invite-message-templates.md)
+
+- [ ] **Validate participants.csv** before seeding:
+
+```bash
+npm run pilot:participants:validate -- --participants participants.csv
+```
 
 - [ ] **Test participants list** with dry-run:
 

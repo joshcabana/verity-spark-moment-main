@@ -18,7 +18,6 @@ Verity is an anti-swipe dating app built around short, anonymous live video call
 This repository uses npm as the canonical package manager. Keep `package-lock.json` committed and use `npm ci` in CI.
 
 ```bash
-cd /Users/joshcabana/Downloads/verity-spark-moment-main
 npm install
 npm run dev
 ```
@@ -134,7 +133,7 @@ npm run security:live:e2e -- \
   --user-b-password "$LIVE_USER_B_PASSWORD"
 ```
 
-See `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/security-verification.md` and `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/runtime-monitoring.md` for full runbooks.
+See [docs/security-verification.md](docs/security-verification.md) and [docs/runtime-monitoring.md](docs/runtime-monitoring.md) for full runbooks.
 
 ## Required Supabase Edge Function Secrets
 
@@ -195,9 +194,9 @@ Redirect origin behavior:
 
 ### Launch packet + tracker
 
-- Launch packet: `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/pilot/launch-packet.md`
-- Shared tracker: `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/pilot/tracker.md`
-- Anti-gravity output template: `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/pilot/anti-gravity-output.md`
+- Launch packet: [docs/pilot/launch-packet.md](docs/pilot/launch-packet.md)
+- Shared tracker: [docs/pilot/tracker.md](docs/pilot/tracker.md)
+- Anti-gravity output template: [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md)
 
 ### Build Wave 1 invite plan (20 users/city, 10/day cap)
 

@@ -381,7 +381,7 @@ const Lobby = () => {
           )}
           <div className="flex items-center gap-1">
             <Shield className="w-3.5 h-3.5 text-verity-success" />
-            <span>AI moderated · 99.8% safe</span>
+            <span>AI moderated · Pilot safeguards active</span>
           </div>
         </div>
 

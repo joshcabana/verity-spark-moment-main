@@ -33,7 +33,7 @@ npm run pilot:ops:daily
 
 The command writes a JSON report to `reports/pilot/daily-ops-YYYY-MM-DD.json` and exits non-zero when reliability/safety/intake thresholds are breached.
 
-To keep `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/pilot/tracker.md` in sync with report outputs, run:
+To keep `docs/pilot/tracker.md` in sync with report outputs, run:
 
 ```bash
 npm run pilot:tracker:update -- --daily-report reports/pilot/daily-ops-YYYY-MM-DD.json --date YYYY-MM-DD
@@ -87,6 +87,7 @@ Recommended redirect hardening secrets:
 - `APP_ALLOWED_ORIGINS` (comma-separated allowlist for checkout/portal redirect origins)
 
 Redirect origin behavior in checkout/portal functions:
+
 - Trust request `Origin` only when it is present in `APP_ALLOWED_ORIGINS`.
 - If `Origin` is missing or not allowlisted, use `APP_BASE_URL` as fallback.
 - If `APP_BASE_URL` is missing/invalid, default fallback is `https://verity-spark-moment-main.vercel.app`.

@@ -28,6 +28,6 @@ Use this structure:
 
 ## Working Files In This Repo
 
-- Shared tracker: [docs/pilot/tracker.md](../../docs/pilot/tracker.md)
-- Invite schedule CSV: [docs/pilot/wave1-invites.csv](../../docs/pilot/wave1-invites.csv)
-- Anti-gravity output template: [docs/pilot/anti-gravity-output.md](../../docs/pilot/anti-gravity-output.md)
+- Shared tracker: [tracker.md](tracker.md)
+- Invite schedule CSV: [wave1-invites.csv](wave1-invites.csv)
+- Anti-gravity output template: [anti-gravity-output.md](anti-gravity-output.md)

@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
+import { parse } from "csv-parse/sync";
 
 const argv = process.argv.slice(2);
 const args = new Set(argv);
@@ -29,6 +31,7 @@ const cohort = readArg("--cohort", "pilot-2026q1");
 const wave = readArg("--wave", wave1 ? "wave-1" : "seed-default");
 const defaultPassword = readArg("--password", "VerityPilot!2026");
 const domain = readArg("--domain", "verity.date");
+const invitesCsvPath = readArg("--invites-csv", "");
 
 const cityConfig = [
   { city: "Canberra", slug: "canberra" },
@@ -57,12 +60,50 @@ const buildCandidate = (city, slug, index) => {
   };
 };
 
+const looksLikePlaceholderEmail = (email) =>
+  !email ||
+  email.includes("REPLACE_WITH_REAL_EMAIL") ||
+  email.includes("pilot.") ||
+  !email.includes("@");
+
+const loadUsersFromInvitesCsv = (path) => {
+  const csvContent = readFileSync(path, "utf8");
+  const invites = parse(csvContent, {
+    columns: true,
+    skip_empty_lines: true,
+  });
+
+  const cityCounters = new Map();
+  const users = [];
+
+  for (const invite of invites) {
+    const email = String(invite.email ?? "").trim();
+    const city = String(invite.city ?? "").trim();
+    if (looksLikePlaceholderEmail(email)) continue;
+    if (!city) continue;
+
+    const cityKey = city.toLowerCase();
+    const cityIndex = (cityCounters.get(cityKey) ?? 0) + 1;
+    cityCounters.set(cityKey, cityIndex);
+
+    const slug = cityKey.replace(/\s+/g, "-");
+    const baseCandidate = buildCandidate(city, slug, cityIndex);
+    users.push({ ...baseCandidate, email });
+  }
+
+  if (users.length === 0) {
+    throw new Error(`No real participant emails found in invites CSV: ${path}`);
+  }
+
+  return users;
+};
+
 const buildPilotUsers = () =>
   cityConfig.flatMap(({ city, slug }) =>
     Array.from({ length: countPerCity }, (_, idx) => buildCandidate(city, slug, idx + 1)),
   );
 
-const pilotUsers = buildPilotUsers();
+const pilotUsers = invitesCsvPath ? loadUsersFromInvitesCsv(invitesCsvPath) : buildPilotUsers();
 const e2eUsers = [
   { email: "test1@example.com", password: "password123", name: "TestOne", gender: "female", seeking: "male", city: "Canberra" },
   { email: "test2@example.com", password: "password123", name: "TestTwo", gender: "male", seeking: "female", city: "Sydney" },

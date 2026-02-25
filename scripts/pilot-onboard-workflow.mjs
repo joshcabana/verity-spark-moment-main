@@ -91,7 +91,7 @@ if (!finalFlag) {
   } else {
     run(
       "npm",
-      ["run", "seed:pilot:users", "--", "--wave1"],
+      ["run", "seed:pilot:users", "--", "--wave1", "--invites-csv", "docs/pilot/wave1-invites.csv"],
       "Step 2: Re-seed Supabase accounts with real emails",
     );
   }

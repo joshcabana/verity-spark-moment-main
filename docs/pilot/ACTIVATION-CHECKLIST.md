@@ -53,7 +53,7 @@ export SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co"
 export SUPABASE_SERVICE_ROLE_KEY="<your-service-role-key>"
 
 # Run the seed script (it will create auth accounts for the new emails)
-npm run seed:pilot:users -- --wave1 --domain gmail.com
+npm run seed:pilot:users -- --wave1 --invites-csv docs/pilot/wave1-invites.csv
 ```
 
 Or if emails are mixed domains, manually update each user in Supabase Dashboard → Authentication → Users, or modify the CSV and re-run with `--wave1`.

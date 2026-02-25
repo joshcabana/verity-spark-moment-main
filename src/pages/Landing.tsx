@@ -1,55 +1,96 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Shield, Clock, Eye, Users, Sparkles, Video } from "lucide-react";
+import {
+  ArrowRight,
+  Shield,
+  Clock,
+  Eye,
+  Users,
+  Sparkles,
+  Video,
+  CheckCircle2,
+  Siren,
+  Lock,
+} from "lucide-react";
 import AppNav from "@/components/AppNav";
 import { trackEvent } from "@/lib/analytics";
 
 const stats = [
-  { value: "78%", label: "of users burned out on dating apps" },
-  { value: "45s", label: "is all you need for a real spark" },
-  { value: "Pilot data pending", label: "for violation-free call rate" },
-  { value: "0", label: "profiles. Zero swipes. Just you." },
+  { value: "78%", label: "of users burned out on traditional swipe apps" },
+  { value: "45s", label: "to feel if there's a real spark" },
+  { value: "18+", label: "adult-only, ID and behavior policy enforced" },
+  { value: "0", label: "public profiles before mutual match" },
+];
+
+const trustPills = [
+  { icon: Shield, label: "AI Moderated Calls" },
+  { icon: Lock, label: "Anonymous Until Mutual" },
+  { icon: Siren, label: "Safe Exit Always On" },
+  { icon: CheckCircle2, label: "No Endless Swipe Loop" },
 ];
 
 const features = [
   {
     icon: Video,
     title: "45-Second Live Video",
-    description: "Full-screen, face-to-face. No filters, no bios, no curated lies. Just raw human presence.",
+    description:
+      "Full-screen, face-to-face. No filters, no bios, no curated lies. Just raw human presence.",
   },
   {
     icon: Eye,
     title: "Complete Anonymity",
-    description: "No names, no handles, no photos upfront. Only the live feed. Identity unlocks only on mutual match.",
+    description:
+      "No names, no handles, no photos upfront. Identity unlocks only on mutual match.",
   },
   {
     icon: Shield,
     title: "AI-Powered Safety",
-    description: "Real-time moderation on every call. Zero-tolerance policy. Safe Exit button always active.",
+    description:
+      "Real-time moderation + report tooling + account consequences for abusive behavior.",
   },
   {
     icon: Clock,
     title: "No Addiction By Design",
-    description: "Daily limits, no infinite scrolling, no dopamine traps. Engaging, not addictive.",
+    description:
+      "Daily guardrails and no infinite swiping. High-intent interactions over dopamine loops.",
   },
   {
     icon: Users,
     title: "Themed Rooms",
-    description: "Night Owls, Tech Professionals, Creatives & Makers, Over 35, Introvert Hours. Find your people.",
+    description:
+      "Night Owls, Tech Professionals, Creatives & Makers, Over 35, Introvert Hours.",
   },
   {
     icon: Sparkles,
     title: "Spark Extension",
-    description: "One free 90-second extension daily. Because sometimes 45 seconds isn't quite enough.",
+    description:
+      "One free 90-second extension daily when both people want to keep talking.",
+  },
+];
+
+const faqs = [
+  {
+    q: "Are calls recorded?",
+    a: "Calls are not recorded by default. Moderation processes live frames transiently to enforce safety policies.",
+  },
+  {
+    q: "Do people see my profile before matching?",
+    a: "No. Verity is anonymous until both people mutually choose to match.",
+  },
+  {
+    q: "What if someone behaves inappropriately?",
+    a: "Use Safe Exit instantly and report. Automated + human review paths are built into enforcement.",
+  },
+  {
+    q: "Why only 45 seconds?",
+    a: "It removes performative chatting and surfaces genuine chemistry quickly.",
   },
 ];
 
 const Landing = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
       <section className="relative min-h-screen h-[100dvh] flex items-center justify-center overflow-hidden">
-        {/* Background image */}
         <div className="absolute inset-0">
           <motion.img
             src="/Verity_Hero.webp"
@@ -61,7 +102,7 @@ const Landing = () => {
             transition={{ duration: 0.9, ease: "easeOut" }}
             className="w-full h-full object-cover object-[52%_24%] sm:object-[52%_22%] md:object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/65 to-black/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/65 to-black/85" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
@@ -70,12 +111,11 @@ const Landing = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Logo */}
             <h1 className="font-display text-6xl md:text-8xl font-bold tracking-tight mb-2">
               <span className="text-gradient-gold">Verity</span>
             </h1>
-            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-10">
-              The Anti-Dating App
+            <p className="text-muted-foreground text-xs sm:text-sm tracking-[0.3em] uppercase mb-8">
+              Real Eyes. Real Voice. Real Spark.
             </p>
           </motion.div>
 
@@ -83,51 +123,66 @@ const Landing = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-display text-2xl md:text-4xl text-foreground/90 leading-relaxed mb-6 italic"
+            className="font-display text-2xl md:text-4xl text-foreground/95 leading-relaxed mb-6 italic"
           >
-            "If there's no spark in 45 seconds of real eyes and voice,
+            "If there’s no spark in 45 seconds of real eyes and voice,
             <br className="hidden md:block" />
-            there won't be one after 45 swipes."
+            there won’t be one after 45 swipes."
           </motion.p>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-muted-foreground text-lg md:text-xl mb-12 max-w-2xl mx-auto"
+            transition={{ duration: 0.8, delay: 0.35 }}
+            className="text-muted-foreground text-lg md:text-xl mb-10 max-w-2xl mx-auto"
           >
-            No profiles. No swiping. No bios. Just 45 seconds of anonymous live video — 
-            and whether it sparks.
+            Anonymous live video. No public profiles. No swipe treadmill. Just 45 seconds and a clear mutual decision.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            transition={{ duration: 0.6, delay: 0.55 }}
+            className="flex flex-col items-center justify-center gap-3"
           >
             <Link
               to="/auth?mode=signup"
               onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "hero" })}
               className="group relative inline-flex items-center gap-3 bg-gradient-gold text-primary-foreground font-semibold text-lg px-10 py-4 rounded-full glow-gold transition-all hover:scale-105"
             >
-              Go Live
+              Try a 45s Spark
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               to="/transparency"
-              onClick={() => trackEvent("landing_safety_clicked")}
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors px-6 py-4"
+              onClick={() => trackEvent("landing_safety_clicked", { placement: "hero" })}
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors px-3 py-1 text-sm"
             >
               <Shield className="w-4 h-4" />
-              How we keep you safe
+              See safety + moderation details
             </Link>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+            className="mt-8 flex flex-wrap items-center justify-center gap-2"
+          >
+            {trustPills.map((pill) => (
+              <span
+                key={pill.label}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-black/30 px-3 py-1.5 text-xs text-foreground/85"
+              >
+                <pill.icon className="w-3.5 h-3.5 text-primary" />
+                {pill.label}
+              </span>
+            ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-20 px-6">
+      <section className="py-16 px-6 border-y border-border/40 bg-verity-surface/40">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, i) => (
             <motion.div
@@ -138,47 +193,50 @@ const Landing = () => {
               transition={{ delay: i * 0.1 }}
               className="text-center"
             >
-              <div className="text-3xl md:text-4xl font-bold text-gradient-gold mb-2">
-                {stat.value}
-              </div>
+              <div className="text-3xl md:text-4xl font-bold text-gradient-gold mb-2">{stat.value}</div>
               <div className="text-sm text-muted-foreground">{stat.label}</div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* How it Works */}
       <section className="py-20 px-6">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">
             How <span className="text-gradient-gold">Verity</span> Works
           </h2>
-          <p className="text-muted-foreground text-lg">
-            Three steps. No games. Real connection.
-          </p>
+          <p className="text-muted-foreground text-lg">Three steps. No games. Real connection.</p>
         </div>
 
         <div className="max-w-4xl mx-auto space-y-0">
           {[
-            { step: "01", title: "Tap Go Live", desc: "No browsing. No swiping. No searching. Just tap — and you're instantly matched with someone who's ready too." },
-            { step: "02", title: "45 Seconds Face-to-Face", desc: "Full-screen, anonymous live video. No names, no bios. Just you, them, and a ticking clock. Be yourself." },
-            { step: "03", title: "Match or Pass", desc: "Both decide privately. Only mutual sparks unlock identities and chat. No rejection notifications. No ego damage." },
+            {
+              step: "01",
+              title: "Tap Go Live",
+              desc: "No browsing. No swiping. No searching. Tap and get matched with someone who's ready now.",
+            },
+            {
+              step: "02",
+              title: "45 Seconds Face-to-Face",
+              desc: "Full-screen anonymous live video with a clear timer. Be yourself. Decide quickly.",
+            },
+            {
+              step: "03",
+              title: "Match or Pass",
+              desc: "Both decide privately. Only mutual sparks unlock identity and chat.",
+            },
           ].map((item, i) => (
             <motion.div
               key={item.step}
               initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.08 }}
               className="flex items-start gap-6 py-10 border-b border-border/30 last:border-0"
             >
-              <span className="text-5xl font-display font-bold text-verity-gold-dim shrink-0">
-                {item.step}
-              </span>
+              <span className="text-5xl font-display font-bold text-verity-gold-dim shrink-0">{item.step}</span>
               <div>
-                <h3 className="font-display text-2xl font-semibold text-foreground mb-2">
-                  {item.title}
-                </h3>
+                <h3 className="font-display text-2xl font-semibold text-foreground mb-2">{item.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
               </div>
             </motion.div>
@@ -186,15 +244,12 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Features */}
       <section className="py-20 px-6 bg-verity-surface">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">
-              Built Different
-            </h2>
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">Built Different</h2>
             <p className="text-muted-foreground text-lg">
-              Every feature designed to fix what's broken in modern dating.
+              Every feature is designed to optimize trust, chemistry, and safety.
             </p>
           </div>
 
@@ -211,20 +266,31 @@ const Landing = () => {
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                   <feature.icon className="w-5 h-5 text-primary" />
                 </div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {feature.description}
-                </p>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-24 px-6 text-center">
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-8 text-center">
+            FAQ
+          </h2>
+          <div className="grid gap-4">
+            {faqs.map((faq) => (
+              <div key={faq.q} className="rounded-2xl border border-border/50 bg-verity-surface/60 p-5">
+                <h3 className="text-foreground font-semibold mb-2">{faq.q}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24 px-6 text-center border-t border-border/30">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -235,14 +301,14 @@ const Landing = () => {
             Ready for <span className="text-gradient-gold">Something Real?</span>
           </h2>
           <p className="text-muted-foreground text-lg mb-10">
-            45 seconds. Real eyes. Real spark. Because real connection doesn't need a bio.
+            45 seconds. Real eyes. Real spark. No profile theatre.
           </p>
           <Link
             to="/auth?mode=signup"
             onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "footer" })}
             className="group inline-flex items-center gap-3 bg-gradient-gold text-primary-foreground font-semibold text-lg px-12 py-5 rounded-full glow-gold transition-all hover:scale-105"
           >
-            Go Live Now
+            Try a 45s Spark
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </Link>
         </motion.div>
@@ -264,6 +330,7 @@ const Landing = () => {
           </div>
         </div>
       </section>
+
       <div className="pb-20 md:pb-0" />
       <AppNav />
     </div>

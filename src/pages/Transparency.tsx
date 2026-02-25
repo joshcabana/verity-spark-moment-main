@@ -38,7 +38,7 @@ const safetyLayers = [
     title: "In-Call Protection",
     items: [
       "Safe Exit button always available",
-      "No screenshots or recording possible",
+      "We don’t record calls. Screen-recording is against policy and enforceable via reports.",
       "Complete anonymity during call",
       "Subtle warnings for borderline behavior",
     ],
@@ -85,7 +85,7 @@ const Transparency = () => {
 
   const violationFreeRate = stats
     ? `${stats.violation_free_percentage}%`
-    : "99.8%";
+    : "Pilot data pending";
 
   const safetyStatsDisplay = [
     {

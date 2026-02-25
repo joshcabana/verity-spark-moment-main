@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -14,8 +14,8 @@ import {
   Zap,
 } from "lucide-react";
 import AppNav from "@/components/AppNav";
-import SparkCallInterface from "@/components/SparkCallInterface";
-import SparkParticlesCanvas from "@/components/SparkParticlesCanvas";
+import SparkCallInterface, { type SparkCallPhase } from "@/components/SparkCallInterface";
+import SparkParticlesCanvas, { type SparkParticleMode } from "@/components/SparkParticlesCanvas";
 import { trackEvent } from "@/lib/analytics";
 
 const trustPills = [
@@ -52,15 +52,53 @@ const waitlistStats = [
 
 const Landing = () => {
   const prefersReducedMotion = useReducedMotion();
+  const [heroParticleMode, setHeroParticleMode] = useState<SparkParticleMode>("ambient");
+  const ambientResetTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     trackEvent("landing_view", { page: "landing_quantum" });
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (ambientResetTimeoutRef.current !== null) {
+        window.clearTimeout(ambientResetTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleHeroPhaseChange = useCallback((phase: SparkCallPhase) => {
+    if (ambientResetTimeoutRef.current !== null) {
+      window.clearTimeout(ambientResetTimeoutRef.current);
+      ambientResetTimeoutRef.current = null;
+    }
+
+    if (phase === "anonymous") {
+      setHeroParticleMode("ambient");
+      return;
+    }
+
+    if (phase === "converge") {
+      setHeroParticleMode("converging");
+      return;
+    }
+
+    setHeroParticleMode("exploding");
+    ambientResetTimeoutRef.current = window.setTimeout(() => {
+      setHeroParticleMode("ambient");
+      ambientResetTimeoutRef.current = null;
+    }, 2100);
+  }, []);
+
   return (
     <main id="main-content" className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <section className="relative isolate min-h-screen overflow-hidden border-b border-white/10">
-        <SparkParticlesCanvas className="opacity-90" density={100} speed={0.4} />
+        <SparkParticlesCanvas
+          className="opacity-90"
+          density={100}
+          speed={0.4}
+          mode={heroParticleMode}
+        />
 
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(52,211,153,0.20),transparent_45%),radial-gradient(circle_at_78%_18%,rgba(217,70,239,0.24),transparent_45%)]" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-black/55 to-[#0a0a0a]" />
@@ -124,7 +162,7 @@ const Landing = () => {
             animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.15, ease: "easeOut" }}
           >
-            <SparkCallInterface />
+            <SparkCallInterface onPhaseChange={handleHeroPhaseChange} />
           </motion.aside>
         </div>
       </section>

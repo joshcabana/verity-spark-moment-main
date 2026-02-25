@@ -6,17 +6,19 @@ type SparkCallInterfaceProps = {
   durationSeconds?: number;
   revealSecond?: number;
   className?: string;
+  onPhaseChange?: (phase: SparkCallPhase) => void;
 };
 
-type Phase = "anonymous" | "converge" | "revealed";
+export type SparkCallPhase = "anonymous" | "converge" | "revealed";
 
 const SparkCallInterface = ({
   durationSeconds = 45,
   revealSecond = 15,
   className = "",
+  onPhaseChange,
 }: SparkCallInterfaceProps) => {
   const [secondsLeft, setSecondsLeft] = useState(durationSeconds);
-  const [phase, setPhase] = useState<Phase>("anonymous");
+  const [phase, setPhase] = useState<SparkCallPhase>("anonymous");
   const [burstVisible, setBurstVisible] = useState(false);
 
   const circumference = 2 * Math.PI * 58;
@@ -50,6 +52,10 @@ const SparkCallInterface = ({
 
     return () => window.clearInterval(intervalId);
   }, [secondsLeft]);
+
+  useEffect(() => {
+    onPhaseChange?.(phase);
+  }, [onPhaseChange, phase]);
 
   useEffect(() => {
     if (secondsLeft === revealSecond && phase === "anonymous") {

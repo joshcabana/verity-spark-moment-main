@@ -58,6 +58,7 @@ export default {
           warm: "hsl(var(--verity-warm))",
           surface: "hsl(var(--verity-surface))",
           "surface-hover": "hsl(var(--verity-surface-hover))",
+          "surface-alt": "hsl(var(--verity-surface-alt))",
           glow: "hsl(var(--verity-glow))",
           success: "hsl(var(--verity-success))",
           danger: "hsl(var(--verity-danger))",

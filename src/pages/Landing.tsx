@@ -170,7 +170,7 @@ const Landing = () => {
   }, [prefersReducedMotion]);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+    <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <section ref={heroRef} className="relative min-h-screen overflow-hidden">
         <motion.div className="absolute inset-0" style={prefersReducedMotion ? undefined : { y: heroMediaY }}>
           {videoEnabled ? (
@@ -217,10 +217,19 @@ const Landing = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: "easeOut" }}
             >
-              <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.22em] text-white/90">
-                <Zap className="h-3.5 w-3.5 text-primary" />
-                Intentional Dating Infrastructure
-              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.22em] text-white/90">
+                  <Zap className="h-3.5 w-3.5 text-primary" />
+                  Intentional Dating Infrastructure
+                </p>
+                <div className="inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-400">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+                  </span>
+                  Accepting Pilot Users
+                </div>
+              </div>
 
               <h1 className="mt-5 max-w-3xl font-display text-5xl font-bold tracking-tight text-white md:text-7xl">
                 Meet in <span className="text-gradient-gold">45 Seconds</span>,
@@ -544,7 +553,7 @@ const Landing = () => {
 
       <div className="pb-24 md:pb-0" />
       <AppNav />
-    </div>
+    </main>
   );
 };
 

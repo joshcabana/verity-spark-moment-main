@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERITY - How Sparks Work Section (Electric Bloom)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-dark-charcoal: #1C1C1C;
+            --color-electric-violet: #8A2BE2;
+            --color-neon-green: #39FF14;
+            --color-fiery-orange: #FF4500;
+            --color-text-light: #E0E0E0;
+            --color-text-medium: #C5C5C5;
+            --color-text-dark: #A0A0A0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--color-dark-charcoal);
+            color: var(--color-text-light);
+            overflow-x: hidden;
+        }
+
+        .section-container {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5em;
+            color: var(--color-neon-green);
+            text-shadow: 0 0 20px rgba(57,255,20,0.7);
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInSlideUp 1.2s ease-out forwards;
+            animation-delay: 0.2s; /* Simulated scroll trigger */
+        }
+
+        @keyframes fadeInSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .spark-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .spark-step-card {
+            background: rgba(0, 0, 0, 0.4); /* Dark glass effect */
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(138, 43, 226, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInSlideUp 1.2s ease-out forwards;
+            /* Staggered animation delays for each card, simulated */
+        }
+
+        .spark-step-card:nth-child(1) { animation-delay: 0.4s; }
+        .spark-step-card:nth-child(2) { animation-delay: 0.6s; }
+        .spark-step-card:nth-child(3) { animation-delay: 0.8s; }
+
+        .spark-step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 69, 0, 0.4);
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: linear-gradient(45deg, var(--color-electric-violet), var(--color-fiery-orange));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3em;
+            color: white;
+            box-shadow: 0 0 20px rgba(138,43,226,0.6);
+            position: relative;
+        }
+
+        /* Placeholder for actual SVG/Video icon */
+        .step-icon::before {
+            content: '⚡'; /* Temporary icon */
+        }
+
+        .step-icon.video::before {
+            content: '🎥';
+        }
+        .step-icon.orb::before {
+            content: '🔮';
+        }
+
+        .spark-step-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8em;
+            color: var(--color-neon-green);
+            text-shadow: 0 0 10px rgba(57,255,20,0.5);
+            margin-bottom: 15px;
+        }
+
+        .spark-step-card p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: var(--color-text-medium);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2.5em;
+                margin-bottom: 40px;
+            }
+            .section-container {
+                padding: 60px 15px;
+            }
+            .spark-step-card {
+                padding: 25px;
+            }
+            .spark-step-card h3 {
+                font-size: 1.5em;
+            }
+            .spark-step-card p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="section-container">
+        <h2 class="section-title">How Sparks Work</h2>
+
+        <div class="spark-steps">
+            <div class="spark-step-card">
+                <div class="step-icon">
+                    <!-- Placeholder for realistic video/animation of entering a room -->
+                </div>
+                <h3>Enter a Live Room</h3>
+                <p>Skip the endless profiles. Connect instantly with someone genuinely present and ready to spark right now.</p>
+            </div>
+
+            <div class="spark-step-card">
+                <div class="step-icon video">
+                    <!-- Placeholder for cinematic 45-second Spark Call video snippet -->
+                </div>
+                <h3>The 45-Second Spark Call</h3>
+                <p>A focused, cinematic live video call designed to reveal authentic chemistry, cutting through chat fatigue.</p>
+            </div>
+
+            <div class="spark-step-card">
+                <div class="step-icon orb">
+                    <!-- Placeholder for animated orb convergence and reveal -->
+                </div>
+                <h3>Orb Convergence + Reveal</h3>
+                <p>At 15 seconds, a dramatic orb event climaxes in a mutual reveal, unlocking continuation based on real connection.</p>
+            </div>
+        </div>
+    </section>
+
+    <!--
+        Framer Motion Integration Plan for 'How Sparks Work' section:
+        - Use `useInView` or `whileInView` for scroll-triggered animations on `.section-title` and each `.spark-step-card`.
+        - `initial={{ opacity: 0, y: 50 }}` and `animate={{ opacity: 1, y: 0 }}` for entrance.
+        - Staggered `transition.delay` for `spark-step-card` elements to create a flowing reveal.
+
+        Visual Storytelling / Video Plan:
+        - Replace `.step-icon` content with small, looping video snippets or high-quality animated SVGs/Lottie files.
+        - `Enter a Live Room`: Short, realistic video of a subtle transition into a video call interface.
+        - `The 45-Second Spark Call`: A highly stylized, short video demonstrating the cinematic call, perhaps blurring faces for privacy but emphasizing genuine reactions.
+        - `Orb Convergence + Reveal`: A vibrant, realistic animation of the orb building energy and then bursting into a reveal, followed by confetti (as described in the original site).
+    -->
+</body>
+</html>

@@ -5,6 +5,7 @@ const Landing = lazy(() => import("./pages/Landing"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Transparency = lazy(() => import("./pages/Transparency"));
+const Safety = lazy(() => import("./pages/Safety"));
 const AppAuthed = lazy(() => import("./AppAuthed"));
 
 const FullScreenLoader = () => (
@@ -21,6 +22,7 @@ const App = () => (
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/transparency" element={<Transparency />} />
+        <Route path="/safety" element={<Safety />} />
         <Route path="/post-spark/:matchId" element={<AppAuthed />} />
         <Route path="/*" element={<AppAuthed />} />
       </Routes>

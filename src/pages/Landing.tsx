@@ -98,6 +98,28 @@ const Landing = () => {
     if (mediaQuery.matches) {
       setVideoEnabled(false);
     }
+
+    const milestones = new Set<number>();
+    const onScroll = () => {
+      const scrollTop = window.scrollY;
+      const viewport = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+      const pct = Math.min(100, Math.round(((scrollTop + viewport) / fullHeight) * 100));
+
+      [25, 50, 75, 100].forEach((threshold) => {
+        if (pct >= threshold && !milestones.has(threshold)) {
+          milestones.add(threshold);
+          trackEvent("landing_scroll_depth", { percent: threshold });
+        }
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
@@ -181,7 +203,7 @@ const Landing = () => {
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
-              to="/transparency"
+              to="/safety"
               onClick={() => trackEvent("landing_safety_clicked", { placement: "hero" })}
               className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors px-3 py-1 text-sm"
             >
@@ -362,6 +384,9 @@ const Landing = () => {
             <Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
               Terms
             </Link>
+            <Link to="/safety" className="text-muted-foreground hover:text-foreground transition-colors">
+              Safety
+            </Link>
             <Link to="/transparency" className="text-muted-foreground hover:text-foreground transition-colors">
               Transparency
             </Link>
@@ -369,7 +394,18 @@ const Landing = () => {
         </div>
       </section>
 
-      <div className="pb-20 md:pb-0" />
+      <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-3 md:hidden">
+        <Link
+          to="/auth?mode=signup"
+          onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "sticky_mobile" })}
+          className="flex items-center justify-center gap-2 rounded-full bg-gradient-gold text-primary-foreground font-semibold py-3.5 shadow-lg"
+        >
+          Try a 45s Spark
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+
+      <div className="pb-24 md:pb-0" />
       <AppNav />
     </div>
   );

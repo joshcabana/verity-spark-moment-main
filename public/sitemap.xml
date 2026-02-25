@@ -16,6 +16,11 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://verity-spark-moment-main.vercel.app/safety</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://verity-spark-moment-main.vercel.app/transparency</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

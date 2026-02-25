@@ -170,8 +170,8 @@ const Landing = () => {
   }, [prefersReducedMotion]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
-      <section ref={heroRef} className="relative min-h-screen overflow-hidden">
+    <main id="main-content" className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+      <header aria-label="Hero Introduction" ref={heroRef} className="relative min-h-screen overflow-hidden">
         <motion.div className="absolute inset-0" style={prefersReducedMotion ? undefined : { y: heroMediaY }}>
           {videoEnabled ? (
             <video
@@ -217,19 +217,10 @@ const Landing = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: "easeOut" }}
             >
-              <div className="flex flex-wrap items-center gap-3">
-                <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.22em] text-white/90">
-                  <Zap className="h-3.5 w-3.5 text-primary" />
-                  Intentional Dating Infrastructure
-                </p>
-                <div className="inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-400">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
-                  </span>
-                  Accepting Pilot Users
-                </div>
-              </div>
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.22em] text-white/90">
+                <Zap className="h-3.5 w-3.5 text-primary" />
+                Intentional Dating Infrastructure
+              </p>
 
               <h1 className="mt-5 max-w-3xl font-display text-5xl font-bold tracking-tight text-white md:text-7xl">
                 Meet in <span className="text-gradient-gold">45 Seconds</span>,
@@ -320,7 +311,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <section className="border-y border-border/40 bg-verity-surface/40 px-6 py-16">
+      <section aria-label="Key Metrics" className="border-y border-border/40 bg-verity-surface/40 px-6 py-16">
         <div className="mx-auto grid max-w-5xl grid-cols-2 gap-8 md:grid-cols-4">
           {heroMetrics.map((metric, index) => (
             <motion.div
@@ -454,7 +445,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <section className="border-y border-border/30 bg-verity-surface/70 px-6 py-20">
+      <section aria-label="Key Metrics" className="border-y border-border/30 bg-verity-surface/70 px-6 py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="text-center font-display text-3xl font-bold md:text-5xl">FAQ</h2>
           <div className="mt-10 grid gap-4">
@@ -553,7 +544,7 @@ const Landing = () => {
 
       <div className="pb-24 md:pb-0" />
       <AppNav />
-    </main>
+    </div>
   );
 };
 

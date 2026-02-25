@@ -12,7 +12,7 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { parseString } from "csv-parse/sync";
+import { parse } from "csv-parse/sync";
 import { stringify } from "csv-stringify/sync";
 
 const parseArgs = (argv) => {
@@ -44,7 +44,7 @@ const SUPABASE_URL = "https://nhpbxlvogqnqutmflwlk.supabase.co";
 try {
   // Read invite CSV
   const csvContent = readFileSync(invitesPath, "utf8");
-  const invites = parseString(csvContent, {
+  const invites = parse(csvContent, {
     columns: true,
     skip_empty_lines: true,
   });

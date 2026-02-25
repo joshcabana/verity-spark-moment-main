@@ -58,6 +58,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(session?.user ?? null);
       setLoading(false);
       if (session?.user) {
+        identifyUser(session.user.id, {
+          email: session.user.email,
+          ...getPilotMetadata(session.user.user_metadata),
+        });
         refreshSubscription();
       }
     });

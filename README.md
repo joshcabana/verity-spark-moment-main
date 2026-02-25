@@ -170,6 +170,7 @@ See `/Users/joshcabana/Downloads/verity-spark-moment-main/docs/security-verifica
   - `APP_ALLOWED_ORIGINS` (comma-separated redirect allowlist for checkout/portal)
 
 Redirect origin behavior:
+
 - If request `Origin` is in `APP_ALLOWED_ORIGINS`, Stripe return URLs use that origin.
 - If request `Origin` is missing or untrusted, functions fall back to `APP_BASE_URL`.
 - If `APP_BASE_URL` is unset/invalid, functions fall back to `https://verity-spark-moment-main.vercel.app`.

@@ -26,6 +26,9 @@
     "pilot:run:daily": "node scripts/pilot-run-daily.mjs",
     "pilot:run:gate": "node scripts/pilot-run-gate.mjs",
     "pilot:reports:validate": "node scripts/validate-pilot-reports.mjs",
+    "pilot:onboard": "node scripts/pilot-onboard-workflow.mjs",
+    "pilot:bulk:email": "node scripts/pilot-bulk-email-update.mjs",
+    "pilot:invite:creds": "node scripts/pilot-generate-invite-credentials.mjs",
     "security:live:smoke": "node scripts/live-security-smoke.mjs",
     "security:live:e2e": "node scripts/live-auth-e2e.mjs"
   },

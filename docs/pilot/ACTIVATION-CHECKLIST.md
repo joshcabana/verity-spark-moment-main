@@ -24,7 +24,7 @@ All 40 invite entries in [wave1-invites.csv](wave1-invites.csv) use synthetic pl
 You need 20 real email addresses per city (40 total). Options:
 
 | Source | Speed | Quality |
-|--------|-------|---------|
+| ------ | ----- | ------- |
 | Personal network / friends-of-friends in CBR + SYD | Fast (hours) | High — motivated, will give feedback |
 | Existing dating app community groups (Reddit, Facebook) | Medium (1–2 days) | Medium — self-selected interest |
 | University / coworking space partnerships | Medium | High — concentrated locations |
@@ -39,6 +39,7 @@ Replace the placeholder emails in [wave1-invites.csv](wave1-invites.csv) with re
 A template with blanks is provided at [wave1-invites-REAL-TEMPLATE.csv](wave1-invites-REAL-TEMPLATE.csv).
 
 **Format:**
+
 ```csv
 invite_id,email,city,cohort,wave,status,invite_date,activated_at,notes
 wave-1-CBR-001,jane.smith@gmail.com,Canberra,pilot-2026q1,wave-1,queued,2026-02-25,,
@@ -62,6 +63,7 @@ Or if emails are mixed domains, manually update each user in Supabase Dashboard 
 Supabase Auth sends a confirmation email on signup. If using pre-confirmed accounts (`email_confirm: true` in the seed script), you'll need to send invite emails manually.
 
 **Option A — Supabase Auth Magic Link:**
+
 ```sql
 -- In Supabase SQL editor, generate magic links for each real user
 SELECT auth.send_magic_link('jane.smith@gmail.com');
@@ -69,6 +71,7 @@ SELECT auth.send_magic_link('jane.smith@gmail.com');
 
 **Option B — Manual email with login link:**
 Send each participant:
+
 - URL: `https://verity-spark-moment-main.vercel.app/auth`
 - Credentials: their email + the default pilot password (`VerityPilot!2026`)
 - Brief instructions: sign in → complete 7-step onboarding → enter lobby
@@ -95,6 +98,7 @@ npm run supabase:secrets:check
 ```
 
 If still using `sk_test_` keys:
+
 1. Get live keys from Stripe Dashboard → Developers → API keys
 2. Update in Supabase Dashboard → Edge Functions → Secrets
 3. Create a live webhook endpoint at `https://nhpbxlvogqnqutmflwlk.supabase.co/functions/v1/stripe-webhook`
@@ -106,7 +110,7 @@ If still using `sk_test_` keys:
 
 Analytics is now wired for production (see updated `src/lib/analytics.ts`). To activate:
 
-1. Create a Mixpanel project at https://mixpanel.com
+1. Create a Mixpanel project at <https://mixpanel.com>
 2. Copy the project token
 3. Add to Vercel environment variables: `VITE_MIXPANEL_TOKEN=<token>`
 4. Redeploy to Vercel
@@ -116,7 +120,7 @@ Analytics is now wired for production (see updated `src/lib/analytics.ts`). To a
 ## Revised Timeline (Proposed)
 
 | Date | Action |
-|------|--------|
+| ---- | ------ |
 | **2026-02-25** (today) | Source first 10 real participants; update CSV; send invites |
 | **2026-02-26** | Source remaining 30 participants; monitor first activations |
 | **2026-02-27** | Gate A — evaluate with real data (even partial is better than 0) |

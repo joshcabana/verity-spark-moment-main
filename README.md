@@ -23,6 +23,47 @@ npm install
 npm run dev
 ```
 
+## Pilot Program (Wave 1: 2026-02-24 to 2026-03-07)
+
+**Active:** Invite-only pilot in Canberra + Sydney. Onboarding real participants now.
+
+**Quick Start:** See [PILOT-QUICKSTART.md](PILOT-QUICKSTART.md)
+
+### Onboarding Real Participants
+
+```bash
+# 1. Create participants.csv with real emails
+cp participants-EXAMPLE.csv participants.csv
+# Edit with your 10–20 real participant emails
+
+# 2. Run the complete onboarding workflow (dry-run first)
+npm run pilot:onboard -- --participants participants.csv --dry-run
+npm run pilot:onboard -- --participants participants.csv --confirm
+```
+
+### Monitoring & Operations
+
+```bash
+# Daily operations check (matches, calls, decisions)
+npm run pilot:ops:daily
+
+# Gate evaluations (A, B, or Final)
+npm run pilot:gate -- --gate A
+
+# Update tracker with latest metrics
+npm run pilot:tracker:update
+
+# Full daily workflow (ops + tracker)
+npm run pilot:run:daily
+```
+
+### Documents
+
+- [PILOT-QUICKSTART.md](PILOT-QUICKSTART.md) — 30-minute onboarding guide
+- [docs/pilot/ACTIVATION-CHECKLIST.md](docs/pilot/ACTIVATION-CHECKLIST.md) — Detailed steps
+- [docs/pilot/tracker.md](docs/pilot/tracker.md) — Live metrics & decisions
+- [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md) — Risk register & GTM
+
 ## CI Package Manager Contract
 
 GitHub Actions in this repository are standardized on npm (`npm ci`) and require a root `package-lock.json`.

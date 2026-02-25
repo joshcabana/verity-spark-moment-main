@@ -55,7 +55,7 @@ SLA: triage in 30 minutes.
 | Gate | Date | Required Condition | Result | Decision |
 | --- | --- | --- | --- | --- |
 <!-- pilot:auto:gates:start -->
-| Gate A | 2026-02-27 | Reliability stable + zero unresolved critical incidents | pending | pending |
-| Gate B | 2026-03-03 | Spark/chat conversion directionally healthy | pending | pending |
+| Gate A | 2026-02-27 | Reliability stable + zero unresolved critical incidents + minimum evidence sample (>=10 matches and >=10 completed decisions) | FAIL | HOLD_COLLECT_EVIDENCE |
+| Gate B | 2026-03-03 | Spark/chat conversion directionally healthy with minimum spark sample (>=5 mutual sparks) | pending | pending |
 | Final | 2026-03-07 | Expand or harden or pause | pending | pending |
 <!-- pilot:auto:gates:end -->

@@ -17,7 +17,7 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { parseString } from "csv-parse/sync";
+import { parse } from "csv-parse/sync";
 import { stringify } from "csv-stringify/sync";
 
 const parseArgs = (argv) => {
@@ -45,14 +45,14 @@ const dryRun = args["dry-run"] === "true";
 try {
   // Read current invite template
   const currentCsvContent = readFileSync(outputPath, "utf8");
-  const currentRows = parseString(currentCsvContent, {
+  const currentRows = parse(currentCsvContent, {
     columns: true,
     skip_empty_lines: true,
   });
 
   // Read participant emails
   const inputCsvContent = readFileSync(inputPath, "utf8");
-  const participants = parseString(inputCsvContent, {
+  const participants = parse(inputCsvContent, {
     columns: true,
     skip_empty_lines: true,
   });

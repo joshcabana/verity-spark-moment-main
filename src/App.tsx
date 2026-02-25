@@ -1,31 +1,11 @@
-import { lazy, Suspense, type ReactNode } from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const Landing = lazy(() => import("./pages/Landing"));
-const Auth = lazy(() => import("./pages/Auth"));
-const Onboarding = lazy(() => import("./pages/Onboarding"));
-const Lobby = lazy(() => import("./pages/Lobby"));
-const VideoCall = lazy(() => import("./pages/VideoCall"));
-const MatchDecision = lazy(() => import("./pages/MatchDecision"));
-const PostSparkScreen = lazy(() => import("./pages/PostSparkScreen"));
-const SparkHistory = lazy(() => import("./pages/SparkHistory"));
-const TokenShop = lazy(() => import("./pages/TokenShop"));
-const Transparency = lazy(() => import("./pages/Transparency"));
-const Chat = lazy(() => import("./pages/Chat"));
-const Profile = lazy(() => import("./pages/Profile"));
-const Appeal = lazy(() => import("./pages/Appeal"));
-const Admin = lazy(() => import("./pages/Admin"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const VerityCircle = lazy(() => import("./pages/VerityCircle"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
-
-const queryClient = new QueryClient();
+const Transparency = lazy(() => import("./pages/Transparency"));
+const AppAuthed = lazy(() => import("./AppAuthed"));
 
 const FullScreenLoader = () => (
   <div className="min-h-screen bg-background flex items-center justify-center">
@@ -33,62 +13,19 @@ const FullScreenLoader = () => (
   </div>
 );
 
-const ProtectedRoute = ({ children }: { children: ReactNode }) => {
-  const { user, loading } = useAuth();
-  if (loading) return <FullScreenLoader />;
-  if (!user) return <Navigate to="/auth" replace />;
-  return <>{children}</>;
-};
-
-const PublicRoute = ({ children }: { children: ReactNode }) => {
-  const { user, loading } = useAuth();
-  if (loading) return <FullScreenLoader />;
-  if (user) return <Navigate to="/lobby" replace />;
-  return <>{children}</>;
-};
-
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-
-const AppRoutes = () => (
-  <ErrorBoundary>
+const App = () => (
+  <BrowserRouter>
     <Suspense fallback={<FullScreenLoader />}>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/auth" element={<PublicRoute><Auth /></PublicRoute>} />
-        <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
-        <Route path="/lobby" element={<ProtectedRoute><Lobby /></ProtectedRoute>} />
-        <Route path="/call" element={<ProtectedRoute><VideoCall /></ProtectedRoute>} />
-        <Route path="/match" element={<ProtectedRoute><MatchDecision /></ProtectedRoute>} />
-        <Route path="/post-spark/:matchId" element={<ProtectedRoute><PostSparkScreen /></ProtectedRoute>} />
-        <Route path="/sparks" element={<ProtectedRoute><SparkHistory /></ProtectedRoute>} />
-        <Route path="/tokens" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />
-        <Route path="/shop" element={<ProtectedRoute><TokenShop /></ProtectedRoute>} />
-        <Route path="/transparency" element={<Transparency />} />
-        <Route path="/chat/:matchId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="/appeals" element={<ProtectedRoute><Appeal /></ProtectedRoute>} />
-        <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-        <Route path="/circle/:ownerId" element={<ProtectedRoute><VerityCircle /></ProtectedRoute>} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/transparency" element={<Transparency />} />
+        <Route path="/post-spark/:matchId" element={<AppAuthed />} />
+        <Route path="/*" element={<AppAuthed />} />
       </Routes>
     </Suspense>
-  </ErrorBoundary>
-);
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <AppRoutes />
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  </BrowserRouter>
 );
 
 export default App;

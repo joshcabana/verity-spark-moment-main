@@ -15,8 +15,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["DM Sans", "system-ui", "sans-serif"],
-        display: ["Playfair Display", "Georgia", "serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Montserrat", "Inter", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -62,6 +62,8 @@ export default {
           glow: "hsl(var(--verity-glow))",
           success: "hsl(var(--verity-success))",
           danger: "hsl(var(--verity-danger))",
+          teal: "hsl(var(--verity-teal))",
+          magenta: "hsl(var(--verity-magenta))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -92,16 +94,43 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
         },
-        "countdown": {
+        countdown: {
           from: { "stroke-dashoffset": "0" },
-          to: { "stroke-dashoffset": "283" },
+          to: { "stroke-dashoffset": "364" },
+        },
+        "particle-drift": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0)", opacity: "0.45" },
+          "50%": { transform: "translate3d(10px, -12px, 0)", opacity: "0.9" },
+        },
+        "orb-left": {
+          from: { transform: "translateX(0) scale(1)" },
+          to: { transform: "translateX(38px) scale(1.1)" },
+        },
+        "orb-right": {
+          from: { transform: "translateX(0) scale(1)" },
+          to: { transform: "translateX(-38px) scale(1.1)" },
+        },
+        "reveal-flash": {
+          "0%": { opacity: "0" },
+          "35%": { opacity: "0.9" },
+          "100%": { opacity: "0" },
+        },
+        confetti: {
+          "0%": { opacity: "0", transform: "translate3d(0,0,0) rotate(0deg)" },
+          "20%": { opacity: "1" },
+          "100%": { opacity: "0", transform: "translate3d(var(--x,0),145px,0) rotate(var(--r,180deg))" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-gold": "pulse-gold 2s ease-in-out infinite",
-        "countdown": "countdown 45s linear forwards",
+        countdown: "countdown 45s linear forwards",
+        "particle-drift": "particle-drift 5s ease-in-out infinite",
+        "orb-left": "orb-left 0.55s ease-in-out forwards",
+        "orb-right": "orb-right 0.55s ease-in-out forwards",
+        "reveal-flash": "reveal-flash 0.8s ease-out forwards",
+        confetti: "confetti 1.6s ease-out forwards",
       },
     },
   },

@@ -1,529 +1,258 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
   CheckCircle2,
   Clock3,
   EyeOff,
-  Flame,
   LockKeyhole,
   Shield,
   Sparkles,
-  Star,
-  Users2,
+  UserCheck,
   Video,
   Zap,
 } from "lucide-react";
 import AppNav from "@/components/AppNav";
+import SparkCallInterface from "@/components/SparkCallInterface";
+import SparkParticlesCanvas from "@/components/SparkParticlesCanvas";
 import { trackEvent } from "@/lib/analytics";
 
 const trustPills = [
-  { icon: Shield, label: "Live safety layer" },
-  { icon: LockKeyhole, label: "Identity locked pre-match" },
-  { icon: EyeOff, label: "Anonymous first minute" },
-  { icon: CheckCircle2, label: "Mutual-only reveal" },
+  { icon: Shield, label: "Live trust + safety" },
+  { icon: EyeOff, label: "Anonymous first 45 seconds" },
+  { icon: LockKeyhole, label: "Mutual-only reveal" },
+  { icon: UserCheck, label: "Identity controls" },
 ];
 
-const heroMetrics = [
-  { value: "45s", label: "first-contact window" },
-  { value: "3", label: "clear outcomes per call" },
-  { value: "0", label: "swipe loops" },
-  { value: "18+", label: "safety-gated experience" },
-];
-
-const roomLabels = [
-  "Night Owls",
-  "Design + Product",
-  "Creatives",
-  "Over 30",
-  "Introvert Hour",
-  "New in Town",
-  "Sunday Reset",
-  "Bookish",
-];
-
-const flowSteps = [
-  {
-    icon: Users2,
-    title: "Enter a live room",
-    body: "No profile theater. Join instantly and match with someone available now.",
-  },
+const sparkFlow = [
   {
     icon: Video,
-    title: "45-second face-to-face",
-    body: "A full-screen timed call surfaces chemistry quickly and cleanly.",
+    title: "Enter a live room",
+    body: "Skip profile theater. Join instantly and meet someone who is present right now.",
+  },
+  {
+    icon: Clock3,
+    title: "45-second Spark Call",
+    body: "A cinematic, focused call that reveals chemistry quickly without endless chat fatigue.",
   },
   {
     icon: Sparkles,
-    title: "Private mutual decision",
-    body: "Only when both choose yes does identity and chat unlock.",
+    title: "Orb convergence + reveal",
+    body: "At 15 seconds, the timer explodes into a reveal moment and unlocks mutual continuation.",
   },
 ];
 
-const principles = [
-  {
-    title: "Signal > noise",
-    text: "Short live interactions reveal compatibility faster than long profile chats.",
-  },
-  {
-    title: "Safety by default",
-    text: "Moderation pathways, safe-exit controls, and report tooling are built into every call.",
-  },
-  {
-    title: "Anti-addictive design",
-    text: "Finite sessions and explicit outcomes replace endless feeds and compulsive loops.",
-  },
-  {
-    title: "Intentional pacing",
-    text: "You get meaningful moments, not a treadmill of low-value interactions.",
-  },
-  {
-    title: "Contextual rooms",
-    text: "Shared context lowers social friction and increases relevance from the first hello.",
-  },
-  {
-    title: "Production-grade UX",
-    text: "Performance, accessibility, and clear system states are part of the product contract.",
-  },
-];
-
-const testimonials = [
-  {
-    quote: "I learned more in one 45-second call than in two weeks of profile messaging.",
-    person: "Aly, 29",
-    city: "Sydney",
-  },
-  {
-    quote: "It feels respectful. You either connect quickly or move on with no emotional drag.",
-    person: "Mason, 34",
-    city: "Melbourne",
-  },
-  {
-    quote: "The moderation and safe-exit controls made me comfortable showing up as myself.",
-    person: "Priya, 31",
-    city: "Brisbane",
-  },
-];
-
-const faqs = [
-  {
-    q: "Are calls recorded?",
-    a: "Calls are not recorded by default. Safety systems inspect transient live signals to enforce policy.",
-  },
-  {
-    q: "Can someone see my profile before a mutual decision?",
-    a: "No. Identity remains locked until both people explicitly choose to continue.",
-  },
-  {
-    q: "What if behavior crosses a line?",
-    a: "Use Safe Exit immediately and report. Enforcement uses automated checks and human review.",
-  },
-  {
-    q: "Why keep first contact to 45 seconds?",
-    a: "It removes performative pre-chat and surfaces genuine chemistry quickly.",
-  },
+const waitlistStats = [
+  { label: "Pilot cities", value: "Sydney + Canberra" },
+  { label: "Spark window", value: "45 seconds" },
+  { label: "Reveal trigger", value: "15 seconds" },
+  { label: "Swipe loops", value: "0" },
 ];
 
 const Landing = () => {
   const prefersReducedMotion = useReducedMotion();
-  const [videoEnabled, setVideoEnabled] = useState(true);
-  const heroRef = useRef<HTMLElement | null>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-
-  const heroMediaY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 100]);
-  const orbOneY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 180]);
-  const orbTwoY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 120]);
 
   useEffect(() => {
-    trackEvent("landing_view", { page: "landing" });
-
-    if (prefersReducedMotion) {
-      setVideoEnabled(false);
-    }
-
-    const milestones = new Set<number>();
-    const onScroll = () => {
-      const scrollTop = window.scrollY;
-      const viewport = window.innerHeight;
-      const fullHeight = document.documentElement.scrollHeight;
-      const pct = Math.min(100, Math.round(((scrollTop + viewport) / fullHeight) * 100));
-
-      [25, 50, 75, 100].forEach((threshold) => {
-        if (pct >= threshold && !milestones.has(threshold)) {
-          milestones.add(threshold);
-          trackEvent("landing_scroll_depth", { percent: threshold });
-        }
-      });
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, [prefersReducedMotion]);
+    trackEvent("landing_view", { page: "landing_quantum" });
+  }, []);
 
   return (
     <main id="main-content" className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
-      <header aria-label="Hero Introduction" ref={heroRef} className="relative min-h-screen overflow-hidden">
-        <motion.div className="absolute inset-0" style={prefersReducedMotion ? undefined : { y: heroMediaY }}>
-          {videoEnabled ? (
-            <video
-              className="h-full w-full object-cover object-center"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster="/Verity_Hero.webp"
-              onError={() => setVideoEnabled(false)}
-            >
-              <source src="/hero-loop.webm" type="video/webm" />
-              <source src="/hero-loop.mp4" type="video/mp4" />
-            </video>
-          ) : (
-            <img
-              src="/Verity_Hero.webp"
-              alt="Two people in a live call experience"
-              loading="eager"
-              fetchPriority="high"
-              className="h-full w-full object-cover object-center"
-            />
-          )}
+      <section className="relative isolate min-h-screen overflow-hidden border-b border-white/10">
+        <SparkParticlesCanvas className="opacity-90" density={100} speed={0.4} />
 
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,hsl(38_90%_55%_/_0.32),transparent_40%),radial-gradient(circle_at_80%_8%,hsl(25_80%_55%_/_0.28),transparent_38%)]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/72 to-background" />
-        </motion.div>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(52,211,153,0.20),transparent_45%),radial-gradient(circle_at_78%_18%,rgba(217,70,239,0.24),transparent_45%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-black/55 to-[#0a0a0a]" />
 
-        <motion.div
-          className="pointer-events-none absolute -left-24 top-24 h-80 w-80 rounded-full bg-primary/20 blur-3xl"
-          style={prefersReducedMotion ? undefined : { y: orbOneY }}
-        />
-        <motion.div
-          className="pointer-events-none absolute -right-24 top-40 h-72 w-72 rounded-full bg-amber-500/15 blur-3xl"
-          style={prefersReducedMotion ? undefined : { y: orbTwoY }}
-        />
+        <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-6xl items-center gap-12 px-6 pb-24 pt-20 lg:grid-cols-[1.05fr_0.95fr]">
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
+            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.22em] text-white/85">
+              <Zap className="h-3.5 w-3.5 text-[#34d399]" />
+              Quantum Spark v1.0
+            </p>
 
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl items-center px-6 pb-24 pt-20 md:pb-20">
-          <div className="grid w-full gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, ease: "easeOut" }}
-            >
-              <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.22em] text-white/90">
-                <Zap className="h-3.5 w-3.5 text-primary" />
-                Intentional Dating Infrastructure
-              </p>
+            <h1 className="mt-6 max-w-3xl font-display text-5xl font-semibold tracking-tight text-white md:text-7xl">
+              Real Eyes.
+              <br />
+              <span className="text-gradient-spark">Real Spark.</span>
+            </h1>
 
-              <h1 className="mt-5 max-w-3xl font-display text-5xl font-bold tracking-tight text-white md:text-7xl">
-                Meet in <span className="text-gradient-gold">45 Seconds</span>,
-                <br />
-                Not 45 Swipes.
-              </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/82 md:text-xl">
+              Verity replaces the warm generic dating flow with a dark cinematic experience: living particles,
+              glassmorphism layers, and a 45-second Spark Call that climaxes in an orb explosion and reveal.
+            </p>
 
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 md:text-xl">
-                A polished, live-first social layer where people connect through presence, not profile performance.
-                Clear outcomes, safer interactions, and dramatically less emotional noise.
-              </p>
+            <div className="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+              <Link
+                to="/auth?mode=signup"
+                onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "hero" })}
+                className="group inline-flex items-center gap-2 rounded-full bg-gradient-spark px-8 py-4 text-base font-semibold text-[#050505] shadow-[0_14px_48px_rgba(52,211,153,0.28)] transition-transform hover:scale-[1.02]"
+              >
+                Start your first Spark
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
 
-              <div className="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-                <Link
-                  to="/auth?mode=signup"
-                  aria-label="Start your first Spark"
-                  onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "hero" })}
-                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-gold px-8 py-4 text-base font-semibold text-primary-foreground glow-gold transition-transform hover:scale-[1.02]"
+              <Link
+                to="/auth?mode=signup&waitlist=1"
+                onClick={() => trackEvent("landing_waitlist_cta_clicked", { placement: "hero" })}
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/35 px-6 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
+              >
+                Join the FOMO waitlist
+              </Link>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-2">
+              {trustPills.map((pill) => (
+                <span
+                  key={pill.label}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/35 px-3 py-1.5 text-xs text-white/88"
                 >
-                  Start your first Spark
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-
-                <Link
-                  to="/safety"
-                  onClick={() => trackEvent("landing_safety_clicked", { placement: "hero" })}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/15"
-                >
-                  <Shield className="h-4 w-4" />
-                  Safety and moderation
-                </Link>
-              </div>
-
-              <div className="mt-8 flex flex-wrap gap-2">
-                {trustPills.map((pill) => (
-                  <span
-                    key={pill.label}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 text-xs text-white/90"
-                  >
-                    <pill.icon className="h-3.5 w-3.5 text-primary" />
-                    {pill.label}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.aside
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-              className="glass-card relative overflow-hidden rounded-3xl border-white/10 p-6 md:p-8"
-            >
-              <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-primary/15 blur-3xl" />
-              <p className="text-xs uppercase tracking-[0.2em] text-white/65">Live right now</p>
-              <h2 className="mt-2 font-display text-3xl font-semibold text-white">Tonight&apos;s flow</h2>
-
-              <div className="mt-6 space-y-4">
-                {[
-                  "Join an active room in under 10 seconds",
-                  "Get one focused 45-second introduction",
-                  "Choose continue, chat, or pass privately",
-                  "Only mutual yes unlocks identity",
-                ].map((line) => (
-                  <div key={line} className="flex items-start gap-3 text-sm text-white/85">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                    <span>{line}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-7 rounded-2xl border border-white/10 bg-black/35 p-4">
-                <p className="text-xs uppercase tracking-[0.16em] text-white/60">Current room pulse</p>
-                <div className="mt-3 grid grid-cols-3 gap-3">
-                  {[
-                    { label: "Avg wait", value: "14s" },
-                    { label: "Live rooms", value: "12" },
-                    { label: "Mutual yes", value: "37%" },
-                  ].map((item) => (
-                    <div key={item.label} className="rounded-xl border border-white/10 bg-black/40 p-3 text-center">
-                      <p className="text-lg font-semibold text-primary">{item.value}</p>
-                      <p className="mt-1 text-[11px] text-white/70">{item.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.aside>
-          </div>
-        </div>
-      </section>
-
-      <section aria-label="Key Metrics" className="border-y border-border/40 bg-verity-surface/40 px-6 py-16">
-        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-8 md:grid-cols-4">
-          {heroMetrics.map((metric, index) => (
-            <motion.div
-              key={metric.label}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08 }}
-              className="text-center"
-            >
-              <p className="text-3xl font-bold text-gradient-gold md:text-4xl">{metric.value}</p>
-              <p className="mt-2 text-sm text-muted-foreground">{metric.label}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      <section className="overflow-hidden border-b border-border/30 bg-verity-surface px-6 py-4">
-        <div className="mx-auto max-w-6xl">
-          {prefersReducedMotion ? (
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {roomLabels.map((room) => (
-                <span key={room} className="rounded-full border border-border/60 bg-card/80 px-3 py-1 text-xs">
-                  {room}
+                  <pill.icon className="h-3.5 w-3.5 text-[#34d399]" />
+                  {pill.label}
                 </span>
               ))}
             </div>
-          ) : (
-            <motion.div
-              className="flex w-max items-center gap-2"
-              animate={{ x: [0, -420] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            >
-              {[...roomLabels, ...roomLabels].map((room, idx) => (
-                <span
-                  key={`${room}-${idx}`}
-                  className="rounded-full border border-border/60 bg-card/80 px-3 py-1 text-xs text-foreground/85"
-                >
-                  {room}
-                </span>
-              ))}
-            </motion.div>
-          )}
+          </motion.div>
+
+          <motion.aside
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 28 }}
+            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.15, ease: "easeOut" }}
+          >
+            <SparkCallInterface />
+          </motion.aside>
         </div>
       </section>
 
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-5xl text-center">
-          <h2 className="font-display text-3xl font-bold md:text-5xl">
-            Built for <span className="text-gradient-gold">clarity in motion</span>
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground">
-            A deterministic first-minute flow that removes ambiguity and keeps people in control.
-          </p>
-        </div>
-
-        <div className="mx-auto mt-12 grid max-w-6xl gap-5 md:grid-cols-3">
-          {flowSteps.map((step, index) => (
-            <motion.article
-              key={step.title}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08 }}
-              className="glass-card rounded-2xl p-6"
-            >
-              <div className="mb-4 inline-flex rounded-xl bg-primary/10 p-2.5">
-                <step.icon className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="font-display text-2xl font-semibold">{step.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-            </motion.article>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-verity-surface px-6 py-20">
+      <section className="border-b border-white/10 bg-[#0f0f0f] px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-14 text-center">
-            <p className="inline-flex items-center gap-2 rounded-full border border-border/50 px-4 py-1 text-xs uppercase tracking-[0.18em] text-muted-foreground">
-              <Clock3 className="h-3.5 w-3.5 text-primary" />
-              Product principles
+          <div className="text-center">
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1 text-xs uppercase tracking-[0.18em] text-white/65">
+              <Sparkles className="h-3.5 w-3.5 text-[#d946ef]" />
+              How Sparks Work
             </p>
-            <h2 className="mt-4 font-display text-3xl font-bold md:text-5xl">
-              Design choices that protect your <span className="text-gradient-gold">attention</span>
+            <h2 className="mt-4 font-display text-3xl font-semibold text-white md:text-5xl">
+              Built for chemistry, not swipe fatigue
             </h2>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {principles.map((item, index) => (
+          <div className="mx-auto mt-12 grid max-w-6xl gap-5 md:grid-cols-3">
+            {sparkFlow.map((step, index) => (
               <motion.article
-                key={item.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                key={step.title}
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+                whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.06 }}
-                className="glass-card rounded-2xl p-6 transition-colors hover:border-primary/35"
+                transition={{ delay: index * 0.08 }}
+                className="glass-card rounded-2xl p-6"
               >
-                <h3 className="font-display text-lg font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                <div className="mb-4 inline-flex rounded-xl bg-white/8 p-2.5">
+                  <step.icon className="h-5 w-5 text-[#34d399]" />
+                </div>
+                <h3 className="font-display text-2xl font-semibold text-white">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/72">{step.body}</p>
               </motion.article>
             ))}
           </div>
         </div>
       </section>
 
+      <section className="border-b border-white/10 bg-[#0b0b0b] px-6 py-20">
+        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1 text-xs uppercase tracking-[0.2em] text-white/65">
+              <Clock3 className="h-3.5 w-3.5 text-[#34d399]" />
+              Cinematic Spark Call
+            </p>
+            <h2 className="mt-4 font-display text-3xl font-semibold text-white md:text-5xl">
+              The 45-second moment that decides everything
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-white/75 md:text-lg">
+              Orb convergence at 15 seconds triggers a reveal flash and confetti burst. The flow is designed to
+              reduce anxiety, increase clarity, and create one decisive mutual yes/no outcome.
+            </p>
+
+            <ul className="mt-6 space-y-3 text-sm text-white/80">
+              {[
+                "Circular gradient timer with high-contrast readability",
+                "Orb explosion + reveal flash sequence at 15 seconds",
+                "Confetti burst on successful reveal to reinforce positive signal",
+                "Glassmorphism interaction layer with reduced-motion safety",
+              ].map((item) => (
+                <li key={item} className="inline-flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#34d399]" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <SparkCallInterface className="h-full" />
+        </div>
+      </section>
+
       <section className="px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-center font-display text-3xl font-bold md:text-5xl">
-            Early user signal, <span className="text-gradient-gold">not vanity metrics</span>
-          </h2>
+        <div className="mx-auto max-w-6xl rounded-3xl border border-white/15 bg-[linear-gradient(135deg,rgba(52,211,153,0.14),rgba(217,70,239,0.14))] p-8 md:p-12">
+          <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+            <div>
+              <p className="text-xs uppercase tracking-[0.22em] text-white/70">Private beta · now running</p>
+              <h2 className="mt-3 font-display text-3xl font-semibold text-white md:text-5xl">
+                Accepting pilot users in Sydney + Canberra
+              </h2>
+              <p className="mt-4 max-w-2xl text-white/78">
+                Limited invitation windows unlock in waves. Join early, secure priority access, and enter the
+                anti-swipe network before public launch.
+              </p>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {testimonials.map((entry, index) => (
-              <motion.blockquote
-                key={entry.person}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className="rounded-2xl border border-border/50 bg-card/70 p-6"
-              >
-                <Star className="mb-3 h-4 w-4 text-primary" />
-                <p className="text-sm leading-relaxed text-foreground/90">“{entry.quote}”</p>
-                <footer className="mt-5 text-xs text-muted-foreground">
-                  {entry.person} · {entry.city}
-                </footer>
-              </motion.blockquote>
-            ))}
+              <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+                <Link
+                  to="/auth?mode=signup&waitlist=1"
+                  onClick={() => trackEvent("landing_waitlist_cta_clicked", { placement: "fomo_panel" })}
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-[#070707] transition-transform hover:scale-[1.02]"
+                >
+                  Reserve pilot access
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/safety"
+                  className="rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
+                >
+                  Safety architecture
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              {waitlistStats.map((item) => (
+                <div key={item.label} className="glass-card rounded-2xl p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-white/65">{item.label}</p>
+                  <p className="mt-1 text-lg font-semibold text-white">{item.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <section aria-label="Key Metrics" className="border-y border-border/30 bg-verity-surface/70 px-6 py-20">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="text-center font-display text-3xl font-bold md:text-5xl">FAQ</h2>
-          <div className="mt-10 grid gap-4">
-            {faqs.map((faq) => (
-              <details
-                key={faq.q}
-                className="rounded-2xl border border-border/50 bg-card/70 p-5"
-                onToggle={(event) => {
-                  if ((event.currentTarget as HTMLDetailsElement).open) {
-                    trackEvent("landing_faq_opened", { question: faq.q });
-                  }
-                }}
-              >
-                <summary className="cursor-pointer list-none text-sm font-semibold text-foreground md:text-base">
-                  {faq.q}
-                </summary>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{faq.a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 py-24 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="mx-auto max-w-3xl"
-        >
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-border/60 px-4 py-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            <Flame className="h-3.5 w-3.5 text-primary" />
-            Real connection, less noise
-          </p>
-
-          <h2 className="font-display text-4xl font-bold md:text-6xl">
-            Ready for a <span className="text-gradient-gold">better first minute</span>?
-          </h2>
-
-          <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
-            Start with one intentional conversation and let mutual signal decide what comes next.
-          </p>
-
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              to="/auth?mode=signup"
-              aria-label="Create your Verity account"
-              onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "footer" })}
-              className="group inline-flex items-center gap-2 rounded-full bg-gradient-gold px-10 py-4 text-base font-semibold text-primary-foreground glow-gold transition-transform hover:scale-[1.02]"
-            >
-              Start your first Spark
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              to="/transparency"
-              onClick={() => trackEvent("landing_secondary_cta_clicked", { placement: "footer" })}
-              className="rounded-full border border-border/60 px-7 py-3 text-sm font-medium text-foreground/85 transition-colors hover:bg-card"
-            >
-              Read transparency notes
-            </Link>
-          </div>
-        </motion.div>
-      </section>
-
-      <section className="border-t border-border/30 bg-verity-surface px-6 py-12">
+      <section className="border-t border-white/10 bg-[#0a0a0a] px-6 py-12">
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 text-sm sm:flex-row">
-          <p className="font-medium">Verity</p>
-          <div className="flex items-center gap-5">
-            <Link to="/privacy" className="text-muted-foreground transition-colors hover:text-foreground">
+          <p className="font-semibold tracking-wide text-white">Verity · Quantum Spark</p>
+          <div className="flex items-center gap-5 text-white/70">
+            <Link to="/privacy" className="transition-colors hover:text-white">
               Privacy
             </Link>
-            <Link to="/terms" className="text-muted-foreground transition-colors hover:text-foreground">
+            <Link to="/terms" className="transition-colors hover:text-white">
               Terms
             </Link>
-            <Link to="/safety" className="text-muted-foreground transition-colors hover:text-foreground">
+            <Link to="/safety" className="transition-colors hover:text-white">
               Safety
             </Link>
-            <Link to="/transparency" className="text-muted-foreground transition-colors hover:text-foreground">
+            <Link to="/transparency" className="transition-colors hover:text-white">
               Transparency
             </Link>
           </div>
@@ -533,9 +262,8 @@ const Landing = () => {
       <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-3 md:hidden">
         <Link
           to="/auth?mode=signup"
-          aria-label="Start your first Spark from mobile quick action"
           onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "sticky_mobile" })}
-          className="flex items-center justify-center gap-2 rounded-full bg-gradient-gold py-3.5 font-semibold text-primary-foreground shadow-lg"
+          className="flex items-center justify-center gap-2 rounded-full bg-gradient-spark py-3.5 font-semibold text-[#060606] shadow-[0_10px_36px_rgba(52,211,153,0.35)]"
         >
           Start your first Spark
           <ArrowRight className="h-4 w-4" />
@@ -544,7 +272,7 @@ const Landing = () => {
 
       <div className="pb-24 md:pb-0" />
       <AppNav />
-    </div>
+    </main>
   );
 };
 

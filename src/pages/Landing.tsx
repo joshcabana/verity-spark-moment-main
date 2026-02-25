@@ -1,22 +1,12 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Clock3,
-  EyeOff,
-  LockKeyhole,
-  Shield,
-  Sparkles,
-  UserCheck,
-  Video,
-  Zap,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import AppNav from "@/components/AppNav";
 import { trackEvent } from "@/lib/analytics";
 import HeroSection from "@/components/HeroSection"; // Import the new HeroSection
 import HowSparksWork from "@/components/HowSparksWork"; // Import the new HowSparksWork
 import SparkCallHero from "@/components/SparkCallHero"; // Import the new SparkCallHero
+import OnboardingDiscoveryPostSpark from "@/components/OnboardingDiscoveryPostSpark"; // Import the new OnboardingDiscoveryPostSpark
 
 
 
@@ -48,6 +38,8 @@ const Landing = () => {
       <HowSparksWork />
 
       <SparkCallHero />
+
+      <OnboardingDiscoveryPostSpark />
 
       <section className="px-6 py-20">
         <div className="mx-auto max-w-6xl rounded-3xl border border-white/15 bg-[linear-gradient(135deg,rgba(52,211,153,0.14),rgba(217,70,239,0.14))] p-8 md:p-12">

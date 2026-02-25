@@ -61,23 +61,25 @@ const SparkCallInterface = ({
     if (secondsLeft === revealSecond && phase === "anonymous") {
       setPhase("converge");
       setBurstVisible(true);
-
-      const revealTimer = window.setTimeout(() => {
-        setPhase("revealed");
-      }, 1200);
-
-      const hideBurst = window.setTimeout(() => {
-        setBurstVisible(false);
-      }, 1800);
-
-      return () => {
-        window.clearTimeout(revealTimer);
-        window.clearTimeout(hideBurst);
-      };
     }
-
-    return undefined;
   }, [phase, revealSecond, secondsLeft]);
+
+  useEffect(() => {
+    if (phase !== "converge") return;
+
+    const revealTimer = window.setTimeout(() => {
+      setPhase("revealed");
+    }, 1200);
+
+    const hideBurst = window.setTimeout(() => {
+      setBurstVisible(false);
+    }, 1800);
+
+    return () => {
+      window.clearTimeout(revealTimer);
+      window.clearTimeout(hideBurst);
+    };
+  }, [phase]);
 
   const resetDemo = () => {
     setSecondsLeft(durationSeconds);

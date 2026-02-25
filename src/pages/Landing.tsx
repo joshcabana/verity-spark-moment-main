@@ -14,9 +14,8 @@ import {
   Zap,
 } from "lucide-react";
 import AppNav from "@/components/AppNav";
-import SparkCallInterface, { type SparkCallPhase } from "@/components/SparkCallInterface";
-import SparkParticlesCanvas, { type SparkParticleMode } from "@/components/SparkParticlesCanvas";
 import { trackEvent } from "@/lib/analytics";
+import HeroSection from "@/components/HeroSection"; // Import the new HeroSection
 
 const trustPills = [
   { icon: Shield, label: "Live trust + safety" },
@@ -52,120 +51,19 @@ const waitlistStats = [
 
 const Landing = () => {
   const prefersReducedMotion = useReducedMotion();
-  const [heroParticleMode, setHeroParticleMode] = useState<SparkParticleMode>("ambient");
-  const ambientResetTimeoutRef = useRef<number | null>(null);
+
 
   useEffect(() => {
     trackEvent("landing_view", { page: "landing_quantum" });
   }, []);
 
-  useEffect(() => {
-    return () => {
-      if (ambientResetTimeoutRef.current !== null) {
-        window.clearTimeout(ambientResetTimeoutRef.current);
-      }
-    };
-  }, []);
 
-  const handleHeroPhaseChange = useCallback((phase: SparkCallPhase) => {
-    if (ambientResetTimeoutRef.current !== null) {
-      window.clearTimeout(ambientResetTimeoutRef.current);
-      ambientResetTimeoutRef.current = null;
-    }
 
-    if (phase === "anonymous") {
-      setHeroParticleMode("ambient");
-      return;
-    }
 
-    if (phase === "converge") {
-      setHeroParticleMode("converging");
-      return;
-    }
-
-    setHeroParticleMode("exploding");
-    ambientResetTimeoutRef.current = window.setTimeout(() => {
-      setHeroParticleMode("ambient");
-      ambientResetTimeoutRef.current = null;
-    }, 2100);
-  }, []);
 
   return (
     <main id="main-content" className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
-      <section className="relative isolate min-h-screen overflow-hidden border-b border-white/10">
-        <SparkParticlesCanvas
-          className="opacity-90"
-          density={100}
-          speed={0.4}
-          mode={heroParticleMode}
-        />
-
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(52,211,153,0.20),transparent_45%),radial-gradient(circle_at_78%_18%,rgba(217,70,239,0.24),transparent_45%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-black/55 to-[#0a0a0a]" />
-
-        <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-6xl items-center gap-12 px-6 pb-24 pt-20 lg:grid-cols-[1.05fr_0.95fr]">
-          <motion.div
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
-            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.22em] text-white/85">
-              <Zap className="h-3.5 w-3.5 text-[#34d399]" />
-              Quantum Spark v1.0
-            </p>
-
-            <h1 className="mt-6 max-w-3xl font-display text-5xl font-semibold tracking-tight text-white md:text-7xl">
-              Real Eyes.
-              <br />
-              <span className="text-gradient-spark">Real Spark.</span>
-            </h1>
-
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/82 md:text-xl">
-              Verity replaces the warm generic dating flow with a dark cinematic experience: living particles,
-              glassmorphism layers, and a 45-second Spark Call that climaxes in an orb explosion and reveal.
-            </p>
-
-            <div className="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-              <Link
-                to="/auth?mode=signup"
-                onClick={() => trackEvent("landing_primary_cta_clicked", { placement: "hero" })}
-                className="group inline-flex items-center gap-2 rounded-full bg-gradient-spark px-8 py-4 text-base font-semibold text-[#050505] shadow-[0_14px_48px_rgba(52,211,153,0.28)] transition-transform hover:scale-[1.02]"
-              >
-                Start your first Spark
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-
-              <Link
-                to="/auth?mode=signup&waitlist=1"
-                onClick={() => trackEvent("landing_waitlist_cta_clicked", { placement: "hero" })}
-                className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/35 px-6 py-3 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
-              >
-                Join the FOMO waitlist
-              </Link>
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-2">
-              {trustPills.map((pill) => (
-                <span
-                  key={pill.label}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/35 px-3 py-1.5 text-xs text-white/88"
-                >
-                  <pill.icon className="h-3.5 w-3.5 text-[#34d399]" />
-                  {pill.label}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.aside
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 28 }}
-            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.15, ease: "easeOut" }}
-          >
-            <SparkCallInterface onPhaseChange={handleHeroPhaseChange} />
-          </motion.aside>
-        </div>
-      </section>
+      <HeroSection />
 
       <section className="border-b border-white/10 bg-[#0f0f0f] px-6 py-20">
         <div className="mx-auto max-w-6xl">

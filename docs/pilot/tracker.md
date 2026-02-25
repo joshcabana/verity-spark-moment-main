@@ -48,7 +48,11 @@ SLA: triage in 30 minutes.
 
 | Date | Observation | Decision | Owner | Follow-up Date |
 | --- | --- | --- | --- | --- |
-| - | - | - | - | - |
+| 2026-02-25 | All 40 invite addresses are synthetic placeholders (`pilot.canberraXX@verity.date`) — no real users received invites | Replace with real email addresses immediately; re-seed auth accounts | Product / Growth | 2026-02-26 |
+| 2026-02-25 | Analytics pipeline is console-only; Mixpanel integration was stubbed but not connected | Implemented SDK-free Mixpanel HTTP integration; needs `VITE_MIXPANEL_TOKEN` env var on Vercel | Engineering | 2026-02-26 |
+| 2026-02-25 | Anti-gravity output (risk register, metric targets, GTM hypotheses) was empty template | Completed full risk register (10 risks), metric targets (9 metrics), and 5 GTM hypotheses | Product | 2026-02-27 |
+| 2026-02-25 | Stripe live-mode keys unconfirmed — `STRIPE_SECRET_KEY` may still be `sk_test_` prefix | Verify key prefix in Supabase secrets before real user purchases | Engineering | 2026-02-26 |
+| 2026-02-25 | Gate A will almost certainly return `HOLD_COLLECT_EVIDENCE` due to 0 matches and 0 decisions | Recommend extending Gate A deadline to 2026-03-01 if real users onboarded by 2026-02-27 | Product | 2026-02-27 |
 
 ## Gate Decisions
 

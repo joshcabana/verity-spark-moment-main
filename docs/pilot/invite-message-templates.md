@@ -22,7 +22,6 @@ I'll set up your account and send login details directly. All I need from you:
 - Confirm you're in (reply here or text me)
 - Let me know the best email to use for your login
 
-
 No cost, no commitment. Takes 15 minutes and I'd genuinely value your feedback.
 
 Want in?
@@ -83,7 +82,6 @@ A few things to know:
 - If you both say yes — it's a Spark and the chat opens.
 - Everything is private (no public profiles, no screenshots).
 
-
 **Questions or issues?** Reply to this email or message me directly. I'm responding
 within 2 hours during pilot hours.
 
@@ -93,7 +91,7 @@ Thanks for helping — your feedback genuinely shapes the final product.
 
 ---
 
-## Frequently Asked Questions (Pre-empt these in your message if relevant)
+## Frequently Asked Questions (Preempt these in your message if relevant)
 
 | Question | Answer |
 | --- | --- |

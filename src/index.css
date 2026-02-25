@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -50,6 +50,7 @@
     --verity-gold-dim: 38 60% 35%;
     --verity-warm: 25 80% 60%;
     --verity-surface: 20 12% 9%;
+    --verity-surface-alt: 20 12% 12%;
     --verity-surface-hover: 20 12% 12%;
     --verity-glass: 20 14% 4% / 0.8;
     --verity-glow: 38 100% 60%;
@@ -65,18 +66,28 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'DM Sans', system-ui, sans-serif;
+    font-family: "DM Sans", system-ui, sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Playfair Display", Georgia, serif;
   }
 }
 
 @layer utilities {
   .text-gradient-gold {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(38 90% 55%), hsl(25 80% 60%), hsl(38 90% 55%));
+    background-image: linear-gradient(
+      135deg,
+      hsl(38 90% 55%),
+      hsl(25 80% 60%),
+      hsl(38 90% 55%)
+    );
   }
 
   .bg-gradient-gold {
@@ -88,7 +99,9 @@
   }
 
   .glow-gold {
-    box-shadow: 0 0 40px hsl(38 90% 55% / 0.15), 0 0 80px hsl(38 90% 55% / 0.05);
+    box-shadow:
+      0 0 40px hsl(38 90% 55% / 0.15),
+      0 0 80px hsl(38 90% 55% / 0.05);
   }
 
   .glow-gold-sm {
@@ -96,7 +109,8 @@
   }
 
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+    @apply bg-card/80 backdrop-blur-xl border border-border/60;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   }
 
   .timer-ring {

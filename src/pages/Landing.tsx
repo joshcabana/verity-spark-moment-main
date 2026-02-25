@@ -16,6 +16,7 @@ import {
 import AppNav from "@/components/AppNav";
 import { trackEvent } from "@/lib/analytics";
 import HeroSection from "@/components/HeroSection"; // Import the new HeroSection
+import HowSparksWork from "@/components/HowSparksWork"; // Import the new HowSparksWork
 
 const trustPills = [
   { icon: Shield, label: "Live trust + safety" },
@@ -24,23 +25,7 @@ const trustPills = [
   { icon: UserCheck, label: "Identity controls" },
 ];
 
-const sparkFlow = [
-  {
-    icon: Video,
-    title: "Enter a live room",
-    body: "Skip profile theater. Join instantly and meet someone who is present right now.",
-  },
-  {
-    icon: Clock3,
-    title: "45-second Spark Call",
-    body: "A cinematic, focused call that reveals chemistry quickly without endless chat fatigue.",
-  },
-  {
-    icon: Sparkles,
-    title: "Orb convergence + reveal",
-    body: "At 15 seconds, the timer explodes into a reveal moment and unlocks mutual continuation.",
-  },
-];
+
 
 const waitlistStats = [
   { label: "Pilot cities", value: "Sydney + Canberra" },
@@ -65,38 +50,7 @@ const Landing = () => {
     <main id="main-content" className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <HeroSection />
 
-      <section className="border-b border-white/10 bg-[#0f0f0f] px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="text-center">
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1 text-xs uppercase tracking-[0.18em] text-white/65">
-              <Sparkles className="h-3.5 w-3.5 text-[#d946ef]" />
-              How Sparks Work
-            </p>
-            <h2 className="mt-4 font-display text-3xl font-semibold text-white md:text-5xl">
-              Built for chemistry, not swipe fatigue
-            </h2>
-          </div>
-
-          <div className="mx-auto mt-12 grid max-w-6xl gap-5 md:grid-cols-3">
-            {sparkFlow.map((step, index) => (
-              <motion.article
-                key={step.title}
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
-                whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className="glass-card rounded-2xl p-6"
-              >
-                <div className="mb-4 inline-flex rounded-xl bg-white/8 p-2.5">
-                  <step.icon className="h-5 w-5 text-[#34d399]" />
-                </div>
-                <h3 className="font-display text-2xl font-semibold text-white">{step.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/72">{step.body}</p>
-              </motion.article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HowSparksWork />
 
       <section className="border-b border-white/10 bg-[#0b0b0b] px-6 py-20">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">

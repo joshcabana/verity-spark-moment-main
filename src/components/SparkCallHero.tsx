@@ -85,7 +85,7 @@ const SparkCallHero: React.FC = () => {
                         reduce anxiety, increase clarity, and create one decisive mutual yes/no outcome.
                     </p>
 
-                    <ul className="mt-6 space-y-3 text-sm text-light-grey">
+                    <div className="mt-6 space-y-3 text-sm text-light-grey">
                         {[{
                             icon: <CheckCircle2 className="w-4 h-4" />,
                             label: "Circular gradient timer with high-contrast readability"
@@ -103,19 +103,19 @@ const SparkCallHero: React.FC = () => {
                             label: "Glassmorphism interaction layer with reduced-motion safety"
                         },
                         ].map((item, index) => (
-                            <motion.li
+                            <motion.div
                                 key={index}
                                 className="inline-flex items-start gap-2"
-                                initial="hidden" // Ensure initial state is hidden
-                                animate={inView ? "visible" : "hidden"} // Animate when in view
-                                variants={itemVariants} // Use item variants
-                                transition={{ delay: 0.3 + index * 0.1 }} // Staggered reveal
+                                initial="hidden"
+                                animate={inView ? "visible" : "hidden"}
+                                variants={itemVariants}
+                                transition={{ delay: 0.3 + index * 0.1 }}
                             >
-                                <span className="mt-0.5 h-4 w-4 shrink-0 text-luxury-gold-light">{item.icon}</span> {/* Render Lucide icon component */}
+                                <span className="mt-0.5 h-4 w-4 shrink-0 text-luxury-gold-light">{item.icon}</span>
                                 <span>{item.label}</span>
-                            </motion.li>
+                            </motion.div>
                         ))}
-                    </ul>
+                    </div>
                 </motion.div>
 
                 {/* Right Visual Area - Spark Call Mockup */}

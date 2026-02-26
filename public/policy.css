@@ -1,66 +1,180 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap");
+/*  Verity – Policy Page Styles (Luxury Theme)
+    Synced with main app's CSS variable system.
+    localStorage key = "theme" — must match next-themes storageKey.
+*/
 
+/* ── Google Fonts ── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap");
+
+/* ── Base (Light / Day) ── */
 :root {
   color-scheme: light;
-
-  --background: 40 10% 98%; /* Luxury off-white */
-  --foreground: 220 10% 5%; /* Luxury deep charcoal */
-
-  --primary: 45 80% 60%; /* Luxury gold strong */
-  --verity-gold: 45 80% 60%;
-  --verity-gold-dim: 40 40% 30%;
+  --background: #F9F6F1;
+  --foreground: #1A1A1A;
+  --primary: #C78B0A;
+  --primary-foreground: #fff;
+  --muted: #6B6B6B;
+  --card: #fff;
+  --border: #E0DAD0;
+  --verity-gold: #C78B0A;
+  --verity-gold-dim: #9A7230;
 }
 
+/* ── Dark (Night) — applied via .dark on <html> ── */
 .dark {
   color-scheme: dark;
-
-  --background: 220 10% 5%; /* Luxury deep charcoal */
-  --foreground: 40 10% 98%; /* Luxury off-white */
-
-  --primary: 45 70% 70%; /* Lighter gold for dark mode */
-  --verity-gold: 45 70% 70%;
-  --verity-gold-dim: 40 30% 20%;
+  --background: #080808;
+  --foreground: #EDE8DD;
+  --primary: #E5A519;
+  --primary-foreground: #080808;
+  --muted: #8C8C8C;
+  --card: #121212;
+  --border: #292929;
+  --verity-gold: #E5A519;
+  --verity-gold-dim: #9A7230;
 }
 
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Body ── */
 body {
-  font-family: "Inter", sans-serif;
-  color: hsl(var(--foreground));
-  background-color: hsl(var(--background));
-  line-height: 1.6;
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: "Inter", system-ui, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  line-height: 1.7;
+  transition: background-color 0.4s ease, color 0.25s ease;
 }
 
-h1, h2, h3, h4, h5, h6 {
+.dark body {
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(229, 165, 25, 0.04), transparent 38%),
+    radial-gradient(circle at 84% 14%, rgba(154, 114, 48, 0.05), transparent 42%),
+    linear-gradient(180deg, #080808, #050505);
+}
+
+:root body {
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(199, 139, 10, 0.06), transparent 38%),
+    radial-gradient(circle at 84% 14%, rgba(154, 114, 48, 0.04), transparent 42%),
+    linear-gradient(180deg, #F9F6F1, #F5F0E8);
+}
+
+/* ── Header ── */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+
+.brand {
   font-family: "Playfair Display", serif;
-  color: hsl(var(--primary));
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--primary);
+  text-decoration: none;
   letter-spacing: 0.02em;
 }
 
-h1 { font-size: 2.5em; }
-h2 { font-size: 2em; }
-h3 { font-size: 1.5em; }
-
-a {
-  color: hsl(var(--primary));
-  text-decoration: none;
-  border-bottom: 1px solid hsla(var(--primary), 0.5);
-  transition: color 0.3s ease, border-color 0.3s ease;
+/* ── Theme Toggle Button ── */
+#theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  transition: all 0.3s ease;
+}
+#theme-toggle:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
 }
 
-a:hover {
-  color: hsl(var(--verity-gold-dim));
-  border-color: hsl(var(--verity-gold-dim));
+/* ── Content ── */
+.content {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+  letter-spacing: 0.02em;
+}
+
+h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 0.8rem;
+  color: var(--foreground);
+}
+
+.last-updated {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
 }
 
 p {
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
 }
 
-strong {
-  color: hsl(var(--primary));
+/* ── Lists ── */
+ul, ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+li {
+  margin-bottom: 0.4rem;
+  line-height: 1.7;
+}
+
+li::marker {
+  color: var(--primary);
+}
+
+/* ── Links ── */
+a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s;
+}
+a:hover {
+  opacity: 0.8;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

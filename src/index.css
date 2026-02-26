@@ -136,6 +136,10 @@
       linear-gradient(180deg, #F9F6F1, #F5F0E8);
   }
 
+  .light-mode .app-nav {
+    background: linear-gradient(180deg, rgba(249,246,241,0.92), rgba(249,246,241,0.98));
+  }
+
   h1,
   h2,
   h3,

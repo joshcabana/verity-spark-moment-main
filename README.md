@@ -5,14 +5,14 @@ Verity is an anti-swipe dating app reimagined for a cinematic, captivating, and 
 - Production app: <https://verity-spark-moment-main.vercel.app/>
 - Supabase project ref: `nhpbxlvogqnqutmflwlk`
 
-## Design Philosophy: Electric Bloom
+## Design Philosophy: Luxury Dating Platform
 
-We've transformed Verity from a functional MVP into a premium, magnetically addictive experience. The "Electric Bloom" design language embraces:
+We've transformed Verity from a functional MVP into a premium, high-end dating experience. The luxury design language embraces:
 
-*   **Cinematic Dark Aesthetic:** Deep blacks, electric violets, neon greens, and fiery oranges create a dynamic, immersive visual environment.
-*   **Premium Intimacy:** Glassmorphism layers and subtle micro-depth effects provide a sophisticated, tactile feel.
+*   **Elegant Dual-Mode Aesthetic:** A persistent Day/Night toggle (light/dark mode) with Gold, Black, Grey, and White as the core palette. Gold serves as the brand accent; black/grey/white for surfaces and text.
+*   **Premium Intimacy:** Glassmorphism layers, thin borders, subtle shadows, and generous whitespace provide a sophisticated, tactile feel.
 *   **Captivating Motion System:** Leveraging Framer Motion for fluid scroll-triggered animations, subtle particle systems powered by `react-tsparticles`, dynamic entrance effects, and engaging micro-interactions across every element.
-*   **Custom Typography & Branding:** A curated typography scale (`Montserrat` for impact, `Nunito` for readability) paired with a striking new logo to reinforce the "VERITY: Real Eyes. Real Spark." brand.
+*   **Custom Typography & Branding:** A curated typography scale (`Playfair Display` for headings, `Inter` for body text) paired with a striking new logo to reinforce the "VERITY: Real Eyes. Real Spark." brand.
 
 ## Key Components & Features (Rebuilt):
 

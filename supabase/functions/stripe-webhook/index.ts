@@ -168,10 +168,14 @@ serve(async (req) => {
         const email = customer.email;
         if (!email) break;
 
-        const { data: usersResponse, error: usersError } = await supabase.auth.admin.listUsers();
+        // BUG FIX: Use targeted email lookup instead of loading ALL users into memory.
+        // listUsers() with no filter is O(N) on auth.users and will fail at scale.
+        const { data: usersResponse, error: usersError } = await supabase.auth.admin.listUsers({
+          filter: `email=${email}`,
+        } as Parameters<typeof supabase.auth.admin.listUsers>[0]);
         if (usersError) throw usersError;
 
-        const appUser = usersResponse.users.find((candidate) => candidate.email === email);
+        const appUser = usersResponse?.users?.[0];
         if (!appUser) {
           log("No app user found for Stripe customer email", { email });
           break;
@@ -191,6 +195,24 @@ serve(async (req) => {
           );
 
         if (upsertError) throw upsertError;
+        break;
+      }
+
+      case "customer.subscription.updated": {
+        // Handles renewals, plan changes, and cancellation-at-period-end.
+        // Without this, subscription renewals never update current_period_end.
+        const subscription = event.data.object as Stripe.Subscription;
+        const newStatus = subscription.status === "active" ? "active" : "cancelled";
+        const { error: updateError } = await supabase
+          .from("subscriptions")
+          .update({
+            status: newStatus,
+            current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+          })
+          .eq("stripe_subscription_id", subscription.id);
+        if (updateError) {
+          log("subscription.updated DB error", { message: updateError.message, subId: subscription.id });
+        }
         break;
       }
 

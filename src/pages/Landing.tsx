@@ -10,10 +10,12 @@ import OnboardingDiscoveryPostSpark from "@/components/OnboardingDiscoveryPostSp
 import SafetyWaitlistSection from "@/components/SafetyWaitlistSection";
 import SparkCallHero from "@/components/SparkCallHero";
 import { trackEvent } from "@/lib/analytics";
+import { useInView } from 'react-intersection-observer';
 
-import { useInView } from 'react-intersection-observer'; // Import useInView
 
 const Landing = () => {
+  const [ctaRef, ctaInView] = useInView({ triggerOnce: true, threshold: 0.3 });
+
   useEffect(() => {
     trackEvent("landing_view", { page: "landing_quantum" });
   }, []);
@@ -30,9 +32,10 @@ const Landing = () => {
 
       {/* Ready to Unlock More Sparks CTA Section */}
       <motion.section
+        ref={ctaRef}
         className="px-6 py-20"
         initial="hidden"
-        animate={useInView ? "visible" : "hidden"} // Trigger animation when in view
+        animate={ctaInView ? "visible" : "hidden"}
         variants={{
           hidden: { opacity: 0, y: 50 },
           visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15, delay: 0.2 } },

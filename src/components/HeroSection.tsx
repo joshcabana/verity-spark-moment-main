@@ -1,16 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SparkParticleSystem from "./SparkParticleSystem";
 
 const HeroSection: React.FC = () => {
     const fadeInSlideUpVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15 } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 80, damping: 15 } },
     };
 
     const fadeInVariants = {
         hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { type: "spring", stiffness: 80, damping: 15 } },
+        visible: { opacity: 1, transition: { type: "spring" as const, stiffness: 80, damping: 15 } },
     };
 
     const buttonVariants = {
@@ -67,9 +68,7 @@ const HeroSection: React.FC = () => {
                 >
                     Real Eyes. Real Spark.
                 </motion.p>
-                <motion.a
-                    href="#"
-                    className="inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-primary-foreground text-xl font-bold py-4 px-8 rounded-full shadow-lg"
+                <motion.div
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
@@ -77,8 +76,13 @@ const HeroSection: React.FC = () => {
                     animate="visible"
                     transition={{ delay: 1.1, ...fadeInSlideUpVariants.visible.transition }}
                 >
-                    Start your first Spark
-                </motion.a>
+                    <Link
+                        to="/auth?mode=signup"
+                        className="inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-primary-foreground text-xl font-bold py-4 px-8 rounded-full shadow-lg"
+                    >
+                        Start your first Spark
+                    </Link>
+                </motion.div>
             </motion.div>
         </section>
     );

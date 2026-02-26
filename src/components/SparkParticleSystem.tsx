@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import Particles from "react-tsparticles";
-import type { Container, Engine } from "tsparticles-engine";
+import type { Container, Engine, ISourceOptions } from "tsparticles-engine";
 import { loadFull } from "tsparticles"; // loads tsparticles and all its plugins
 
 interface SparkParticleSystemProps {
@@ -20,7 +20,7 @@ const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambie
     }, []);
 
     const options = useMemo(() => {
-        let baseOptions: any = {
+        const baseOptions: ISourceOptions = {
             background: {
                 color: { value: "transparent" },
             },

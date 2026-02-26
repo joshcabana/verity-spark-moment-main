@@ -39,13 +39,13 @@ const Landing = () => {
         }}
       >
                 <motion.div // Wrap with motion.div for animation
-          className="mx-auto max-w-3xl rounded-2xl border border-verity-gold/25 bg-card/60 p-8 text-center backdrop-blur-lg shadow-xl"
+          className="mx-auto max-w-3xl rounded-2xl border border-luxury-gold/15 bg-card/60 p-8 text-center backdrop-blur-lg shadow-xl"
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, amount: 0.5 }}
           variants={{
-            initial: { borderColor: "rgba(199,160,70,0.2)" },
-            animate: { borderColor: ["rgba(199,160,70,0.2)", "rgba(241,223,176,0.45)", "rgba(181,134,52,0.45)", "rgba(199,160,70,0.2)"], transition: { duration: 8, repeat: Infinity, ease: "easeInOut" } },
+            initial: { borderColor: "hsla(var(--verity-gold),0.2)" },
+            animate: { borderColor: ["hsla(var(--verity-gold),0.2)", "hsla(var(--verity-gold),0.45)", "hsla(var(--verity-gold-dim),0.45)", "hsla(var(--verity-gold),0.2)"], transition: { duration: 8, repeat: Infinity, ease: "easeInOut" } },
           }}
         >
           <h2 className="font-display text-4xl text-gradient-gold drop-shadow-lux font-semibold mb-3">
@@ -57,13 +57,13 @@ const Landing = () => {
           <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               to="/checkout"
-              className="inline-block bg-gradient-to-r from-primary to-verity-warm text-primary-foreground text-lg font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform
-                hover:scale-105 hover:shadow-2xl hover:shadow-verity-gold/40 active:scale-98"
+              className="inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-black text-lg font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform
+                hover:scale-105 hover:shadow-2xl hover:shadow-luxury-gold/40 active:scale-98"
               // Note: payment related styling has been included here as it's part of allowed design scope
             >
               Open Checkout
             </Link>
-            <Link to="/auth?mode=signup" className="text-md font-medium text-verity-gold underline-offset-4 hover:underline hover:text-primary transition-colors duration-200">
+            <Link to="/auth?mode=signup" className="text-md font-medium text-luxury-gold underline-offset-4 hover:underline hover:text-luxury-gold-light transition-colors duration-200">
               Create account first
             </Link>
           </div>

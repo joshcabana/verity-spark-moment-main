@@ -21,10 +21,10 @@ const ThemeToggle = ({ className = "" }: ThemeToggleProps) => {
       type="button"
       aria-label="Toggle theme"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className={`inline-flex items-center gap-2 rounded-full border border-verity-gold/35 bg-card/85 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-foreground shadow-[0_10px_28px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-colors hover:border-verity-gold/55 hover:bg-card ${className}`}
+      className={`inline-flex items-center gap-2 rounded-md border border-input px-3 py-2 text-sm font-medium text-foreground backdrop-blur-md transition-colors hover:bg-accent hover:text-accent-foreground ${className}`}
     >
       {mounted && isDark ? <Sun className="h-4 w-4 text-verity-gold" /> : <Moon className="h-4 w-4 text-verity-gold" />}
-      <span className="hidden sm:inline">{mounted ? (isDark ? "Day" : "Night") : "Theme"}</span>
+      <span className="hidden sm:inline">{mounted ? (isDark ? "Light" : "Dark") : "Theme"}</span>
     </button>
   );
 };

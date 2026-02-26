@@ -72,8 +72,6 @@ export default {
           glow: "hsl(var(--verity-glow))",
           success: "hsl(var(--verity-success))",
           danger: "hsl(var(--verity-danger))",
-          teal: "hsl(var(--verity-teal))", // Alias to gold in new theme
-          magenta: "hsl(var(--verity-magenta))", // Alias to deep gold accent
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

@@ -1,45 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface TrailDot {
+  id: number;
+  x: number;
+  y: number;
+}
+
+const MAX_TRAILS = 15;
 
 const ElectricCursorTrail: React.FC = () => {
-  const [trails, setTrails] = useState<{ id: number; x: number; y: number }[]>([]);
-  const [nextId, setNextId] = useState(0);
+  const [trails, setTrails] = React.useState<TrailDot[]>([]);
+  const idRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
+  const latestPos = useRef<{ x: number; y: number } | null>(null);
+
+  const flushTrail = useCallback(() => {
+    rafRef.current = null;
+    const pos = latestPos.current;
+    if (!pos) return;
+    latestPos.current = null;
+
+    const newId = ++idRef.current;
+    setTrails((prev) => [...prev.slice(-(MAX_TRAILS - 1)), { id: newId, x: pos.x, y: pos.y }]);
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setTrails((prevTrails) => {
-        const newTrail = { id: nextId, x: e.clientX, y: e.clientY };
-        setNextId((prevId) => prevId + 1);
-        return [...prevTrails.slice(-20), newTrail]; // Keep max 20 trail elements
-      });
+      latestPos.current = { x: e.clientX, y: e.clientY };
+      if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(flushTrail);
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
     };
-  }, [nextId]);
+  }, [flushTrail]);
+
+  // Auto-expire old trails
+  useEffect(() => {
+    if (trails.length === 0) return;
+    const timer = setTimeout(() => {
+      setTrails((prev) => prev.slice(1));
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [trails.length]);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      {trails.map((trail) => (
-        <motion.div
-          key={trail.id}
-          className="absolute rounded-full bg-luxury-gold/70 blur-md"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 0.7, scale: 1, x: trail.x, y: trail.y }}
-          exit={{ opacity: 0, scale: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          style={{
-            left: `${trail.x}px`,
-            top: `${trail.y}px`,
-            width: '10px',
-            height: '10px',
-            transform: 'translate(-50%, -50%)', // Center the trail element
-          }}
-        />
-      ))}
+      <AnimatePresence>
+        {trails.map((trail) => (
+          <motion.div
+            key={trail.id}
+            className="absolute rounded-full bg-luxury-gold/60 blur-md"
+            initial={{ opacity: 0.7, scale: 1 }}
+            animate={{ opacity: 0, scale: 0.3 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            style={{
+              left: trail.x,
+              top: trail.y,
+              width: 8,
+              height: 8,
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        ))}
+      </AnimatePresence>
     </div>
   );
 };

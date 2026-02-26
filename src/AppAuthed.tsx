@@ -126,6 +126,14 @@ const AppAuthed = () => (
                 }
               />
               <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <TokenShop />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/chat/:matchId"
                 element={
                   <ProtectedRoute>

@@ -21,6 +21,26 @@ const Landing = () => {
       <OnboardingDiscoveryPostSpark />
       <SafetyWaitlistSection />
 
+      <section className="px-6 pb-10">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-primary/20 bg-card/60 p-6 text-center backdrop-blur">
+          <h2 className="font-display text-2xl font-semibold">Ready to unlock more Sparks?</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Choose tokens or Verity Pass in secure Stripe checkout.
+          </p>
+          <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              to="/checkout"
+              className="rounded-full bg-gradient-gold px-6 py-3 text-sm font-semibold text-primary-foreground glow-gold"
+            >
+              Open Checkout
+            </Link>
+            <Link to="/auth?mode=signup" className="text-sm font-medium text-primary underline-offset-4 hover:underline">
+              Create account first
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Keep explicit signup route in Landing for release-hygiene guardrails. */}
       <div className="sr-only" aria-hidden="true">
         <Link to="/auth?mode=signup">Start your first Spark</Link>

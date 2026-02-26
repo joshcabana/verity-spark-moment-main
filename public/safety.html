@@ -6,38 +6,71 @@
     <title>Safety — Verity Dating App</title>
     <meta name="description" content="How Verity protects users with complete anonymity before matching, live AI video moderation, and robust enforcement for safe dating." />
     <link rel="canonical" href="https://verity-spark-moment-main.vercel.app/safety" />
-    <style>
-      body { font-family: Inter, system-ui, -apple-system, sans-serif; margin: 0; background:#0b0b0f; color:#eaeaea; line-height:1.6; }
-      main { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; }
-      h1,h2 { color:#fff; }
-      a { color:#d4af6f; }
-      .muted { color:#b8b8c2; }
-    </style>
+    <link rel="stylesheet" href="/policy.css" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var dark = saved ? saved === "dark" : prefersDark;
+          document.documentElement.classList.toggle("dark", dark);
+        } catch (_) {}
+      })();
+    </script>
   </head>
   <body>
-    <main>
-      <h1>Safety by Design</h1>
-      <p class="muted">Last updated: 2026-02-26</p>
-      <p>Verity is built for real connection with strong safety controls: anonymous start, active moderation, and clear enforcement.</p>
-      <h2>Pre-call controls</h2>
-      <ul>
-        <li>Phone verification and anti-abuse checks</li>
-        <li>18+ access requirement</li>
-        <li>Policy acceptance before first call</li>
-      </ul>
-      <h2>Live moderation</h2>
-      <ul>
-        <li>AI safety monitoring during calls</li>
-        <li>Intervention on severe violations</li>
-        <li>Escalation for repeated abuse</li>
-      </ul>
-      <h2>In-call protection</h2>
-      <ul>
-        <li>Safe Exit available at all times</li>
-        <li>Instant in-app reporting flow</li>
-        <li>Anonymous identity before mutual match</li>
-      </ul>
-      <p><a href="/">Return to Verity</a></p>
-    </main>
+    <div class="policy-shell">
+      <header class="policy-header">
+        <a class="brand-link" href="/">VERITY</a>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">Toggle theme</button>
+      </header>
+      <main class="policy-card">
+        <h1>Safety by Design</h1>
+        <p class="muted">Last updated: 2026-02-26</p>
+        <p>Verity is built for real connection with strong safety controls: anonymous start, active moderation, and clear enforcement.</p>
+        <h2>Pre-call controls</h2>
+        <ul>
+          <li>Phone verification and anti-abuse checks</li>
+          <li>18+ access requirement</li>
+          <li>Policy acceptance before first call</li>
+        </ul>
+        <h2>Live moderation</h2>
+        <ul>
+          <li>AI safety monitoring during calls</li>
+          <li>Intervention on severe violations</li>
+          <li>Escalation for repeated abuse</li>
+        </ul>
+        <h2>In-call protection</h2>
+        <ul>
+          <li>Safe Exit available at all times</li>
+          <li>Instant in-app reporting flow</li>
+          <li>Anonymous identity before mutual match</li>
+        </ul>
+        <p><a href="/">Return to Verity</a></p>
+      </main>
+    </div>
+    <script>
+      (function () {
+        var toggle = document.getElementById("theme-toggle");
+        if (!toggle) return;
+
+        function currentTheme() {
+          return document.documentElement.classList.contains("dark") ? "dark" : "light";
+        }
+
+        function render() {
+          toggle.textContent = currentTheme() === "dark" ? "Day mode" : "Night mode";
+        }
+
+        toggle.addEventListener("click", function () {
+          var dark = !document.documentElement.classList.contains("dark");
+          document.documentElement.classList.toggle("dark", dark);
+          localStorage.setItem("theme", dark ? "dark" : "light");
+          render();
+        });
+
+        render();
+      })();
+    </script>
   </body>
 </html>

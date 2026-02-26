@@ -52,14 +52,14 @@ const SafetyWaitlistSection: React.FC = () => {
 
     const inputFocusVariants = {
         focus: {
-            borderColor: "#39FF14", // neon-green
-            boxShadow: "0 0 15px rgba(57,255,20,0.5)",
+            borderColor: "#e4c97d",
+            boxShadow: "0 0 15px rgba(228,201,125,0.45)",
             scale: 1.01,
             transition: { duration: 0.2 }
         },
         initial: {
-            borderColor: "#8A2BE2", // electric-violet
-            boxShadow: "0 0 10px rgba(138,43,226,0.3)",
+            borderColor: "#c7a046",
+            boxShadow: "0 0 10px rgba(199,160,70,0.3)",
             scale: 1,
             transition: { duration: 0.2 }
         }
@@ -68,7 +68,7 @@ const SafetyWaitlistSection: React.FC = () => {
     const buttonVariants = {
         hover: {
             scale: 1.05,
-            boxShadow: "0 15px 40px rgba(255, 69, 0, 0.9)",
+            boxShadow: "0 15px 40px rgba(199,160,70,0.46)",
             transition: { duration: 0.3 }
         },
         tap: {
@@ -102,10 +102,10 @@ const SafetyWaitlistSection: React.FC = () => {
                             initial="hidden"
                             animate={inView ? "visible" : "hidden"}
                             transition={{ delay: 0.3 + index * 0.1 }}
-                            whileHover={{ scale: 1.03, boxShadow: "0 10px 30px rgba(138,43,226,0.4)" }}
+                            whileHover={{ scale: 1.03, boxShadow: "0 10px 30px rgba(199,160,70,0.4)" }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <div className={`mb-4 text-neon-green`}> {/* Adjusted to directly render Lucide icon, conditional text-fiery-orange moved to icon definition */}
+                            <div className="mb-4 text-verity-gold">
                                 {feature.icon}
                             </div>
                             <h4 className="font-montserrat text-xl text-text-light mb-3">

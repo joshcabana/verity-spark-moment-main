@@ -32,7 +32,7 @@ const SparkCallInterface = ({
         x: -110 + Math.random() * 220,
         delay: Math.random() * 0.45,
         rotation: -180 + Math.random() * 360,
-        color: Math.random() > 0.5 ? "#34d399" : "#d946ef",
+        color: Math.random() > 0.5 ? "#c7a046" : "#f1dfb0",
       })),
     []
   );
@@ -99,16 +99,16 @@ const SparkCallInterface = ({
       aria-label="Spark Call cinematic interface"
       className={`relative overflow-hidden rounded-3xl border border-white/15 bg-black/50 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl ${className}`}
     >
-      <div className="absolute -left-20 top-0 h-48 w-48 rounded-full bg-[#34d399]/20 blur-3xl" aria-hidden="true" />
-      <div className="absolute -right-20 bottom-0 h-48 w-48 rounded-full bg-[#d946ef]/20 blur-3xl" aria-hidden="true" />
+      <div className="absolute -left-20 top-0 h-48 w-48 rounded-full bg-[#c7a046]/20 blur-3xl" aria-hidden="true" />
+      <div className="absolute -right-20 bottom-0 h-48 w-48 rounded-full bg-[#b58634]/20 blur-3xl" aria-hidden="true" />
 
       <div className="relative z-10 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-white/65">
         <span className="inline-flex items-center gap-2">
-          <Users className="h-3.5 w-3.5 text-[#34d399]" />
+          <Users className="h-3.5 w-3.5 text-[#c7a046]" />
           Live Spark Call
         </span>
         <span className="inline-flex items-center gap-2">
-          <Clock3 className="h-3.5 w-3.5 text-[#d946ef]" />
+          <Clock3 className="h-3.5 w-3.5 text-[#f1dfb0]" />
           {secondsLeft}s
         </span>
       </div>
@@ -117,8 +117,8 @@ const SparkCallInterface = ({
         <svg viewBox="0 0 140 140" className="h-44 w-44" role="img" aria-label={`${secondsLeft} seconds left`}>
           <defs>
             <linearGradient id="spark-ring" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#34d399" />
-              <stop offset="100%" stopColor="#d946ef" />
+              <stop offset="0%" stopColor="#c7a046" />
+              <stop offset="100%" stopColor="#f1dfb0" />
             </linearGradient>
           </defs>
           <circle cx="70" cy="70" r="58" stroke="rgba(255,255,255,0.16)" strokeWidth="8" fill="none" />
@@ -151,7 +151,7 @@ const SparkCallInterface = ({
             <>
               <motion.span
                 key="orb-left"
-                className="absolute left-[22%] h-10 w-10 rounded-full bg-[#34d399] shadow-[0_0_40px_rgba(52,211,153,0.85)]"
+                className="absolute left-[22%] h-10 w-10 rounded-full bg-[#c7a046] shadow-[0_0_40px_rgba(199,160,70,0.85)]"
                 initial={{ x: 0, opacity: 0.9, scale: 1 }}
                 animate={{ x: 38, opacity: 1, scale: 1.1 }}
                 exit={{ opacity: 0 }}
@@ -159,7 +159,7 @@ const SparkCallInterface = ({
               />
               <motion.span
                 key="orb-right"
-                className="absolute right-[22%] h-10 w-10 rounded-full bg-[#d946ef] shadow-[0_0_40px_rgba(217,70,239,0.85)]"
+                className="absolute right-[22%] h-10 w-10 rounded-full bg-[#f1dfb0] shadow-[0_0_40px_rgba(241,223,176,0.75)]"
                 initial={{ x: 0, opacity: 0.9, scale: 1 }}
                 animate={{ x: -38, opacity: 1, scale: 1.1 }}
                 exit={{ opacity: 0 }}
@@ -209,11 +209,11 @@ const SparkCallInterface = ({
         <p className="text-sm text-white/90">{subtitle}</p>
         <div className="mt-3 flex items-center justify-between text-xs text-white/70">
           <span className="inline-flex items-center gap-1">
-            <Sparkles className="h-3.5 w-3.5 text-[#34d399]" />
+            <Sparkles className="h-3.5 w-3.5 text-[#c7a046]" />
             Orb explosion at 15s
           </span>
           <span className="inline-flex items-center gap-1">
-            <CheckCircle2 className="h-3.5 w-3.5 text-[#d946ef]" />
+            <CheckCircle2 className="h-3.5 w-3.5 text-[#f1dfb0]" />
             Mutual reveal protocol
           </span>
         </div>

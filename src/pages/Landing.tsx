@@ -38,8 +38,17 @@ const Landing = () => {
           visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15, delay: 0.2 } },
         }}
       >
-        <div className="mx-auto max-w-3xl rounded-2xl border border-electric-violet/20 bg-card/60 p-8 text-center backdrop-blur-lg shadow-xl">
-          <h2 className="font-montserrat text-4xl text-gradient-electric drop-shadow-neon font-semibold mb-3">
+                <motion.div // Wrap with motion.div for animation
+          className="mx-auto max-w-3xl rounded-2xl border border-verity-gold/25 bg-card/60 p-8 text-center backdrop-blur-lg shadow-xl"
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, amount: 0.5 }}
+          variants={{
+            initial: { borderColor: "rgba(199,160,70,0.2)" },
+            animate: { borderColor: ["rgba(199,160,70,0.2)", "rgba(241,223,176,0.45)", "rgba(181,134,52,0.45)", "rgba(199,160,70,0.2)"], transition: { duration: 8, repeat: Infinity, ease: "easeInOut" } },
+          }}
+        >
+          <h2 className="font-display text-4xl text-gradient-gold drop-shadow-lux font-semibold mb-3">
             Ready to unlock more Sparks?
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -48,17 +57,17 @@ const Landing = () => {
           <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               to="/checkout"
-              className="inline-block bg-gradient-to-r from-electric-violet to-fiery-orange text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform
-                hover:scale-105 hover:shadow-2xl hover:shadow-electric-violet/50 active:scale-98"
+              className="inline-block bg-gradient-to-r from-primary to-verity-warm text-primary-foreground text-lg font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform
+                hover:scale-105 hover:shadow-2xl hover:shadow-verity-gold/40 active:scale-98"
               // Note: payment related styling has been included here as it's part of allowed design scope
             >
               Open Checkout
             </Link>
-            <Link to="/auth?mode=signup" className="text-md font-medium text-electric-violet underline-offset-4 hover:underline hover:text-neon-green transition-colors duration-200">
+            <Link to="/auth?mode=signup" className="text-md font-medium text-verity-gold underline-offset-4 hover:underline hover:text-primary transition-colors duration-200">
               Create account first
             </Link>
           </div>
-        </div>
+        </motion.div>
       </motion.section>
 
       {/* Keep explicit signup route in Landing for release-hygiene guardrails. */}

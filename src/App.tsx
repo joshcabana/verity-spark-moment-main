@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Privacy = lazy(() => import("./pages/Privacy"));
@@ -16,6 +17,7 @@ const FullScreenLoader = () => (
 
 const App = () => (
   <BrowserRouter>
+    <ThemeToggle className="fixed right-4 top-[max(1rem,env(safe-area-inset-top))] z-[120]" />
     <Suspense fallback={<FullScreenLoader />}>
       <Routes>
         <Route path="/" element={<Landing />} />

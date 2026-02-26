@@ -16,7 +16,7 @@ const HeroSection: React.FC = () => {
     const buttonVariants = {
         hover: {
             scale: 1.05,
-            boxShadow: "0 15px 40px rgba(255, 69, 0, 0.9)",
+            boxShadow: "0 15px 40px rgba(199, 160, 70, 0.45)",
             transition: { duration: 0.3 }
         },
         tap: {
@@ -27,7 +27,8 @@ const HeroSection: React.FC = () => {
     return (
         <section className="relative w-full h-screen flex flex-col justify-center items-center text-center overflow-hidden">
             <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0">
-                <source src="/hero-loop.mp4" type="video/webm" />
+                <source src="/hero-loop.webm" type="video/webm" />
+                <source src="/hero-loop.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
             <SparkParticleSystem className="opacity-70" />
@@ -40,7 +41,7 @@ const HeroSection: React.FC = () => {
                 transition={{ delay: 0.5 }}
             >
                 <motion.img
-                    src="/public/verity_logo.webp"
+                    src="/verity_logo.webp"
                     alt="VERITY Logo"
                     className="max-w-xs mx-auto mb-5"
                     initial="hidden"
@@ -49,7 +50,7 @@ const HeroSection: React.FC = () => {
                     transition={{ delay: 0.2 }}
                 />
                 <motion.h1
-                    className="font-montserrat text-7xl md:text-8xl lg:text-9xl text-gradient-electric leading-tight mb-3 drop-shadow-neon"
+                    className="font-display text-7xl md:text-8xl lg:text-9xl text-gradient-gold leading-tight mb-3 drop-shadow-lux"
                     initial="hidden"
                     animate="visible"
                     variants={fadeInSlideUpVariants}
@@ -58,7 +59,7 @@ const HeroSection: React.FC = () => {
                     VERITY
                 </motion.h1>
                 <motion.p
-                    className="font-montserrat text-2xl md:text-3xl text-electric-violet mb-10 drop-shadow-electric"
+                    className="font-display text-2xl md:text-3xl text-primary mb-10 drop-shadow-lux-sm"
                     initial="hidden"
                     animate="visible"
                     variants={fadeInSlideUpVariants}
@@ -68,7 +69,7 @@ const HeroSection: React.FC = () => {
                 </motion.p>
                 <motion.a
                     href="#"
-                    className="inline-block bg-gradient-to-r from-electric-violet to-fiery-orange text-white text-xl font-bold py-4 px-8 rounded-full shadow-lg"
+                    className="inline-block bg-gradient-to-r from-primary to-verity-warm text-primary-foreground text-xl font-bold py-4 px-8 rounded-full shadow-lg"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"

@@ -6,30 +6,63 @@
     <title>Terms of Service — Verity Dating App</title>
     <meta name="description" content="Verity Terms of Service. Understand the rules for using our safe, anonymous, 45-second live video dating platform." />
     <link rel="canonical" href="https://verity-spark-moment-main.vercel.app/terms" />
-    <style>
-      body { font-family: Inter, system-ui, -apple-system, sans-serif; margin: 0; background:#0b0b0f; color:#eaeaea; line-height:1.6; }
-      main { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; }
-      h1,h2 { color:#fff; }
-      a { color:#d4af6f; }
-      .muted { color:#b8b8c2; }
-    </style>
+    <link rel="stylesheet" href="/policy.css" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var dark = saved ? saved === "dark" : prefersDark;
+          document.documentElement.classList.toggle("dark", dark);
+        } catch (_) {}
+      })();
+    </script>
   </head>
   <body>
-    <main>
-      <h1>Terms of Service</h1>
-      <p class="muted">Last updated: 2026-02-26</p>
-      <p>By using Verity, you agree to these Terms of Service.</p>
-      <h2>1. Eligibility</h2>
-      <p>You must be at least 18 years old to use Verity.</p>
-      <h2>2. User Conduct</h2>
-      <p>Unlawful, abusive, or explicit conduct is prohibited. AI moderation may terminate sessions and accounts for violations.</p>
-      <h2>3. Account Security</h2>
-      <p>You are responsible for your account credentials and activity.</p>
-      <h2>4. Purchases</h2>
-      <p>Some features may require tokens or subscriptions. Payments are processed by third parties. Refunds are handled per Australian Consumer Law.</p>
-      <h2>5. Disclaimer</h2>
-      <p>Verity is provided "as is" without warranties of uninterrupted service.</p>
-      <p><a href="/">Return to Verity</a></p>
-    </main>
+    <div class="policy-shell">
+      <header class="policy-header">
+        <a class="brand-link" href="/">VERITY</a>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">Toggle theme</button>
+      </header>
+      <main class="policy-card">
+        <h1>Terms of Service</h1>
+        <p class="muted">Last updated: 2026-02-26</p>
+        <p>By using Verity, you agree to these Terms of Service.</p>
+        <h2>1. Eligibility</h2>
+        <p>You must be at least 18 years old to use Verity.</p>
+        <h2>2. User Conduct</h2>
+        <p>Unlawful, abusive, or explicit conduct is prohibited. AI moderation may terminate sessions and accounts for violations.</p>
+        <h2>3. Account Security</h2>
+        <p>You are responsible for your account credentials and activity.</p>
+        <h2>4. Purchases</h2>
+        <p>Some features may require tokens or subscriptions. Payments are processed by third parties. Refunds are handled per Australian Consumer Law.</p>
+        <h2>5. Disclaimer</h2>
+        <p>Verity is provided "as is" without warranties of uninterrupted service.</p>
+        <p><a href="/">Return to Verity</a></p>
+      </main>
+    </div>
+    <script>
+      (function () {
+        var toggle = document.getElementById("theme-toggle");
+        if (!toggle) return;
+
+        function currentTheme() {
+          return document.documentElement.classList.contains("dark") ? "dark" : "light";
+        }
+
+        function render() {
+          toggle.textContent = currentTheme() === "dark" ? "Day mode" : "Night mode";
+        }
+
+        toggle.addEventListener("click", function () {
+          var dark = !document.documentElement.classList.contains("dark");
+          document.documentElement.classList.toggle("dark", dark);
+          localStorage.setItem("theme", dark ? "dark" : "light");
+          render();
+        });
+
+        render();
+      })();
+    </script>
   </body>
 </html>

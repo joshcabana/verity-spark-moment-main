@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import Particles from "react-tsparticles";
 import type { Container, Engine, ISourceOptions } from "tsparticles-engine";
-import { loadSlim } from "tsparticles"; // loads tsparticles and a slim set of plugins
+import { loadFull } from "tsparticles";
 
 interface SparkParticleSystemProps {
     mode?: "ambient" | "converging" | "exploding";
@@ -49,10 +49,10 @@ const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambie
             },
             particles: {
                 color: {
-                    value: ["#8A2BE2", "#39FF14", "#FF4500", "#E0E0E0"], // Electric Bloom palette
+                    value: ["#c7a046", "#e4c97d", "#f4ede1", "#b58634"],
                 },
                 links: {
-                    color: "#E0E0E0",
+                    color: "#f4ede1",
                     distance: 150,
                     enable: true,
                     opacity: 0.3,
@@ -95,7 +95,7 @@ const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambie
             case "converging":
                 baseOptions.particles.move.direction = "right";
                 baseOptions.particles.move.speed = speed * 2;
-                baseOptions.particles.color.value = ["#8A2BE2", "#FF4500"]; // Focus on converging colors
+                baseOptions.particles.color.value = ["#c7a046", "#e4c97d"];
                 baseOptions.interactivity.modes.repulse.distance = 50;
                 baseOptions.interactivity.modes.repulse.duration = 0.8;
                 break;

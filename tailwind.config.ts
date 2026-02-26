@@ -54,14 +54,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Electric Bloom colors
-        'dark-charcoal': '#1C1C1C',
-        'electric-violet': '#8A2BE2',
-        'neon-green': '#39FF14',
-        'fiery-orange': '#FF4500',
-        'text-light': '#E0E0E0',
-        'text-medium': '#C5C5C5',
-        'text-dark': '#A0A0A0',
+        // Legacy keys remapped to luxury-safe palette to avoid breaking existing classes
+        'dark-charcoal': '#0f0d0a',
+        'electric-violet': '#c7a046',
+        'neon-green': '#e4c97d',
+        'fiery-orange': '#b58634',
+        'text-light': '#f3ede1',
+        'text-medium': '#d8c9ad',
+        'text-dark': '#9d8a68',
         verity: {
           gold: "hsl(var(--verity-gold))",
           "gold-dim": "hsl(var(--verity-gold-dim))",
@@ -143,12 +143,14 @@ export default {
         confetti: "confetti 1.6s ease-out forwards",
       },
       dropShadow: {
-        neon: '0 0 25px rgba(57,255,20,0.9)',
-        electric: '0 0 15px rgba(138,43,226,0.7)',
+        neon: "0 0 22px rgba(199,160,70,0.5)",
+        electric: "0 0 14px rgba(229,201,125,0.45)",
+        lux: "0 12px 36px rgba(0,0,0,0.3), 0 0 14px rgba(199,160,70,0.28)",
+        "lux-sm": "0 6px 16px rgba(0,0,0,0.2), 0 0 8px rgba(199,160,70,0.2)",
       },
       // Custom text gradients
       backgroundImage: {
-        'text-gradient-electric': 'linear-gradient(to right, #39FF14, #8A2BE2)',
+        'text-gradient-electric': 'linear-gradient(120deg, #b58634, #e4c97d, #c7a046)',
       },
     },
   },

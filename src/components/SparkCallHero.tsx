@@ -54,7 +54,7 @@ const SparkCallHero: React.FC = () => {
     const controlButtonVariants = {
         hover: {
             scale: 1.1,
-            boxShadow: "0 0 15px rgba(138,43,226,0.8), 0 0 30px rgba(138,43,226,0.4)", // Enhanced, deeper glow
+            boxShadow: "0 0 15px rgba(199,160,70,0.6), 0 0 30px rgba(199,160,70,0.35)",
             transition: { duration: 0.2 }
         },
         tap: {
@@ -150,7 +150,7 @@ const SparkCallHero: React.FC = () => {
                     <motion.div
                         className="absolute w-40 h-40 rounded-full z-20 pointer-events-none"
                         style={{
-                            background: 'radial-gradient(circle, rgba(138,43,226,0.8) 0%, rgba(255,69,0,0) 70%)'
+                            background: "radial-gradient(circle, rgba(199,160,70,0.82) 0%, rgba(181,134,52,0) 70%)"
                         }}
                         initial="hidden"
                         animate={inView ? "converge" : "hidden"} // Will be triggered by time in actual app

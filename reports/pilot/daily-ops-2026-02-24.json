@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-02-24T00:00:00.000Z",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "Stale queue entries",
+      "pass": true,
+      "actual": 0,
+      "threshold": "<= 3"
+    },
+    {
+      "name": "Call completion rate",
+      "pass": true,
+      "actual": 1,
+      "threshold": ">= 0.7"
+    },
+    {
+      "name": "Open critical incidents",
+      "pass": true,
+      "actual": 0,
+      "threshold": "<= 0"
+    },
+    {
+      "name": "Stripe failures",
+      "pass": true,
+      "actual": 0,
+      "threshold": "<= 1"
+    },
+    {
+      "name": "RPC exceptions",
+      "pass": true,
+      "actual": 0,
+      "threshold": "<= 3"
+    },
+    {
+      "name": "Daily intake cap",
+      "pass": true,
+      "actual": 0,
+      "threshold": "<= 10"
+    }
+  ],
+  "metrics": {
+    "windowStart": "2026-02-23T00:00:00.000Z",
+    "staleThresholdMinutes": 15,
+    "queuedNow": 0,
+    "staleQueueEntries": 0,
+    "matchesCreated": 0,
+    "decisionsCompleted": 0,
+    "callCompletionRate": 1,
+    "mutualSparks": 0,
+    "sparkConversionRate": 0,
+    "chatRoomsCreated": 0,
+    "chatActivationRate": 0,
+    "messagesSent": 0,
+    "moderationFlags": 0,
+    "unresolvedCriticalIncidents": 0,
+    "stripeFailures": 0,
+    "stripeProcessed": 0,
+    "rpcExceptions": 0,
+    "newProfiles": 0
+  }
+}

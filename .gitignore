@@ -27,7 +27,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.claude/worktrees/
 supabase/.temp/
 security/current-prod-audit.json
 .cache/
 .npm-cache/
+.vercel
+
+# Pilot sensitive data (never commit)
+private/pilot/
+participants.csv
+participants-EXAMPLE.csv
+docs/pilot/wave1-invites.csv
+docs/pilot/wave1-invites-REAL-TEMPLATE.csv
+reports/pilot/invite-credentials.csv
+reports/pilot/invite-credentials-SHAREABLE.csv
+reports/pilot/invite-credentials*.csv

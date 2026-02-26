@@ -90,11 +90,6 @@ const Admin = () => {
 
   const loadEvents = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase.functions.invoke("admin-moderation", {
-      body: null,
-      headers: { "Content-Type": "application/json" },
-    });
-    // Use query params via the URL approach
     const response = await fetch(
       `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-moderation?action=list`,
       {
@@ -398,15 +393,23 @@ const Admin = () => {
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
-                          <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${
-                            appeal.status === "pending"
+                          {(() => {
+                            const isPending = appeal.status === "pending" || appeal.status === "reviewing";
+                            const isOverturned = appeal.status === "overturned";
+                            const isUpheld = appeal.status === "upheld";
+                            const statusClasses = isPending
                               ? "bg-amber-500/20 text-amber-400"
-                              : appeal.status === "approved"
-                              ? "bg-verity-success/20 text-verity-success"
-                              : "bg-destructive/20 text-destructive"
-                          }`}>
-                            {appeal.status}
-                          </span>
+                              : isOverturned
+                                ? "bg-verity-success/20 text-verity-success"
+                                : isUpheld
+                                  ? "bg-destructive/20 text-destructive"
+                                  : "bg-muted text-muted-foreground";
+                            return (
+                              <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusClasses}`}>
+                                {appeal.status}
+                              </span>
+                            );
+                          })()}
                           <span className="text-xs text-muted-foreground">
                             {new Date(appeal.created_at).toLocaleString()}
                           </span>
@@ -419,31 +422,31 @@ const Admin = () => {
                         </p>
                       )}
 
-                      {appeal.status === "pending" && (
+                      {(appeal.status === "pending" || appeal.status === "reviewing") && (
                         <div className="flex gap-2">
                           <button
                             onClick={() => adminAction("override-appeal", {
                               appealId: appeal.id,
-                              outcome: "approved",
+                              outcome: "overturned",
                               tokensAwarded: 3,
                             })}
                             disabled={actionLoading === appeal.id}
                             className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-verity-success/10 text-verity-success text-sm font-medium hover:bg-verity-success/20 transition-colors disabled:opacity-50"
                           >
                             <Award className="w-3.5 h-3.5" />
-                            Approve + 3 Tokens
+                            Overturn + 3 Tokens
                           </button>
                           <button
                             onClick={() => adminAction("override-appeal", {
                               appealId: appeal.id,
-                              outcome: "rejected",
+                              outcome: "upheld",
                               tokensAwarded: 0,
                             })}
                             disabled={actionLoading === appeal.id}
                             className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-destructive/10 text-destructive text-sm font-medium hover:bg-destructive/20 transition-colors disabled:opacity-50"
                           >
                             <XCircle className="w-3.5 h-3.5" />
-                            Reject
+                            Uphold
                           </button>
                         </div>
                       )}

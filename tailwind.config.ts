@@ -15,8 +15,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["DM Sans", "system-ui", "sans-serif"],
-        display: ["Playfair Display", "Georgia", "serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Playfair Display", "serif"], // Change display to Playfair Display
+        serif: ["Playfair Display", "Georgia", "serif"], // New serif font for accent
       },
       colors: {
         border: "hsl(var(--border))",
@@ -52,12 +53,22 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // New luxury palette aliases
+        'dark-charcoal': '#0A0A0A',
+        'luxury-gold': '#E5A519',
+        'luxury-gold-light': '#F0C75E',
+        'luxury-gold-deep': '#C78B0A',
+        'warm-champagne': '#EDE8DD',
+        'mid-grey': '#8C8C8C',
+        'light-grey': '#C5C5C5',
+        'charcoal': '#242424',
         verity: {
           gold: "hsl(var(--verity-gold))",
           "gold-dim": "hsl(var(--verity-gold-dim))",
           warm: "hsl(var(--verity-warm))",
           surface: "hsl(var(--verity-surface))",
           "surface-hover": "hsl(var(--verity-surface-hover))",
+          "surface-alt": "hsl(var(--verity-surface-alt))",
           glow: "hsl(var(--verity-glow))",
           success: "hsl(var(--verity-success))",
           danger: "hsl(var(--verity-danger))",
@@ -91,18 +102,56 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
         },
-        "countdown": {
+        countdown: {
           from: { "stroke-dashoffset": "0" },
-          to: { "stroke-dashoffset": "283" },
+          to: { "stroke-dashoffset": "364" },
+        },
+        "particle-drift": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0)", opacity: "0.45" },
+          "50%": { transform: "translate3d(10px, -12px, 0)", opacity: "0.9" },
+        },
+        "orb-left": {
+          from: { transform: "translateX(0) scale(1)" },
+          to: { transform: "translateX(38px) scale(1.1)" },
+        },
+        "orb-right": {
+          from: { transform: "translateX(0) scale(1)" },
+          to: { transform: "translateX(-38px) scale(1.1)" },
+        },
+        "reveal-flash": {
+          "0%": { opacity: "0" },
+          "35%": { opacity: "0.9" },
+          "100%": { opacity: "0" },
+        },
+        confetti: {
+          "0%": { opacity: "0", transform: "translate3d(0,0,0) rotate(0deg)" },
+          "20%": { opacity: "1" },
+          "100%": { opacity: "0", transform: "translate3d(var(--x,0),145px,0) rotate(var(--r,180deg))" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-gold": "pulse-gold 2s ease-in-out infinite",
-        "countdown": "countdown 45s linear forwards",
+        countdown: "countdown 45s linear forwards",
+        "particle-drift": "particle-drift 5s ease-in-out infinite",
+        "orb-left": "orb-left 0.55s ease-in-out forwards",
+        "orb-right": "orb-right 0.55s ease-in-out forwards",
+        "reveal-flash": "reveal-flash 0.8s ease-out forwards",
+        confetti: "confetti 1.6s ease-out forwards",
+      },
+      dropShadow: {
+        gold: "0 0 25px rgba(229,165,25,0.6)", // Custom gold drop shadow
+        "gold-soft": "0 0 15px rgba(229,165,25,0.4)", // Custom soft gold drop shadow
+        lux: "0 12px 36px hsla(var(--foreground), 0.3), 0 0 14px hsla(var(--verity-gold), 0.28)",
+        "lux-sm": "0 6px 16px hsla(var(--foreground), 0.2), 0 0 8px hsla(var(--verity-gold), 0.2)",
+      },
+      backgroundImage: {
+        'text-gradient-gold': 'linear-gradient(135deg, #E5A519, #F0C75E, #C78B0A)', // New gold text gradient
       },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [
+    tailwindcssAnimate,
+  ],
 } satisfies Config;

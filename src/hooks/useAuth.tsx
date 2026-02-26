@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
+import { identifyUser, resetAnalytics, getPilotMetadata } from "@/lib/analytics";
 
 interface AuthContextType {
   user: User | null;
@@ -41,8 +42,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(session?.user ?? null);
       setLoading(false);
       if (session?.user) {
+        identifyUser(session.user.id, {
+          email: session.user.email,
+          ...getPilotMetadata(session.user.user_metadata),
+        });
         // Defer subscription check to avoid Supabase deadlock
         setTimeout(() => refreshSubscription(), 0);
+      } else {
+        resetAnalytics();
       }
     });
 
@@ -51,6 +58,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(session?.user ?? null);
       setLoading(false);
       if (session?.user) {
+        identifyUser(session.user.id, {
+          email: session.user.email,
+          ...getPilotMetadata(session.user.user_metadata),
+        });
         refreshSubscription();
       }
     });
@@ -81,6 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    resetAnalytics();
     setSubscribed(false);
     setSubscriptionEnd(null);
   };
@@ -94,6 +106,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  if (!ctx) {
+    // Return a safe default when used outside of AuthProvider (e.g. public landing pages)
+    return {
+      user: null,
+      session: null,
+      loading: false,
+      subscribed: false,
+      subscriptionEnd: null,
+      signUp: async () => ({ error: new Error("Auth provider not mounted") }),
+      signIn: async () => ({ error: new Error("Auth provider not mounted") }),
+      signOut: async () => {},
+      refreshSubscription: async () => {},
+    };
+  }
   return ctx;
 };

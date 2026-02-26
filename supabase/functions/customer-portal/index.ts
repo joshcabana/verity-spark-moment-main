@@ -8,6 +8,40 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const DEFAULT_APP_BASE_URL = "https://verity-spark-moment-main.vercel.app";
+
+const parseAllowedOrigins = (value: string | null): string[] =>
+  (value ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0);
+
+const normalizeOrigin = (value: string | null): string | null => {
+  if (!value) return null;
+  try {
+    return new URL(value).origin;
+  } catch {
+    return null;
+  }
+};
+
+const resolveTrustedOrigin = (req: Request): string => {
+  const fallbackOrigin = normalizeOrigin(Deno.env.get("APP_BASE_URL")) ?? DEFAULT_APP_BASE_URL;
+  const allowedOrigins = new Set(
+    parseAllowedOrigins(Deno.env.get("APP_ALLOWED_ORIGINS"))
+      .map((origin) => normalizeOrigin(origin))
+      .filter((origin): origin is string => Boolean(origin)),
+  );
+  allowedOrigins.add(fallbackOrigin);
+
+  const requestOrigin = normalizeOrigin(req.headers.get("origin"));
+  if (requestOrigin && allowedOrigins.has(requestOrigin)) {
+    return requestOrigin;
+  }
+
+  return fallbackOrigin;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -56,7 +90,7 @@ serve(async (req) => {
       throw new Error("No billing account found. Subscribe to Verity Pass first.");
     }
 
-    const origin = req.headers.get("origin") || "https://verity-spark-moment.lovable.app";
+    const origin = resolveTrustedOrigin(req);
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: customers.data[0].id,
       return_url: `${origin}/tokens`,

@@ -1,5 +1,5 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -11,7 +11,6 @@ const AI_DEFAULT_MODEL = "google/gemini-3-flash-preview";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
-
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
@@ -20,33 +19,42 @@ serve(async (req) => {
       });
     }
 
-    const supabaseAuth = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
-    );
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!supabaseUrl || !anonKey || !serviceRoleKey) {
+      throw new Error("Supabase environment is not configured");
+    }
 
     const token = authHeader.replace("Bearer ", "");
-    const { data: claims, error: claimsError } = await supabaseAuth.auth.getClaims(token);
-    if (claimsError || !claims?.claims) {
+
+    // Use service-role client to verify token and get user identity
+    const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { persistSession: false },
+    });
+    const { data: userData, error: userError } = await adminClient.auth.getUser(token);
+    if (userError || !userData?.user) {
+      await adminClient.rpc("log_runtime_alert_event", {
+        p_event_source: "submit-appeal",
+        p_event_type: "auth_rejected",
+        p_severity: "warning",
+        p_status_code: 401,
+        p_details: { reason: userError?.message ?? "No user from token" },
+      }).catch(() => {});
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    const userId = userData.user.id;
 
-    const userId = claims.claims.sub as string;
     const { moderationEventId, appealText } = await req.json();
-
     if (!moderationEventId) {
       return new Response(JSON.stringify({ error: "Missing moderation event ID" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
+    const supabase = adminClient;
 
     // Verify the moderation event belongs to this user
     const { data: event } = await supabase
@@ -55,7 +63,6 @@ serve(async (req) => {
       .eq("id", moderationEventId)
       .eq("offender_id", userId)
       .single();
-
     if (!event) {
       return new Response(JSON.stringify({ error: "Event not found" }), {
         status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -69,7 +76,6 @@ serve(async (req) => {
       .eq("moderation_event_id", moderationEventId)
       .eq("user_id", userId)
       .single();
-
     if (existing) {
       return new Response(JSON.stringify({ error: "Appeal already submitted" }), {
         status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -87,7 +93,6 @@ serve(async (req) => {
       })
       .select()
       .single();
-
     if (appealError) throw appealError;
 
     // Use AI to auto-review the appeal for false positives
@@ -134,13 +139,11 @@ serve(async (req) => {
             tool_choice: { type: "function", function: { name: "review_appeal" } }
           }),
         });
-
         if (aiResponse.ok) {
           const aiResult = await aiResponse.json();
           const reviewCall = aiResult.choices?.[0]?.message?.tool_calls?.[0];
           if (reviewCall) {
             const review = JSON.parse(reviewCall.function.arguments);
-
             if (review.recommendation === "overturn") {
               // Auto-overturn: update appeal, lift ban, award apology tokens
               await supabase.from("appeals").update({
@@ -149,19 +152,16 @@ serve(async (req) => {
                 apology_tokens_awarded: 2,
                 resolved_at: new Date().toISOString(),
               }).eq("id", appeal.id);
-
               await supabase.from("moderation_events").update({
                 reviewed: true,
                 reviewed_by: "ai_auto_review",
                 reviewed_at: new Date().toISOString(),
                 review_outcome: "overturned",
               }).eq("id", moderationEventId);
-
               // Lift any active ban
               await supabase.from("user_bans").update({
                 lifted_at: new Date().toISOString(),
               }).eq("user_id", userId).is("lifted_at", null);
-
               // Award apology tokens
               const { error: incrementError } = await supabase.rpc("increment_user_tokens", {
                 p_user_id: userId,
@@ -169,7 +169,6 @@ serve(async (req) => {
                 p_type: "refund",
                 p_description: "Apology tokens for overturned moderation action",
               });
-
               if (incrementError) {
                 await supabase.rpc("log_runtime_alert_event", {
                   p_event_source: "submit-appeal",
@@ -181,7 +180,6 @@ serve(async (req) => {
                 });
                 throw incrementError;
               }
-
               return new Response(JSON.stringify({
                 success: true,
                 status: "overturned",
@@ -208,7 +206,6 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("submit-appeal error:", e);
-
     const errorMessage = e instanceof Error ? e.message : "Unknown error";
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -221,7 +218,6 @@ serve(async (req) => {
       p_status_code: 500,
       p_details: { message: errorMessage },
     });
-
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

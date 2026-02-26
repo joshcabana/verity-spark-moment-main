@@ -1,13 +1,17 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Sparkles, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { trackEvent } from "@/lib/analytics";
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [searchParams] = useSearchParams();
+  const defaultIsLogin = searchParams.get("mode") !== "signup";
+
+  const [isLogin, setIsLogin] = useState(defaultIsLogin);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -15,35 +19,49 @@ const Auth = () => {
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    trackEvent("auth_view", { mode: isLogin ? "signin" : "signup" });
+  }, [isLogin]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
+    trackEvent("auth_submit_attempt", {
+      mode: isLogin ? "signin" : "signup",
+      email_domain: email.includes("@") ? email.split("@")[1] : "unknown",
+    });
+
     if (isLogin) {
       const { error } = await signIn(email, password);
       if (error) {
+        trackEvent("auth_submit_failed", { mode: "signin", reason: error.message });
         toast({ title: "Error", description: error.message, variant: "destructive" });
       } else {
+        trackEvent("auth_submit_success", { mode: "signin" });
+
         // Check if profile is complete; skip onboarding for returning users
         const { data: profile } = await supabase
           .from("profiles")
           .select("display_name, gender, seeking_gender")
           .eq("user_id", (await supabase.auth.getUser()).data.user?.id ?? "")
           .single();
-        if (profile?.display_name && profile?.gender && profile?.seeking_gender) {
-          navigate("/lobby");
-        } else {
-          navigate("/onboarding");
-        }
+
+        const nextRoute = profile?.display_name && profile?.gender && profile?.seeking_gender ? "/lobby" : "/onboarding";
+        trackEvent("auth_post_signin_route", { next_route: nextRoute });
+        navigate(nextRoute);
       }
     } else {
       const { error } = await signUp(email, password);
       if (error) {
+        trackEvent("auth_submit_failed", { mode: "signup", reason: error.message });
         toast({ title: "Error", description: error.message, variant: "destructive" });
       } else {
+        trackEvent("auth_submit_success", { mode: "signup", verification: "email_link_sent" });
         toast({ title: "Check your email", description: "We sent you a verification link." });
       }
     }
+
     setLoading(false);
   };
 
@@ -106,7 +124,14 @@ const Auth = () => {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-          <button onClick={() => setIsLogin(!isLogin)} className="text-primary font-medium hover:underline">
+          <button
+            onClick={() => {
+              const nextMode = isLogin ? "signup" : "signin";
+              trackEvent("auth_mode_toggled", { next_mode: nextMode });
+              setIsLogin(!isLogin);
+            }}
+            className="text-primary font-medium hover:underline"
+          >
             {isLogin ? "Sign up" : "Sign in"}
           </button>
         </p>

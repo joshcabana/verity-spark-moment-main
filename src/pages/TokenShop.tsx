@@ -14,8 +14,8 @@ const tokenPacks = [
 const VERITY_PASS_PRICE_ID = "price_1T2B9NHHJNu8TYH7nFtB11O8";
 
 const passFeatures = [
-  "Unlimited entries",
-  "Priority queue matching",
+  "More weekly entries (daily caps still apply)",
+  "Room access and premium features without bypassing safety limits",
   "1 free Spark Extension daily",
   "All themed room access",
   "Spark analytics & insights",

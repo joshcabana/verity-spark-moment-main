@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, AlertTriangle, Mic, MicOff, VideoOff, Video, Sparkles } from "lucide-react";
+import { Shield, AlertTriangle, Mic, MicOff, VideoOff, Video, Sparkles, WifiOff } from "lucide-react";
 import AgoraRTC, {
   IAgoraRTCClient,
   ICameraVideoTrack,
@@ -17,6 +17,7 @@ import CallControls from "@/components/CallControls";
 import TimerRing from "@/components/TimerRing";
 import SafeExitModal from "@/components/SafeExitModal";
 import { readMatchSession } from "@/lib/match-session";
+import { getPilotMetadata, trackEvent, trackPilotEvent } from "@/lib/analytics";
 
 const VideoCall = () => {
   const [timeLeft, setTimeLeft] = useState(45);
@@ -27,8 +28,11 @@ const VideoCall = () => {
   const [joined, setJoined] = useState(false);
   const [extended, setExtended] = useState(false);
   const [extending, setExtending] = useState(false);
+  const [connectionState, setConnectionState] = useState<"CONNECTED" | "RECONNECTING" | "DISCONNECTED">("CONNECTED");
+  const connectionStateRef = useRef<"CONNECTED" | "RECONNECTING" | "DISCONNECTED">("CONNECTED");
   const navigate = useNavigate();
   const { user } = useAuth();
+  const pilotMetadata = useMemo(() => getPilotMetadata(user?.user_metadata), [user?.user_metadata]);
 
   const clientRef = useRef<IAgoraRTCClient | null>(null);
   const localVideoRef = useRef<HTMLDivElement>(null);
@@ -38,6 +42,9 @@ const VideoCall = () => {
     video: null,
     audio: null,
   });
+  const callStartedAtRef = useRef<number | null>(null);
+  const callStartedTrackedRef = useRef(false);
+  const callCompletedTrackedRef = useRef(false);
 
   // Get match info
   const matchInfo = useRef(readMatchSession());
@@ -67,8 +74,20 @@ const VideoCall = () => {
 
   const cleanup = useCallback(() => {
     stopModeration();
+    
+    // Rigorously close all Agora tracks
+    localTracksRef.current.video?.stop();
     localTracksRef.current.video?.close();
+    localTracksRef.current.audio?.stop();
     localTracksRef.current.audio?.close();
+
+    // Force-stop any underlying MediaStream tracks to release hardware indicators immediately
+    if (localVideoElRef.current?.srcObject) {
+      const stream = localVideoElRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+      localVideoElRef.current.srcObject = null;
+    }
+
     clientRef.current?.leave().catch(console.error);
   }, [stopModeration]);
 
@@ -115,6 +134,28 @@ const VideoCall = () => {
           if (remoteVideoRef.current) remoteVideoRef.current.innerHTML = "";
         });
 
+        // Connection state tracking for reconnection UX
+        client.on("connection-state-change", (curState, _revState, reason) => {
+          const previousState = connectionStateRef.current;
+          if (curState === "RECONNECTING") {
+            connectionStateRef.current = "RECONNECTING";
+            setConnectionState("RECONNECTING");
+            toast({ title: "Reconnecting...", description: "Your connection dropped briefly. Trying to reconnect." });
+          } else if (curState === "CONNECTED") {
+            if (previousState === "RECONNECTING") {
+              toast({ title: "Reconnected", description: "Your call is back." });
+            }
+            connectionStateRef.current = "CONNECTED";
+            setConnectionState("CONNECTED");
+          } else if (curState === "DISCONNECTED" && reason !== "LEAVE") {
+            connectionStateRef.current = "DISCONNECTED";
+            setConnectionState("DISCONNECTED");
+            toast({ title: "Connection lost", description: "Could not reconnect. Returning to lobby.", variant: "destructive" });
+            cleanup();
+            navigate("/lobby");
+          }
+        });
+
         await client.join(tokenData.appId, channelName, tokenData.token, tokenData.uid);
 
         const [audioTrack, videoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
@@ -135,6 +176,15 @@ const VideoCall = () => {
         }
 
         await client.publish([audioTrack, videoTrack]);
+        if (!callStartedTrackedRef.current && matchInfo.current?.matchId) {
+          callStartedTrackedRef.current = true;
+          callStartedAtRef.current = Date.now();
+          trackPilotEvent("call_started", {
+            ...pilotMetadata,
+            matchId: matchInfo.current.matchId,
+            roomId: matchInfo.current.roomId,
+          });
+        }
         setJoined(true);
       } catch (err) {
         console.error("Agora init error:", err);
@@ -145,21 +195,36 @@ const VideoCall = () => {
     init();
 
     return () => { cleanup(); };
-  }, [user, startModeration, cleanup]);
+  }, [user, startModeration, cleanup, pilotMetadata, navigate]);
 
-  // Timer countdown
+  // Timer countdown — paused during reconnection
   useEffect(() => {
     if (!isSessionValid) return;
+    if (connectionState === "RECONNECTING") return; // Freeze timer while reconnecting
     if (timeLeft <= 0) {
+      if (!callCompletedTrackedRef.current && matchInfo.current?.matchId) {
+        const elapsedSeconds = callStartedAtRef.current
+          ? Math.max(0, Math.round((Date.now() - callStartedAtRef.current) / 1000))
+          : 45;
+        callCompletedTrackedRef.current = true;
+        trackPilotEvent("call_completed", {
+          ...pilotMetadata,
+          matchId: matchInfo.current.matchId,
+          roomId: matchInfo.current.roomId,
+          durationSeconds: elapsedSeconds,
+          extended,
+        });
+      }
       cleanup();
-      navigate("/match");
+      navigate("/match", { state: { from: "video_call" } });
       return;
     }
     const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearInterval(timer);
-  }, [timeLeft, navigate, cleanup, isSessionValid]);
+  }, [timeLeft, navigate, cleanup, isSessionValid, connectionState, extended, pilotMetadata]);
 
   const handleSafeExit = useCallback(() => {
+    trackEvent("safe_exit_used");
     cleanup();
     navigate("/lobby");
   }, [navigate, cleanup]);
@@ -187,6 +252,7 @@ const VideoCall = () => {
       const { data, error } = await supabase.functions.invoke("spark-extend");
       if (error) throw error;
       if (data?.success) {
+        trackEvent("call_extended", { freeExtension: !!data.freeExtension });
         setTimeLeft((t) => t + data.extraSeconds);
         setExtended(true);
         const description = data.freeExtension
@@ -252,6 +318,22 @@ const VideoCall = () => {
         >
           <span className="text-[10px] text-muted-foreground">Anonymous · No recording</span>
         </motion.div>
+
+        {/* Reconnection overlay */}
+        <AnimatePresence>
+          {connectionState === "RECONNECTING" && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-16 left-4 right-4 flex items-center justify-center gap-2 bg-amber-500/90 backdrop-blur-md text-white text-sm font-medium px-4 py-2.5 rounded-xl z-10"
+            >
+              <WifiOff className="w-4 h-4" />
+              Reconnecting... Timer paused.
+              <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Moderation Warning Overlay (Tier 1 - shown to offender only) */}
         <ModerationWarning

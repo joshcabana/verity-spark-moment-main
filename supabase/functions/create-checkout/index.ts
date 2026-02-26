@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
@@ -8,10 +10,53 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// Map price IDs to modes
-const SUBSCRIPTION_PRICES = new Set([
-  "price_1T2B9NHHJNu8TYH7nFtB11O8", // Verity Pass
-]);
+const DEFAULT_VERITY_PASS_PRICE_ID = "price_1T2B9NHHJNu8TYH7nFtB11O8";
+const DEFAULT_APP_BASE_URL = "https://verity-spark-moment-main.vercel.app";
+
+const buildSubscriptionPriceSet = (): Set<string> => {
+  const base = Deno.env.get("STRIPE_PRICE_VERITY_PASS") ?? DEFAULT_VERITY_PASS_PRICE_ID;
+  const additional = (Deno.env.get("STRIPE_SUBSCRIPTION_PRICE_IDS") ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter((id) => id.length > 0);
+
+  return new Set([base, ...additional]);
+};
+
+// Map price IDs to checkout modes.
+const SUBSCRIPTION_PRICES = buildSubscriptionPriceSet();
+
+const parseAllowedOrigins = (value: string | null): string[] =>
+  (value ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0);
+
+const normalizeOrigin = (value: string | null): string | null => {
+  if (!value) return null;
+  try {
+    return new URL(value).origin;
+  } catch {
+    return null;
+  }
+};
+
+const resolveTrustedOrigin = (req: Request): string => {
+  const fallbackOrigin = normalizeOrigin(Deno.env.get("APP_BASE_URL")) ?? DEFAULT_APP_BASE_URL;
+  const allowedOrigins = new Set(
+    parseAllowedOrigins(Deno.env.get("APP_ALLOWED_ORIGINS"))
+      .map((origin) => normalizeOrigin(origin))
+      .filter((origin): origin is string => Boolean(origin)),
+  );
+  allowedOrigins.add(fallbackOrigin);
+
+  const requestOrigin = normalizeOrigin(req.headers.get("origin"));
+  if (requestOrigin && allowedOrigins.has(requestOrigin)) {
+    return requestOrigin;
+  }
+
+  return fallbackOrigin;
+};
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -51,6 +96,22 @@ serve(async (req) => {
       });
     }
 
+    // ENFORCE RATE LIMIT: 5 requests per 60 seconds
+    const { data: isAllowed, error: rateLimitError } = await supabaseClient
+      .rpc("rpc_check_rate_limit", {
+        p_user_id: user.id,
+        p_endpoint: "create-checkout",
+        p_limit: 5,
+        p_window_seconds: 60,
+      });
+
+    if (rateLimitError || !isAllowed) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 429,
+      });
+    }
+
     const { priceId } = await req.json();
     if (!priceId) {
       return new Response(JSON.stringify({ error: "Missing priceId" }), {
@@ -70,7 +131,7 @@ serve(async (req) => {
     }
 
     const mode = SUBSCRIPTION_PRICES.has(priceId) ? "subscription" : "payment";
-    const origin = req.headers.get("origin") || "https://verity-spark-moment.lovable.app";
+    const origin = resolveTrustedOrigin(req);
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,

@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Video, Moon, Briefcase, Palette, Users, Clock, Heart, Zap, Shield, Phone, Crown } from "lucide-react";
 import AppNav from "@/components/AppNav";
@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { writeMatchSession } from "@/lib/match-session";
 import type { VerityMatchSession } from "@/lib/match-session";
+import { getPilotMetadata, trackEvent, trackPilotEvent } from "@/lib/analytics";
 
 const themedRooms = [
   { id: "general", name: "Open Room", icon: Heart, desc: "Anyone, anytime", color: "text-primary", premium: false },
@@ -52,7 +53,9 @@ const Lobby = () => {
   const [banReason, setBanReason] = useState("");
   const [phoneVerified, setPhoneVerified] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, subscribed } = useAuth();
+  const pilotMetadata = useMemo(() => getPilotMetadata(user?.user_metadata), [user?.user_metadata]);
 
   const pollIntervalRef = useRef<number | null>(null);
   const timeoutRef = useRef<number | null>(null);
@@ -128,6 +131,21 @@ const Lobby = () => {
     load();
   }, [user]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("checkout") !== "success") return;
+
+    trackPilotEvent("purchase_completed", {
+      ...pilotMetadata,
+      source: "stripe_checkout_redirect",
+    });
+
+    params.delete("checkout");
+    const nextQuery = params.toString();
+    const nextUrl = `${location.pathname}${nextQuery ? `?${nextQuery}` : ""}`;
+    window.history.replaceState({}, "", nextUrl);
+  }, [location.pathname, location.search, pilotMetadata]);
+
   const commitMatchAndNavigate = useCallback(
     (payload: VerityMatchSession) => {
       queueIdRef.current = null;
@@ -158,6 +176,7 @@ const Lobby = () => {
     }
 
     setIsSearching(true);
+    trackEvent("go_live_clicked", { roomId: selectedRoom, isWarmup: warmupEnabled });
 
     const { data, error } = await supabase.rpc("rpc_enter_matchmaking", {
       p_room_id: selectedRoom,
@@ -179,6 +198,14 @@ const Lobby = () => {
       setIsSearching(false);
       navigate("/appeals");
       return;
+    }
+
+    if (response.queueId) {
+      trackPilotEvent("queue_entered", {
+        ...pilotMetadata,
+        roomId: response.roomId ?? selectedRoom,
+        isWarmup: warmupEnabled,
+      });
     }
 
     if (response.error === "premium_room_locked") {
@@ -300,6 +327,8 @@ const Lobby = () => {
             <div className="text-xs text-muted-foreground">First 3 calls are platonic practice rounds</div>
           </div>
           <button
+            title="Toggle warm-up mode"
+            aria-label="Toggle warm-up mode"
             onClick={() => setWarmupEnabled(!warmupEnabled)}
             className={`w-10 h-6 rounded-full border flex items-center p-0.5 transition-colors ${
               warmupEnabled ? "bg-primary/20 border-primary/30" : "bg-secondary border-border"
@@ -352,7 +381,7 @@ const Lobby = () => {
           )}
           <div className="flex items-center gap-1">
             <Shield className="w-3.5 h-3.5 text-verity-success" />
-            <span>AI moderated · 99.8% safe</span>
+            <span>AI moderated · Pilot safeguards active</span>
           </div>
         </div>
 

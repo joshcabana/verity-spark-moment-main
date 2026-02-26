@@ -1,107 +1,240 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* ── DAY (Light) theme ─── default ── */
   :root {
-    --background: 20 14% 4%;
-    --foreground: 40 20% 92%;
+    color-scheme: light;
 
-    --card: 20 12% 7%;
-    --card-foreground: 40 20% 92%;
+    --background: 40 20% 97%;       /* warm off-white  #F9F6F1 */
+    --foreground: 0 0% 10%;         /* near-black text #1A1A1A */
 
-    --popover: 20 12% 7%;
-    --popover-foreground: 40 20% 92%;
+    --card: 0 0% 100%;              /* white card */
+    --card-foreground: 0 0% 10%;
 
-    --primary: 38 90% 55%;
-    --primary-foreground: 20 14% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
 
-    --secondary: 20 10% 14%;
-    --secondary-foreground: 40 15% 80%;
+    --primary: 42 92% 46%;          /* slightly deeper gold for light bg contrast */
+    --primary-foreground: 0 0% 100%;
 
-    --muted: 20 8% 12%;
-    --muted-foreground: 30 10% 50%;
+    --secondary: 40 10% 92%;        /* warm light grey #ECE8E1 */
+    --secondary-foreground: 0 0% 20%;
 
-    --accent: 38 80% 45%;
-    --accent-foreground: 20 14% 4%;
+    --muted: 40 10% 94%;            /* very light warm grey */
+    --muted-foreground: 0 0% 42%;   /* readable medium grey on light */
+
+    --accent: 42 80% 40%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 10% 16%;
-    --input: 20 10% 16%;
-    --ring: 38 90% 55%;
+    --border: 40 10% 85%;           /* light grey border */
+    --input: 40 10% 85%;
+    --ring: 42 92% 46%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 20 12% 6%;
-    --sidebar-foreground: 40 15% 80%;
-    --sidebar-primary: 38 90% 55%;
-    --sidebar-primary-foreground: 20 14% 4%;
-    --sidebar-accent: 20 10% 14%;
-    --sidebar-accent-foreground: 40 15% 80%;
-    --sidebar-border: 20 10% 16%;
-    --sidebar-ring: 38 90% 55%;
+    --sidebar-background: 40 20% 97%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 42 92% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 42 80% 40%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 40 10% 85%;
+    --sidebar-ring: 42 92% 46%;
 
-    /* Custom Verity tokens */
-    --verity-gold: 38 90% 55%;
-    --verity-gold-dim: 38 60% 35%;
-    --verity-warm: 25 80% 60%;
-    --verity-surface: 20 12% 9%;
-    --verity-surface-hover: 20 12% 12%;
-    --verity-glass: 20 14% 4% / 0.8;
-    --verity-glow: 38 100% 60%;
-    --verity-success: 142 70% 45%;
+    --verity-gold: 42 92% 46%;
+    --verity-gold-dim: 42 55% 35%;
+    --verity-warm: 36 78% 48%;
+    --verity-surface: 40 10% 94%;
+    --verity-surface-alt: 40 10% 92%;
+    --verity-surface-hover: 40 10% 88%;
+    --verity-glass: 0 0% 100% / 0.72;
+    --verity-glow: 42 92% 46%;
+    --verity-success: 145 63% 38%;
     --verity-danger: 0 72% 51%;
   }
-}
 
-@layer base {
+  /* ── NIGHT (Dark) theme ── activated by next-themes .dark class ── */
+  .dark {
+    color-scheme: dark;
+
+    --background: 0 0% 3%;          /* rich near-black #080808 */
+    --foreground: 45 10% 92%;       /* warm cream/off-white #EDE8DD */
+
+    --card: 0 0% 7%;                /* dark card surface #121212 */
+    --card-foreground: 45 10% 92%;
+
+    --popover: 0 0% 7%;
+    --popover-foreground: 45 10% 92%;
+
+    --primary: 42 92% 56%;          /* rich gold #E5A519 */
+    --primary-foreground: 0 0% 3%;
+
+    --secondary: 0 0% 14%;          /* charcoal grey #242424 */
+    --secondary-foreground: 45 10% 85%;
+
+    --muted: 0 0% 11%;              /* deep grey #1C1C1C */
+    --muted-foreground: 0 0% 55%;   /* medium grey #8C8C8C */
+
+    --accent: 42 80% 48%;           /* deep gold accent #D99C16 */
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 16%;             /* subtle grey border #292929 */
+    --input: 0 0% 16%;
+    --ring: 42 92% 56%;             /* gold ring */
+
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 45 10% 85%;
+    --sidebar-primary: 42 92% 56%;
+    --sidebar-primary-foreground: 0 0% 3%;
+    --sidebar-accent: 0 0% 9%;
+    --sidebar-accent-foreground: 45 10% 85%;
+    --sidebar-border: 0 0% 16%;
+    --sidebar-ring: 42 92% 56%;
+
+    --verity-gold: 42 92% 56%;
+    --verity-gold-dim: 42 55% 35%;
+    --verity-warm: 36 78% 52%;
+    --verity-surface: 0 0% 7%;
+    --verity-surface-alt: 0 0% 11%;
+    --verity-surface-hover: 0 0% 14%;
+    --verity-glass: 0 0% 8% / 0.72;
+    --verity-glow: 42 92% 56%;
+    --verity-success: 145 63% 42%;
+    --verity-danger: 0 72% 51%;
+  }
+
   * {
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'DM Sans', system-ui, sans-serif;
+  html,
+  body,
+  #root {
+    min-height: 100%;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: "Inter", system-ui, sans-serif;
+    transition: background-color 0.4s ease, color 0.25s ease;
+  }
+
+  /* Luxury background gradients — adapt to both modes */
+  .dark body {
+    background-image:
+      radial-gradient(circle at 15% 20%, hsla(var(--verity-gold), 0.04), transparent 38%),
+      radial-gradient(circle at 84% 14%, hsla(var(--verity-gold-dim), 0.05), transparent 42%),
+      linear-gradient(180deg, #080808, #050505);
+  }
+
+  :root body {
+    background-image:
+      radial-gradient(circle at 15% 20%, hsla(var(--verity-gold), 0.06), transparent 38%),
+      radial-gradient(circle at 84% 14%, hsla(var(--verity-gold-dim), 0.04), transparent 42%),
+      linear-gradient(180deg, #F9F6F1, #F5F0E8);
+  }
+
+  .dark .app-nav {
+    background: linear-gradient(180deg, rgba(8,8,8,0.92), rgba(5,5,5,0.98));
+  }
+
+  :root .app-nav {
+    background: linear-gradient(180deg, rgba(249,246,241,0.92), rgba(249,246,241,0.98));
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Playfair Display", serif;
+    letter-spacing: 0.02em;
   }
 }
 
 @layer utilities {
+  /* ─── Luxury text gradients ─── */
+  .text-gradient-electric {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(42 92% 56%), hsl(36 78% 52%), hsl(42 92% 56%));
+  }
+
   .text-gradient-gold {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(38 90% 55%), hsl(25 80% 60%), hsl(38 90% 55%));
+    background-image: linear-gradient(135deg, hsl(42 92% 56%), hsl(36 78% 52%), hsl(42 92% 56%));
   }
 
   .bg-gradient-gold {
-    background-image: linear-gradient(135deg, hsl(38 90% 55%), hsl(30 85% 50%));
+    background-image: linear-gradient(135deg, hsl(42 92% 56%), hsl(42 80% 48%));
   }
 
-  .bg-gradient-dark {
-    background-image: linear-gradient(180deg, hsl(20 14% 4%), hsl(20 12% 7%));
+  .bg-gradient-spark {
+    background-image: linear-gradient(135deg, #E5A519 0%, #F0C75E 45%, #C78B0A 100%);
   }
 
+  /* ─── Glass card — luxury feel ─── */
+  .glass-card {
+    @apply backdrop-blur-xl;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card) / 0.6);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.15), inset 0 1px 0 hsla(var(--verity-gold), 0.08);
+  }
+
+  .dark .glass-card {
+    border-color: rgba(255, 255, 255, 0.10);
+    background: rgba(0, 0, 0, 0.40);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45), inset 0 1px 0 hsla(var(--verity-gold), 0.08);
+  }
+
+  /* ─── Gold glow effects ─── */
   .glow-gold {
-    box-shadow: 0 0 40px hsl(38 90% 55% / 0.15), 0 0 80px hsl(38 90% 55% / 0.05);
+    box-shadow:
+      0 0 40px hsl(42 92% 56% / 0.25),
+      0 0 80px hsl(42 92% 56% / 0.10);
+  }
+
+  .glow-gold-ring {
+    box-shadow: 0 0 0 2px hsl(42 92% 56% / 0.3), 0 0 20px hsl(42 92% 56% / 0.15);
   }
 
   .glow-gold-sm {
-    box-shadow: 0 0 20px hsl(38 90% 55% / 0.1);
+    box-shadow:
+      0 0 16px hsl(42 92% 56% / 0.18),
+      0 0 40px hsl(42 92% 56% / 0.06);
   }
 
-  .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+  /* ─── Luxury border & shadow utilities ─── */
+  .lux-border {
+    border: 1px solid hsla(var(--verity-gold), 0.35);
   }
 
-  .timer-ring {
-    stroke-dasharray: 283;
-    stroke-dashoffset: 0;
-    transition: stroke-dashoffset 1s linear;
+  .lux-shadow {
+    box-shadow: 0 12px 36px hsla(var(--foreground), 0.08), 0 0 14px hsla(var(--verity-gold), 0.12);
+  }
+
+  /* ─── Reduced motion ─── */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

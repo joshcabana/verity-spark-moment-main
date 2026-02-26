@@ -8,11 +8,50 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const TOKEN_PACK_MAP: Record<string, number> = {
+const DEFAULT_TOKEN_PACK_MAP: Record<string, number> = {
   "price_1T2B8ZHHJNu8TYH7wfh5fdNv": 10,
   "price_1T2B8rHHJNu8TYH7lnqB0oGV": 15,
   "price_1T2B96HHJNu8TYH7e2Tikj7C": 30,
 };
+
+const toPositiveInt = (value: string | null, fallback: number): number => {
+  if (!value) return fallback;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed <= 0) return fallback;
+  return Math.floor(parsed);
+};
+
+const buildTokenPackMap = (): Record<string, number> => {
+  const json = Deno.env.get("STRIPE_TOKEN_PACK_MAP_JSON");
+  if (json) {
+    try {
+      const parsed = JSON.parse(json) as Record<string, unknown>;
+      const normalized = Object.entries(parsed).reduce<Record<string, number>>((acc, [priceId, amount]) => {
+        if (typeof priceId !== "string" || priceId.trim().length === 0) return acc;
+        if (typeof amount !== "number" || !Number.isFinite(amount) || amount <= 0) return acc;
+        acc[priceId.trim()] = Math.floor(amount);
+        return acc;
+      }, {});
+      if (Object.keys(normalized).length > 0) {
+        return normalized;
+      }
+    } catch {
+      // Fallback to individual env vars/defaults below.
+    }
+  }
+
+  const price10 = Deno.env.get("STRIPE_PRICE_TOKENS_10") ?? "price_1T2B8ZHHJNu8TYH7wfh5fdNv";
+  const price15 = Deno.env.get("STRIPE_PRICE_TOKENS_15") ?? "price_1T2B8rHHJNu8TYH7lnqB0oGV";
+  const price30 = Deno.env.get("STRIPE_PRICE_TOKENS_30") ?? "price_1T2B96HHJNu8TYH7e2Tikj7C";
+
+  return {
+    [price10]: toPositiveInt(Deno.env.get("STRIPE_TOKENS_10_AMOUNT"), DEFAULT_TOKEN_PACK_MAP["price_1T2B8ZHHJNu8TYH7wfh5fdNv"]),
+    [price15]: toPositiveInt(Deno.env.get("STRIPE_TOKENS_15_AMOUNT"), DEFAULT_TOKEN_PACK_MAP["price_1T2B8rHHJNu8TYH7lnqB0oGV"]),
+    [price30]: toPositiveInt(Deno.env.get("STRIPE_TOKENS_30_AMOUNT"), DEFAULT_TOKEN_PACK_MAP["price_1T2B96HHJNu8TYH7e2Tikj7C"]),
+  };
+};
+
+const TOKEN_PACK_MAP: Record<string, number> = buildTokenPackMap();
 
 const log = (step: string, details?: unknown) => {
   console.log(`[STRIPE-WEBHOOK] ${step}${details ? ` - ${JSON.stringify(details)}` : ""}`);
@@ -54,48 +93,39 @@ serve(async (req) => {
     eventId = event.id;
     log("Event received", { type: event.type, id: event.id });
 
-    const { data: existingEvent } = await supabase
-      .from("stripe_events")
-      .select("event_id,status")
-      .eq("event_id", event.id)
+    // Fully Idempotent - use ON CONFLICT DO NOTHING pattern via single insert
+    const { data: claimData, error: claimError } = await supabase
+      .from("processed_events")
+      .insert({ event_id: event.id })
+      .select()
       .maybeSingle();
 
-    if (existingEvent?.status === "processed") {
-      log("Duplicate event ignored", { id: event.id, status: existingEvent.status });
+    if (claimError) {
+      // 23505 is PostgreSQL unique_violation
+      if (claimError.code === '23505') {
+        log("Duplicate event ignored via ON CONFLICT DO NOTHING", { id: event.id });
+        return new Response(JSON.stringify({ received: true, duplicate: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        });
+      }
+      throw claimError;
+    }
+
+    if (!claimData) {
+      log("Duplicate event ignored natively", { id: event.id });
       return new Response(JSON.stringify({ received: true, duplicate: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       });
     }
 
-    if (existingEvent?.status === "processing") {
-      log("Event already processing", { id: event.id });
-      return new Response(JSON.stringify({ received: true, duplicate: true }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      });
-    }
-
-    if (!existingEvent) {
-      const { error: claimError } = await supabase.from("stripe_events").insert({
-        event_id: event.id,
-        event_type: event.type,
-        status: "processing",
-        payload: JSON.parse(body),
-      });
-
-      if (claimError) throw claimError;
-    } else {
-      await supabase
-        .from("stripe_events")
-        .update({
-          status: "processing",
-          error: null,
-          event_type: event.type,
-          payload: JSON.parse(body),
-        })
-        .eq("event_id", event.id);
-    }
+    await supabase.from("stripe_events").insert({
+      event_id: event.id,
+      event_type: event.type,
+      status: "processing",
+      payload: JSON.parse(body),
+    });
 
     switch (event.type) {
       case "checkout.session.completed": {
@@ -138,10 +168,14 @@ serve(async (req) => {
         const email = customer.email;
         if (!email) break;
 
-        const { data: usersResponse, error: usersError } = await supabase.auth.admin.listUsers();
+        // BUG FIX: Use targeted email lookup instead of loading ALL users into memory.
+        // listUsers() with no filter is O(N) on auth.users and will fail at scale.
+        const { data: usersResponse, error: usersError } = await supabase.auth.admin.listUsers({
+          filter: `email=${email}`,
+        } as Parameters<typeof supabase.auth.admin.listUsers>[0]);
         if (usersError) throw usersError;
 
-        const appUser = usersResponse.users.find((candidate) => candidate.email === email);
+        const appUser = usersResponse?.users?.[0];
         if (!appUser) {
           log("No app user found for Stripe customer email", { email });
           break;
@@ -161,6 +195,24 @@ serve(async (req) => {
           );
 
         if (upsertError) throw upsertError;
+        break;
+      }
+
+      case "customer.subscription.updated": {
+        // Handles renewals, plan changes, and cancellation-at-period-end.
+        // Without this, subscription renewals never update current_period_end.
+        const subscription = event.data.object as Stripe.Subscription;
+        const newStatus = subscription.status === "active" ? "active" : "cancelled";
+        const { error: updateError } = await supabase
+          .from("subscriptions")
+          .update({
+            status: newStatus,
+            current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+          })
+          .eq("stripe_subscription_id", subscription.id);
+        if (updateError) {
+          log("subscription.updated DB error", { message: updateError.message, subId: subscription.id });
+        }
         break;
       }
 

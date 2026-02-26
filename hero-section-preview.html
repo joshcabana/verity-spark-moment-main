@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERITY - Hero Section (Electric Bloom)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-dark-charcoal: #1C1C1C;
+            --color-electric-violet: #8A2BE2;
+            --color-neon-green: #39FF14;
+            --color-fiery-orange: #FF4500;
+            --color-text-light: #E0E0E0;
+            --color-text-medium: #C5C5C5;
+            --color-text-dark: #A0A0A0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--color-dark-charcoal);
+            color: var(--color-text-light);
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+        }
+
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            /* Placeholder for dynamic video background */
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://via.placeholder.com/1920x1080/1C1C1C/39FF14?text=Spark+Video+Placeholder');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 900px;
+            opacity: 0; /* Initial state for animation */
+            transform: translateY(20px); /* Initial state for animation */
+            animation: fadeInSlideUp 1.5s ease-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.5em;
+            color: var(--color-neon-green);
+            text-shadow: 0 0 25px rgba(57,255,20,0.9);
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .tagline {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            color: var(--color-electric-violet);
+            text-shadow: 0 0 15px rgba(138,43,226,0.7);
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, var(--color-electric-violet) 0%, var(--color-fiery-orange) 100%);
+            border: none;
+            padding: 18px 36px;
+            border-radius: 40px;
+            color: white;
+            font-size: 1.4em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 69, 0, 0.5);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.04);
+            box-shadow: 0 12px 35px rgba(255, 69, 0, 0.8);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3em;
+            }
+            .tagline {
+                font-size: 1.5em;
+            }
+            .btn {
+                font-size: 1.2em;
+                padding: 15px 30px;
+            }
+            .logo {
+                max-width: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            .tagline {
+                font-size: 1.2em;
+            }
+            .btn {
+                font-size: 1em;
+                padding: 12px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-section">
+        <div class="hero-content">
+            <img src="public/verity_logo.png" alt="VERITY Logo" class="logo">
+            <h1>VERITY</h1>
+            <p class="tagline">Real Eyes. Real Spark.</p>
+            <a href="#" class="btn">Start your first Spark</a>
+        </div>
+    </section>
+
+    <!--
+        Framer Motion Integration Plan:
+        - Use `motion.div`, `motion.img`, `motion.h1`, `motion.p`, `motion.a` for animated elements.
+        - `initial={{ opacity: 0, y: 20 }}` for entrance animations.
+        - `animate={{ opacity: 1, y: 0 }}` with `transition={{ duration: 0.8, delay: 0.x }}` for staggered reveals.
+        - Use `useScroll` hook for scroll-triggered animations on other sections.
+        - Hover effects on buttons with `whileHover={{ scale: 1.05, boxShadow: "0 15px 40px rgba(255, 69, 0, 0.9)" }}`.
+
+        Video Background Plan:
+        - Replace `background-image` in `.hero-section` with a `<video>` element.
+        - `autoplay loop muted playsinline` attributes.
+        - Source a high-quality, short, looping video (e.g., abstract sparks, subtle energy flows, or quick glimpses of genuine human interaction, highly stylized).
+        - Ensure video optimization for fast loading and mobile performance.
+    -->
+</body>
+</html>

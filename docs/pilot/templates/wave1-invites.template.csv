@@ -1,0 +1,5 @@
+invite_id,email,city,cohort,wave,status,invite_date,activated_at,notes
+wave-1-CBR-001,REPLACE_WITH_REAL_EMAIL_01,Canberra,pilot-2026q1,wave-1,queued,2026-02-24,,
+wave-1-CBR-002,REPLACE_WITH_REAL_EMAIL_02,Canberra,pilot-2026q1,wave-1,queued,2026-02-24,,
+wave-1-SYD-001,REPLACE_WITH_REAL_EMAIL_03,Sydney,pilot-2026q1,wave-1,queued,2026-02-24,,
+wave-1-SYD-002,REPLACE_WITH_REAL_EMAIL_04,Sydney,pilot-2026q1,wave-1,queued,2026-02-24,,

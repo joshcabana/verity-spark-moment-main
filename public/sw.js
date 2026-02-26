@@ -1,5 +1,5 @@
 const CACHE_NAME = 'verity-v1';
-const STATIC_ASSETS = ['/', '/manifest.json', '/verity-icon-512.png', '/verity-icon-192.png'];
+const STATIC_ASSETS = ['/', '/manifest.json', '/verity-icon-512.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

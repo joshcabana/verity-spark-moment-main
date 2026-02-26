@@ -1,6 +1,7 @@
 # Runtime Monitoring Setup
 
 This repository includes a scheduled workflow (`.github/workflows/runtime-alerts.yml`) that runs `scripts/check-runtime-alerts.mjs`.
+For pilot operations, use `scripts/pilot-daily-ops-check.mjs` for a broader readiness report (queue health, completion/conversion, moderation backlog, Stripe failures, intake cap).
 
 ## Required GitHub Secrets
 
@@ -19,6 +20,32 @@ The script checks a rolling window (`ALERT_LOOKBACK_MINUTES`, default `60`) for:
    Threshold env: `MODERATION_STATUS_SPIKE_THRESHOLD` (default `20`)
 
 If any threshold is met/exceeded, the workflow exits non-zero.
+
+## Pilot Daily Ops Command
+
+Run this once per day during gated rollout:
+
+```bash
+SUPABASE_URL="https://<project-ref>.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:ops:daily
+```
+
+The command writes a JSON report to `reports/pilot/daily-ops-YYYY-MM-DD.json` and exits non-zero when reliability/safety/intake thresholds are breached.
+
+To keep `docs/pilot/tracker.md` in sync with report outputs, run:
+
+```bash
+npm run pilot:tracker:update -- --daily-report reports/pilot/daily-ops-YYYY-MM-DD.json --date YYYY-MM-DD
+```
+
+Or use the daily wrapper command:
+
+```bash
+SUPABASE_URL="https://<project-ref>.supabase.co" \
+SUPABASE_SERVICE_ROLE_KEY="<service_role_key>" \
+npm run pilot:run:daily
+```
 
 ## Runtime Event Logging
 
@@ -54,5 +81,24 @@ Required in `full` mode:
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 
+Recommended redirect hardening secrets:
+
+- `APP_BASE_URL` (trusted fallback origin)
+- `APP_ALLOWED_ORIGINS` (comma-separated allowlist for checkout/portal redirect origins)
+
+Redirect origin behavior in checkout/portal functions:
+
+- Trust request `Origin` only when it is present in `APP_ALLOWED_ORIGINS`.
+- If `Origin` is missing or not allowlisted, use `APP_BASE_URL` as fallback.
+- If `APP_BASE_URL` is missing/invalid, default fallback is `https://verity-spark-moment-main.vercel.app`.
+
 `scripts/deploy-supabase.sh` now runs both target-alignment + secrets preflight checks automatically (`full` mode by default).
 Set `SUPABASE_SECRET_CHECK_MODE=core` only if you intentionally need a limited rollout.
+
+## Manual Artifact Guard
+
+Use the manual GitHub workflow `.github/workflows/pilot-reports.yml` (or local CLI) to validate that:
+
+1. expected daily report files exist and include required metrics fields,
+2. tracker rows for the selected date are updated,
+3. due gate reports are present after gate dates.

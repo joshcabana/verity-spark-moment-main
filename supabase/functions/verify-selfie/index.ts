@@ -1,5 +1,5 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -286,6 +286,30 @@ You MUST respond using the verify_selfie tool.`,
       verification.single_person &&
       verification.appears_adult &&
       verification.confidence >= 0.7;
+
+    // If verification passed, update the user's profile verification status.
+    if (passed) {
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({
+          verification_status: "verified",
+          verified_selfie_at: new Date().toISOString(),
+        })
+        .eq("user_id", user.id);
+
+      if (updateError) {
+        // Non-fatal: log but still return success since the AI check passed.
+        console.error("verify-selfie: failed to update profile verification_status", updateError);
+        await monitorClient.rpc("log_runtime_alert_event", {
+          p_event_source: "verify-selfie",
+          p_event_type: "profile_update_failed",
+          p_severity: "error",
+          p_status_code: 500,
+          p_user_id: user.id,
+          p_details: { message: updateError.message },
+        });
+      }
+    }
 
     return new Response(
       JSON.stringify({

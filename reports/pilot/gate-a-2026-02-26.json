@@ -1,0 +1,86 @@
+{
+  "generatedAt": "2026-02-25T13:59:24.433Z",
+  "gate": "A",
+  "status": "FAIL",
+  "recommendation": "HOLD_COLLECT_EVIDENCE",
+  "checks": [
+    {
+      "name": "Matches created (sample size)",
+      "pass": false,
+      "actual": 0,
+      "threshold": ">= 10",
+      "category": "evidence"
+    },
+    {
+      "name": "Decisions completed (sample size)",
+      "pass": false,
+      "actual": 0,
+      "threshold": ">= 10",
+      "category": "evidence"
+    },
+    {
+      "name": "Call completion rate",
+      "pass": true,
+      "actual": 1,
+      "threshold": ">= 0.8",
+      "category": "reliability"
+    },
+    {
+      "name": "Stale queue entries",
+      "pass": true,
+      "actual": 0,
+      "threshold": "<= 3",
+      "category": "reliability"
+    },
+    {
+      "name": "Open critical incidents",
+      "pass": true,
+      "actual": 0,
+      "threshold": "<= 0",
+      "category": "reliability"
+    },
+    {
+      "name": "RPC exceptions",
+      "pass": true,
+      "actual": 0,
+      "threshold": "<= 3",
+      "category": "reliability"
+    }
+  ],
+  "metrics": {
+    "windowStart": "2026-02-22T13:59:23.135Z",
+    "staleThresholdMinutes": 15,
+    "queuedNow": 0,
+    "staleQueueEntries": 0,
+    "matchesCreated": 0,
+    "decisionsCompleted": 0,
+    "callCompletionRate": 1,
+    "mutualSparks": 0,
+    "sparkConversionRate": 0,
+    "chatRoomsCreated": 0,
+    "chatActivationRate": 0,
+    "messagesSent": 0,
+    "moderationFlags": 0,
+    "unresolvedCriticalIncidents": 0,
+    "stripeFailures": 0,
+    "stripeProcessed": 0,
+    "rpcExceptions": 0,
+    "newProfiles": 0
+  },
+  "thresholds": {
+    "gateA": {
+      "minMatchesCreated": 10,
+      "minDecisionsCompleted": 10,
+      "minCallCompletionRate": 0.8,
+      "maxStaleQueueEntries": 3,
+      "maxOpenCriticalIncidents": 0,
+      "maxRpcExceptions": 3
+    },
+    "gateB": {
+      "minMutualSparks": 5,
+      "minSparkConversionRate": 0.2,
+      "minChatActivationRate": 0.5,
+      "maxOpenCriticalIncidents": 0
+    }
+  }
+}

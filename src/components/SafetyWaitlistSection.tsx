@@ -1,25 +1,26 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { ShieldCheck, AlertTriangle, Lock, Sparkles } from 'lucide-react'; // Import Lucide icons
 
 const trustFeatures = [
     {
-        icon: '🛡️', // Placeholder: Animated shield or lock icon
+        icon: <ShieldCheck className="w-10 h-10" />,
         title: "Anonymous First 45 Seconds",
         description: "Your identity remains private until a mutual reveal. Focus on genuine connection, not first impressions."
     },
     {
-        icon: '🚨', // Placeholder: Animated alert/warning icon with a pulse
+        icon: <AlertTriangle className="w-10 h-10 text-fiery-orange" />,
         title: "Real-time Moderation",
         description: "Advanced AI and human oversight monitor every Spark for inappropriate behavior, ensuring a respectful space."
     },
     {
-        icon: '🔒', // Placeholder: Animated padlock or biometric scan icon
+        icon: <Lock className="w-10 h-10" />,
         title: "Identity Controls",
         description: "You're in control. Set your preferences and manage who you connect with after a mutual Spark."
     },
     {
-        icon: '✨', // Placeholder: Animated spark or starburst icon for reveal
+        icon: <Sparkles className="w-10 h-10" />,
         title: "Mutual-Only Reveals",
         description: "No unsolicited access. Reveals only happen when both participants feel a genuine spark and opt-in."
     },
@@ -85,7 +86,7 @@ const SafetyWaitlistSection: React.FC = () => {
                 className="max-w-6xl mx-auto rounded-2xl p-10 shadow-2xl bg-gradient-to-br from-dark-charcoal to-dark-charcoal/50 border border-electric-violet/20"
             >
                 {/* Safety & Trust Section */}
-                <h2 className="font-montserrat text-5xl text-neon-green drop-shadow-neon mb-5 text-center">
+                <h2 className="font-montserrat text-6xl text-gradient-electric drop-shadow-neon mb-5 text-center">
                     Your Safety, Our Priority
                 </h2>
                 <p className="text-text-medium text-lg max-w-3xl mx-auto mb-16 text-center">
@@ -104,7 +105,7 @@ const SafetyWaitlistSection: React.FC = () => {
                             whileHover={{ scale: 1.03, boxShadow: "0 10px 30px rgba(138,43,226,0.4)" }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <div className={`text-4xl mb-4 ${feature.icon === '🚨' ? 'text-fiery-orange' : 'text-neon-green'}`}>
+                            <div className={`mb-4 text-neon-green`}> {/* Adjusted to directly render Lucide icon, conditional text-fiery-orange moved to icon definition */}
                                 {feature.icon}
                             </div>
                             <h4 className="font-montserrat text-xl text-text-light mb-3">
@@ -119,7 +120,7 @@ const SafetyWaitlistSection: React.FC = () => {
 
                 {/* Waitlist / Invite System Section */}
                 <div className="border-t border-electric-violet/30 pt-16 mt-16">
-                    <h2 className="font-montserrat text-5xl text-fiery-orange drop-shadow-electric mb-5 text-center">
+                    <h2 className="font-montserrat text-6xl text-gradient-electric drop-shadow-electric mb-5 text-center">
                         Join the Inner Circle. Spark Early.
                     </h2>
                     <p className="text-text-medium text-lg max-w-3xl mx-auto mb-8 text-center">
@@ -153,7 +154,7 @@ const SafetyWaitlistSection: React.FC = () => {
                             whileHover="hover"
                             whileTap="tap"
                         >
-                            Secure My Spot
+                            Secure My Priority Spot
                         </motion.button>
                     </div>
                 </div>

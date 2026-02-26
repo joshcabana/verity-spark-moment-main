@@ -1,23 +1,24 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Sparkles, Search, Heart, ArrowDown } from 'lucide-react'; // Import Lucide icons
 
 const flowStepsContent = [
     {
-        icon: '✨', // Placeholder: Animated SVG of a user entering a glowing room/portal
+        icon: <Sparkles className="w-12 h-12 text-white" />,
         title: "Welcome to Real Connections",
         body: "Dive into Verity's unique anti-swipe experience. We'll guide you through setting up your profile, understanding Spark etiquette, and getting ready for your first genuine connection.",
         cta: "Get Started"
     },
     {
-        icon: '🔎', // Placeholder: Animated matching sequence or radar scan
+        icon: <Search className="w-12 h-12 text-white" />,
         title: "Spark Discovery",
         body: "No endless scrolling. Verity intelligently matches you with individuals who are genuinely present and seeking a real-time Spark. Prepare for a spontaneous, authentic encounter.",
         cta: "Find Your Spark",
         subText: "Searching for compatible Sparks..."
     },
     {
-        icon: '💖', // Placeholder: Animated confetti burst and glowing connection line
+        icon: <Heart className="w-12 h-12 text-white" />,
         title: "What Happens After a Spark?",
         body: "If there's a mutual reveal, the connection ignites! You'll have options to connect further, send a message, or simply reflect on the experience. No pressure, just genuine next steps.",
         actions: [
@@ -89,7 +90,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                 className="max-w-4xl mx-auto rounded-2xl p-10 shadow-2xl bg-gradient-to-br from-dark-charcoal to-dark-charcoal/50 border border-electric-violet/20"
             >
                 <motion.h2
-                    className="font-montserrat text-5xl text-neon-green drop-shadow-neon mb-16 text-center"
+                    className="font-montserrat text-6xl text-gradient-electric drop-shadow-neon mb-16 text-center"
                     variants={sectionVariants}
                 >
                     Your Journey with VERITY
@@ -105,7 +106,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                                 animate={inView ? "visible" : "hidden"}
                                 transition={{ delay: 0.3 + index * 0.2 }}
                             >
-                                <div className="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-electric-violet to-fiery-orange rounded-full flex justify-center items-center text-6xl text-white shadow-xl">
+                                <div className="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-electric-violet to-fiery-orange rounded-full flex justify-center items-center text-white shadow-xl">
                                     {step.icon}
                                 </div>
                                 <h3 className="font-montserrat text-3xl text-fiery-orange drop-shadow-electric mb-4">
@@ -160,7 +161,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                                     animate={inView ? "visible" : "hidden"}
                                     transition={{ delay: 0.5 + index * 0.2, duration: 0.6, ease: "easeOut" }}
                                 >
-                                    ↓
+                                    <ArrowDown className="w-16 h-16" />
                                 </motion.div>
                             )}
                         </React.Fragment>

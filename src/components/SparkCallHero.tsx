@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Clock, CheckCircle2, Sparkle, PartyPopper, Star, Mic, Video, PhoneOff, ArrowRight } from 'lucide-react'; // Import Lucide icons
 
 const SparkCallHero: React.FC = () => {
     const [ref, inView] = useInView({
@@ -34,15 +35,15 @@ const SparkCallHero: React.FC = () => {
     const orbVariants = {
         hidden: { scale: 0.1, opacity: 0 },
         converge: {
-            scale: [0.1, 1.2, 1], // Orb grows and then shrinks slightly
-            opacity: [0, 1, 0],
-            transition: { duration: 1, ease: "easeOut" } // Delay removed, will be dynamic in app
+            scale: [0.1, 1.5, 0.9], // More dramatic growth and subtle shrink
+            opacity: [0, 1, 0.7], // Hold opacity slightly longer for reveal
+            transition: { duration: 1.2, ease: "easeOut" } // Slightly longer, smoother transition
         },
     };
 
     const flashVariants = {
         hidden: { opacity: 0 },
-        reveal: { opacity: [0, 1, 0], transition: { duration: 0.3, ease: "easeOut", delay: 0.8 } }, // Adjusted delay
+        reveal: { opacity: [0, 1, 0], transition: { duration: 0.4, ease: "easeOut", delay: 0.9 } }, // Slightly longer, delayed flash
     };
 
     const messageVariants = {
@@ -53,7 +54,7 @@ const SparkCallHero: React.FC = () => {
     const controlButtonVariants = {
         hover: {
             scale: 1.1,
-            boxShadow: "0 5px 20px rgba(138,43,226,0.5)",
+            boxShadow: "0 0 15px rgba(138,43,226,0.8), 0 0 30px rgba(138,43,226,0.4)", // Enhanced, deeper glow
             transition: { duration: 0.2 }
         },
         tap: {
@@ -73,10 +74,10 @@ const SparkCallHero: React.FC = () => {
                 {/* Left Content Area */}
                 <motion.div variants={containerVariants}>
                     <p className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1 text-xs uppercase tracking-[0.2em] text-white/65">
-                        <motion.span className="h-3.5 w-3.5 text-neon-green">⏰</motion.span>
+                        <Clock className="h-3.5 w-3.5 text-neon-green" />
                         Cinematic Spark Call
                     </p>
-                    <h2 className="mt-4 font-montserrat text-5xl text-white md:text-6xl">
+                    <h2 className="mt-4 font-montserrat text-6xl text-gradient-electric md:text-7xl">
                         The 45-second moment that decides everything
                     </h2>
                     <p className="mt-5 text-lg leading-relaxed text-text-medium">
@@ -86,31 +87,31 @@ const SparkCallHero: React.FC = () => {
 
                     <ul className="mt-6 space-y-3 text-sm text-text-medium">
                         {[{
-                            icon: '✔️',
+                            icon: <CheckCircle2 className="w-4 h-4" />,
                             label: "Circular gradient timer with high-contrast readability"
                         },
                         {
-                            icon: '💥',
+                            icon: <Sparkle className="w-4 h-4" />,
                             label: "Orb explosion + reveal flash sequence at 15 seconds"
                         },
                         {
-                            icon: '🎉',
+                            icon: <PartyPopper className="w-4 h-4" />,
                             label: "Confetti burst on successful reveal to reinforce positive signal"
                         },
                         {
-                            icon: '✨',
+                            icon: <Star className="w-4 h-4" />,
                             label: "Glassmorphism interaction layer with reduced-motion safety"
                         },
                         ].map((item, index) => (
                             <motion.li
                                 key={index}
                                 className="inline-flex items-start gap-2"
-                                initial="hidden"
-                                animate={inView ? "visible" : "hidden"}
-                                variants={itemVariants} 
-                                transition={{ delay: 0.3 + index * 0.1 }}
+                                initial="hidden" // Ensure initial state is hidden
+                                animate={inView ? "visible" : "hidden"} // Animate when in view
+                                variants={itemVariants} // Use item variants
+                                transition={{ delay: 0.3 + index * 0.1 }} // Staggered reveal
                             >
-                                <span className="mt-0.5 h-4 w-4 shrink-0 text-neon-green">{item.icon}</span>
+                                <span className="mt-0.5 h-4 w-4 shrink-0 text-neon-green">{item.icon}</span> {/* Render Lucide icon component */}
                                 <span>{item.label}</span>
                             </motion.li>
                         ))}
@@ -119,14 +120,20 @@ const SparkCallHero: React.FC = () => {
 
                 {/* Right Visual Area - Spark Call Mockup */}
                 <motion.div
-                    className="relative w-full h-[500px] flex flex-col justify-center items-center rounded-2xl overflow-hidden bg-dark-charcoal/70 border border-electric-violet/30 shadow-xl"
+                    className="relative w-full h-[500px] flex flex-col justify-center items-center rounded-2xl overflow-hidden bg-dark-charcoal/70 border border-electric-violet/30 shadow-xl backdrop-blur-md"
                     variants={containerVariants}
                     transition={{ delay: 0.4 }}
                 >
                     {/* Video Streams Placeholder */}
-                    <div className="absolute inset-0 flex items-center justify-center gap-4 p-4">
-                        <div className="flex-1 bg-gray-700 h-full rounded-lg flex items-center justify-center text-text-dark">Opponent Stream</div>
-                        <div className="absolute bottom-8 right-8 w-1/4 h-1/4 bg-gray-800 rounded-lg flex items-center justify-center text-text-dark border-2 border-neon-green">Your Stream</div>
+                    <div className="absolute inset-0 flex items-center justify-center gap-4 p-4 z-0">
+                        {/* Opponent Stream Placeholder with Glassmorphism */}
+                        <div className="flex-1 h-full rounded-lg bg-white/5 backdrop-blur-sm flex items-center justify-center text-text-dark border border-white/10 shadow-inner">
+                            <span className="text-sm text-white/50">Opponent Stream</span>
+                        </div>
+                        {/* Your Stream Placeholder with Glassmorphism */}
+                        <div className="absolute bottom-8 right-8 w-1/4 h-1/4 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center text-text-dark border-2 border-neon-green shadow-lg">
+                            <span className="text-xs text-white/70">Your Stream</span>
+                        </div>
                     </div>
 
                     {/* Timer Display */} 
@@ -136,7 +143,7 @@ const SparkCallHero: React.FC = () => {
                         animate={inView ? "pulse" : "initial"}
                         variants={timerVariants}
                     >
-                        30s
+                        45s {/* Start at 45 seconds for cinematic effect */}
                     </motion.div>
 
                     {/* Orb Convergence Indicator */}
@@ -170,10 +177,10 @@ const SparkCallHero: React.FC = () => {
 
                     {/* Controls Placeholder */}
                     <div className="absolute bottom-4 z-50 flex gap-4 bg-dark-charcoal/50 backdrop-blur-md rounded-full px-6 py-3 border border-white/10">
-                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-white/20 text-white text-xl">🎤</motion.button>
-                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-white/20 text-white text-xl">📹</motion.button>
-                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-fiery-orange text-white text-xl">📞</motion.button>
-                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-neon-green text-white text-xl">➡️</motion.button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-white/20 text-white text-xl"><Mic className="w-6 h-6" /></motion.button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-white/20 text-white text-xl"><Video className="w-6 h-6" /></motion.button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-fiery-orange text-white text-xl"><PhoneOff className="w-6 h-6" /></motion.button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-neon-green text-white text-xl"><ArrowRight className="w-6 h-6" /></motion.button>
                     </div>
                 </motion.div>
             </motion.div>

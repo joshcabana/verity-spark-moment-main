@@ -39,8 +39,8 @@ const HowSparksWork: React.FC = () => {
     const cardHoverVariants = {
         hover: {
             scale: 1.03,
-            y: -8,
-            boxShadow: "0 15px 40px rgba(255, 69, 0, 0.4)",
+            y: -12,
+            boxShadow: "0 20px 50px rgba(236, 72, 153, 0.6), 0 0 15px rgba(255, 69, 0, 0.8)",
             transition: { duration: 0.3 }
         },
         tap: {
@@ -58,7 +58,7 @@ const HowSparksWork: React.FC = () => {
                 className="max-w-6xl mx-auto text-center"
             >
                 <motion.h2
-                    className="font-montserrat text-5xl text-neon-green drop-shadow-neon mb-16"
+                    className="font-montserrat text-6xl text-gradient-electric drop-shadow-neon mb-16"
                     variants={itemVariants}
                 >
                     How Sparks Work
@@ -72,7 +72,7 @@ const HowSparksWork: React.FC = () => {
                         <motion.article
                             key={index}
                             className="bg-electric-violet/10 backdrop-blur-md rounded-2xl border border-electric-violet/20 p-8 shadow-lg transition-all duration-300 transform"
-                            variants={itemVariants}
+                            variants={{ ...itemVariants, ...cardHoverVariants }}
                             whileHover="hover"
                             whileTap="tap"
                             custom={index} // Pass index as custom prop for potential staggered hover effects

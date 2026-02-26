@@ -145,8 +145,24 @@ export default {
       dropShadow: {
         neon: '0 0 25px rgba(57,255,20,0.9)',
         electric: '0 0 15px rgba(138,43,226,0.7)',
-      }
+      },
+      // Custom text gradients
+      backgroundImage: {
+        'text-gradient-electric': 'linear-gradient(to right, #39FF14, #8A2BE2)',
+      },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [
+    tailwindcssAnimate,
+    function({ addUtilities, theme }: { addUtilities: (utilities: Record<string, Record<string, string>>) => void, theme: (path: string) => string }) {
+      const newUtilities = {
+        '.text-gradient-electric': {
+          backgroundImage: theme('backgroundImage.text-gradient-electric'),
+          '-webkit-background-clip': 'text',
+          '-webkit-text-fill-color': 'transparent',
+        },
+      };
+      addUtilities(newUtilities);
+    }
+  ],
 } satisfies Config;

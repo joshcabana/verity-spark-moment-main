@@ -71,19 +71,19 @@ const SafetyWaitlistSection: React.FC = () => {
 
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15 } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 80, damping: 15 } },
     };
 
     const cardVariants = {
         hidden: { opacity: 0, scale: 0.9 },
-        visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 100, damping: 15 } },
+        visible: { opacity: 1, scale: 1, transition: { type: "spring" as const, stiffness: 100, damping: 15 } },
     };
 
     const fomoVariants = {
         pulse: {
             scale: [1, 1.05, 1],
             opacity: [1, 0.9, 1],
-            transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+            transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" as const }
         }
     };
 

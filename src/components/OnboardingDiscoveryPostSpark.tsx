@@ -37,12 +37,12 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
 
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15 } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 80, damping: 15 } },
     };
 
     const stepVariants = {
         hidden: { opacity: 0, scale: 0.9 },
-        visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 100, damping: 15 } },
+        visible: { opacity: 1, scale: 1, transition: { type: "spring" as const, stiffness: 100, damping: 15 } },
     };
 
     const ctaButtonVariants = {
@@ -69,14 +69,14 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
 
     const subTextPulseVariants = {
         hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { delay: 0.5, duration: 1, repeat: Infinity, repeatType: "reverse" } },
+        visible: { opacity: 1, transition: { delay: 0.5, duration: 1, repeat: Infinity, repeatType: "reverse" as const } },
     };
 
     const arrowVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
             opacity: 0.6, y: 0,
-            transition: { type: "spring", stiffness: 100, damping: 10, delay: 0.5 }
+            transition: { type: "spring" as const, stiffness: 100, damping: 10, delay: 0.5 }
         },
     };
 

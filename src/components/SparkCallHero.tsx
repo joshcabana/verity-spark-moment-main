@@ -11,24 +11,24 @@ const SparkCallHero: React.FC = () => {
 
     const containerVariants = {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15, delay: 0.2 } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 80, damping: 15, delay: 0.2 } },
     };
 
     const itemVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 15 } },
     };
 
     const timerVariants = {
         initial: { opacity: 0, scale: 0.8 },
         animate: {
             opacity: 1, scale: 1,
-            transition: { type: "spring", stiffness: 100, damping: 15 }
+            transition: { type: "spring" as const, stiffness: 100, damping: 15 }
         },
         pulse: {
             scale: [1, 1.05, 1],
             opacity: [1, 0.9, 1],
-            transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+            transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" as const }
         }
     };
 
@@ -37,18 +37,18 @@ const SparkCallHero: React.FC = () => {
         converge: {
             scale: [0.1, 1.5, 0.9], // More dramatic growth and subtle shrink
             opacity: [0, 1, 0.7], // Hold opacity slightly longer for reveal
-            transition: { duration: 1.2, ease: "easeOut" } // Slightly longer, smoother transition
+            transition: { duration: 1.2, ease: "easeOut" as const } // Slightly longer, smoother transition
         },
     };
 
     const flashVariants = {
         hidden: { opacity: 0 },
-        reveal: { opacity: [0, 1, 0], transition: { duration: 0.4, ease: "easeOut", delay: 0.9 } }, // Slightly longer, delayed flash
+        reveal: { opacity: [0, 1, 0], transition: { duration: 0.4, ease: "easeOut" as const, delay: 0.9 } }, // Slightly longer, delayed flash
     };
 
     const messageVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15, delay: 1 } }, // Adjusted delay
+        visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 15, delay: 1 } }, // Adjusted delay
     };
 
     const controlButtonVariants = {

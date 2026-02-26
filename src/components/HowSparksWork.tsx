@@ -33,7 +33,7 @@ const HowSparksWork: React.FC = () => {
 
     const itemVariants = {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 0.7 } }, // Spring physics
+        visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 15, duration: 0.7 } }, // Spring physics
     };
 
     const cardHoverVariants = {

@@ -30,3 +30,4 @@ dist-ssr
 supabase/.temp/
 security/current-prod-audit.json
 .cache/
+.npm-cache/

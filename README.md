@@ -1,17 +1,40 @@
-# Verity
+# Verity: Real Eyes. Real Spark.
 
-Verity is an anti-swipe dating app built around short, anonymous live video calls.
+Verity is an anti-swipe dating app reimagined for a cinematic, captivating, and innovative experience. Built around short, anonymous live video "Sparks," our mission is to deliver authentic connections with world-class design and performance.
 
 - Production app: <https://verity-spark-moment-main.vercel.app/>
 - Supabase project ref: `nhpbxlvogqnqutmflwlk`
 
-## Stack
+## Design Philosophy: Electric Bloom
 
-- Vite + React + TypeScript
-- Tailwind + shadcn/ui
-- Supabase (Auth, Postgres, Realtime, Edge Functions, Storage)
-- Agora RTC
-- Stripe Checkout + Billing Portal
+We've transformed Verity from a functional MVP into a premium, magnetically addictive experience. The "Electric Bloom" design language embraces:
+
+*   **Cinematic Dark Aesthetic:** Deep blacks, electric violets, neon greens, and fiery oranges create a dynamic, immersive visual environment.
+*   **Premium Intimacy:** Glassmorphism layers and subtle micro-depth effects provide a sophisticated, tactile feel.
+*   **Captivating Motion System:** Leveraging Framer Motion for fluid scroll-triggered animations, subtle particle systems powered by `react-tsparticles`, dynamic entrance effects, and engaging micro-interactions across every element.
+*   **Custom Typography & Branding:** A curated typography scale (`Montserrat` for impact, `Nunito` for readability) paired with a striking new logo to reinforce the "VERITY: Real Eyes. Real Spark." brand.
+
+## Key Components & Features (Rebuilt):
+
+Our frontend has been rebuilt with a focus on user experience and visual storytelling:
+
+*   **HeroSection:** The captivating entry point, featuring a dynamic video background, an advanced particle system, and Framer Motion-driven entrance animations.
+*   **HowSparksWork:** Visually engaging breakdown of the Spark process, using animated elements to explain the flow.
+*   **SparkCallHero:** A mock-up of the core 45-second Spark call interface, designed to reduce anxiety and maximize magic with dynamic timers, orb convergence effects, and animated reveals.
+*   **OnboardingDiscoveryPostSpark:** Guides users through their journey with Verity, from initial setup to matching and post-Spark actions, all with fluid animations and clear calls to action.
+*   **SafetyWaitlistSection:** A dual-purpose section emphasizing robust safety and trust features, paired with a FOMO-driven private beta waitlist system with dynamic countdowns and interactive elements.
+
+## Technical Stack & Enhancements
+
+-   **Vite + React + TypeScript:** Modern and performant frontend stack.
+-   **Tailwind CSS + shadcn/ui:** Utility-first CSS framework with a custom advanced component library and design system (defined in `tailwind.config.ts`).
+-   **Framer Motion:** Integrated for all major animations and micro-interactions, creating a buttery smooth user experience.
+-   **react-tsparticles:** Used for subtle, dynamic particle effects to enhance the cinematic aesthetic.
+-   **Supabase:** (Auth, Postgres, Realtime, Edge Functions, Storage) for backend services.
+-   **Agora RTC:** For real-time video communication (core Spark call).
+-   **Stripe Checkout + Billing Portal:** For payment processing.
+-   **Performance Optimizations:** Code splitting (for Agora, Framer Motion, tsparticles), responsive design, and PWA-ready considerations (with potential for full `vite-plugin-pwa` integration).
+-   **Video Optimization:** Placeholder videos are in place, with the intention to replace them with highly optimized, looping video assets for production.
 
 ## Local Development
 
@@ -58,10 +81,10 @@ npm run pilot:run:daily
 
 ### Documents
 
-- [PILOT-QUICKSTART.md](PILOT-QUICKSTART.md) — 30-minute onboarding guide
-- [docs/pilot/ACTIVATION-CHECKLIST.md](docs/pilot/ACTIVATION-CHECKLIST.md) — Detailed steps
-- [docs/pilot/tracker.md](docs/pilot/tracker.md) — Live metrics & decisions
-- [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md) — Risk register & GTM
+-   [PILOT-QUICKSTART.md](PILOT-QUICKSTART.md) — 30-minute onboarding guide
+-   [docs/pilot/ACTIVATION-CHECKLIST.md](docs/pilot/ACTIVATION-CHECKLIST.md) — Detailed steps
+-   [docs/pilot/tracker.md](docs/pilot/tracker.md) — Live metrics & decisions
+-   [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md) — Risk register & GTM
 
 ## CI Package Manager Contract
 
@@ -75,23 +98,23 @@ Every push to `main` builds and deploys the site to Vercel production.
 
 One-time setup in GitHub:
 
-1. Add repository secrets in `Settings -> Secrets and variables -> Actions -> Secrets`:
-   - `VERCEL_TOKEN`
-   - `VERCEL_ORG_ID`
-   - `VERCEL_PROJECT_ID`
-2. Add repository variables in `Settings -> Secrets and variables -> Actions -> Variables`:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_PUBLISHABLE_KEY`
-   - Optional pricing/project vars used by the build (`VITE_*` in workflow).
+1.  Add repository secrets in `Settings -> Secrets and variables -> Actions -> Secrets`:
+    -   `VERCEL_TOKEN`
+    -   `VERCEL_ORG_ID`
+    -   `VERCEL_PROJECT_ID`
+2.  Add repository variables in `Settings -> Secrets and variables -> Actions -> Variables`:
+    -   `VITE_SUPABASE_URL`
+    -   `VITE_SUPABASE_PUBLISHABLE_KEY`
+    -   Optional pricing/project vars used by the build (`VITE_*` in workflow).
 
 Current production host:
 
-- `https://verity-spark-moment-main.vercel.app`
+-   `https://verity-spark-moment-main.vercel.app`
 
 Set Supabase Edge Function redirect secrets to keep Stripe return URLs on this host:
 
-- `APP_BASE_URL=https://verity-spark-moment-main.vercel.app`
-- `APP_ALLOWED_ORIGINS=https://verity-spark-moment-main.vercel.app`
+-   `APP_BASE_URL=https://verity-spark-moment-main.vercel.app`
+-   `APP_ALLOWED_ORIGINS=https://verity-spark-moment-main.vercel.app`
 
 ## Quality Checks
 
@@ -102,7 +125,11 @@ npm run build
 npm run audit:prod:check
 ```
 
-## Supabase Rollout Flow
+### Note on `react-tsparticles` deprecation warnings:
+
+During development, `npm install` for `react-tsparticles` and `tsparticles` showed deprecation warnings, recommending `@tsparticles/react` and `@tsparticles/engine`. This will be addressed in a future technical upgrade, ensuring full compatibility with the latest versions.
+
+## Supabase Rollout Flow (Operational Details)
 
 ### 1) Preflight
 
@@ -139,64 +166,64 @@ See [docs/security-verification.md](docs/security-verification.md) and [docs/run
 
 ### Core
 
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
+-   `SUPABASE_URL`
+-   `SUPABASE_ANON_KEY`
+-   `SUPABASE_SERVICE_ROLE_KEY`
 
 ### AI moderation
 
-- `AI_API_KEY` (preferred)
-- `LOVABLE_API_KEY` (legacy alias accepted)
-- Optional:
-  - `AI_API_BASE_URL`
-  - `AI_API_MODEL`
+-   `AI_API_KEY` (preferred)
+-   `LOVABLE_API_KEY` (legacy alias accepted)
+-   Optional:
+    -   `AI_API_BASE_URL`
+    -   `AI_API_MODEL`
 
 ### Stripe
 
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET`
-- Optional for price/config cutover:
-  - `STRIPE_PRICE_TOKENS_10`
-  - `STRIPE_PRICE_TOKENS_15`
-  - `STRIPE_PRICE_TOKENS_30`
-  - `STRIPE_PRICE_VERITY_PASS`
-  - `STRIPE_SUBSCRIPTION_PRICE_IDS` (comma-separated)
-  - `STRIPE_TOKENS_10_AMOUNT`
-  - `STRIPE_TOKENS_15_AMOUNT`
-  - `STRIPE_TOKENS_30_AMOUNT`
-  - `STRIPE_TOKEN_PACK_MAP_JSON` (JSON map override)
-  - `APP_BASE_URL` (domain fallback for checkout/portal redirects)
-  - `APP_ALLOWED_ORIGINS` (comma-separated redirect allowlist for checkout/portal)
+-   `STRIPE_SECRET_KEY`
+-   `STRIPE_WEBHOOK_SECRET`
+-   Optional for price/config cutover:
+    -   `STRIPE_PRICE_TOKENS_10`
+    -   `STRIPE_PRICE_TOKENS_15`
+    -   `STRIPE_PRICE_TOKENS_30`
+    -   `STRIPE_PRICE_VERITY_PASS`
+    -   `STRIPE_SUBSCRIPTION_PRICE_IDS` (comma-separated)
+    -   `STRIPE_TOKENS_10_AMOUNT`
+    -   `STRIPE_TOKENS_15_AMOUNT`
+    -   `STRIPE_TOKENS_30_AMOUNT`
+    -   `STRIPE_TOKEN_PACK_MAP_JSON` (JSON map override)
+    -   `APP_BASE_URL` (domain fallback for checkout/portal redirects)
+    -   `APP_ALLOWED_ORIGINS` (comma-separated redirect allowlist for checkout/portal)
 
 Redirect origin behavior:
 
-- If request `Origin` is in `APP_ALLOWED_ORIGINS`, Stripe return URLs use that origin.
-- If request `Origin` is missing or untrusted, functions fall back to `APP_BASE_URL`.
-- If `APP_BASE_URL` is unset/invalid, functions fall back to `https://verity-spark-moment-main.vercel.app`.
+-   If request `Origin` is in `APP_ALLOWED_ORIGINS`, Stripe return URLs use that origin.
+-   If request `Origin` is missing or untrusted, functions fall back to `APP_BASE_URL`.
+-   If `APP_BASE_URL` is unset/invalid, functions fall back to `https://verity-spark-moment-main.vercel.app`.
 
 ## Frontend Environment Variables
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_PUBLISHABLE_KEY`
-- `VITE_SUPABASE_PROJECT_ID`
-- Optional Stripe UI configuration:
-  - `VITE_DISPLAY_CURRENCY` (default `AUD`)
-  - `VITE_STRIPE_PRICE_TOKENS_10`
-  - `VITE_STRIPE_PRICE_TOKENS_15`
-  - `VITE_STRIPE_PRICE_TOKENS_30`
-  - `VITE_STRIPE_PRICE_VERITY_PASS`
-  - `VITE_PRICE_PACK_10_AMOUNT`
-  - `VITE_PRICE_PACK_15_AMOUNT`
-  - `VITE_PRICE_PACK_30_AMOUNT`
-  - `VITE_PRICE_VERITY_PASS_AMOUNT`
+-   `VITE_SUPABASE_URL`
+-   `VITE_SUPABASE_PUBLISHABLE_KEY`
+-   `VITE_SUPABASE_PROJECT_ID`
+-   Optional Stripe UI configuration:
+    -   `VITE_DISPLAY_CURRENCY` (default `AUD`)
+    -   `VITE_STRIPE_PRICE_TOKENS_10`
+    -   `VITE_STRIPE_PRICE_TOKENS_15`
+    -   `VITE_STRIPE_PRICE_TOKENS_30`
+    -   `VITE_STRIPE_PRICE_VERITY_PASS`
+    -   `VITE_PRICE_PACK_10_AMOUNT`
+    -   `VITE_PRICE_PACK_15_AMOUNT`
+    -   `VITE_PRICE_PACK_30_AMOUNT`
+    -   `VITE_PRICE_VERITY_PASS_AMOUNT`
 
 ## Pilot Operations (Canberra + Sydney)
 
 ### Launch packet + tracker
 
-- Launch packet: [docs/pilot/launch-packet.md](docs/pilot/launch-packet.md)
-- Shared tracker: [docs/pilot/tracker.md](docs/pilot/tracker.md)
-- Anti-gravity output template: [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md)
+-   Launch packet: [docs/pilot/launch-packet.md](docs/pilot/launch-packet.md)
+-   Shared tracker: [docs/pilot/tracker.md](docs/pilot/tracker.md)
+-   Anti-gravity output template: [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md)
 
 ### Build Wave 1 invite plan (20 users/city, 10/day cap)
 
@@ -273,18 +300,18 @@ npm run pilot:reports:validate -- --date YYYY-MM-DD
 
 ## Launch Checklist
 
-1. `supabase:secrets:check --mode full` passes.
-2. `scripts/deploy-supabase.sh` succeeds.
-3. Live smoke + live auth E2E pass.
-4. Manual two-device call flow passes (`onboarding -> call -> spark -> chat -> purchase`).
-5. Stripe live-mode keys/webhook configured and validated.
-6. Custom domain connected and verified.
-7. Pilot daily ops report saved under `reports/pilot/`.
-8. Gate A/B/Final decision reports generated and reviewed.
+1.  `supabase:secrets:check --mode full` passes.
+2.  `scripts/deploy-supabase.sh` succeeds.
+3.  Live smoke + live auth E2E pass.
+4.  Manual two-device call flow passes (`onboarding -> call -> spark -> chat -> purchase`).
+5.  Stripe live-mode keys/webhook configured and validated.
+6.  Custom domain connected and verified.
+7.  Pilot daily ops report saved under `reports/pilot/`.
+8.  Gate A/B/Final decision reports generated and reviewed.
 
 ## Rollback Defaults
 
-1. Re-deploy last known-good function bundle.
-2. Restore prior Stripe key/webhook secrets.
-3. Disable promotional traffic and keep pilot-only access.
-4. Review `runtime_alert_events` and `stripe_events` before re-attempting rollout.
+1.  Re-deploy last known-good function bundle.
+2.  Restore prior Stripe key/webhook secrets.
+3.  Disable promotional traffic and keep pilot-only access.
+4.  Review `runtime_alert_events` and `stripe_events` before re-attempting rollout.

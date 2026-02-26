@@ -40,7 +40,7 @@ const HeroSection: React.FC = () => {
                 transition={{ delay: 0.5 }}
             >
                 <motion.img
-                    src="/public/verity_logo.png"
+                    src="/public/verity_logo.webp"
                     alt="VERITY Logo"
                     className="max-w-xs mx-auto mb-5"
                     initial="hidden"

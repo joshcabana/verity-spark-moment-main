@@ -90,7 +90,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                 className="max-w-4xl mx-auto rounded-2xl p-10 shadow-2xl bg-gradient-to-br from-dark-charcoal to-dark-charcoal/50 border border-electric-violet/20"
             >
                 <motion.h2
-                    className="font-montserrat text-6xl text-gradient-electric drop-shadow-neon mb-16 text-center"
+                    className="font-montserrat text-4xl md:text-6xl text-gradient-electric drop-shadow-neon mb-16 text-center"
                     variants={sectionVariants}
                 >
                     Your Journey with VERITY

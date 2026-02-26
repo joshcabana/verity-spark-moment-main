@@ -49,7 +49,7 @@ const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambie
             },
             particles: {
                 color: {
-                    value: ["hsl(var(--verity-gold) / 0.1)", "hsl(var(--verity-gold-dim) / 0.05)", "hsl(var(--background) / 0.2)"], // Luxury subtle palette
+                    value: ["hsl(var(--verity-gold) / 0.1)", "hsl(var(--verity-gold-dim) / 0.05)", "hsl(0 0% 100% / 0.08)", "hsl(45 10% 92% / 0.08)"], // Luxury subtle palette
                 },
                 links: {
                     color: "hsl(var(--foreground) / 0.1)", // Subtle links
@@ -95,7 +95,7 @@ const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambie
             case "converging":
                 baseOptions.particles.move.direction = "right";
                 baseOptions.particles.move.speed = speed * 2;
-                baseOptions.particles.color.value = ["hsl(var(--verity-gold) / 0.2)", "hsl(var(--verity-gold-dim) / 0.1)"]; // Converging luxury gold
+                baseOptions.particles.color.value = ["hsl(var(--verity-gold) / 0.2)", "hsl(var(--verity-gold-dim) / 0.1)", "hsl(0 0% 100% / 0.1)"]; // Converging luxury gold
                 baseOptions.interactivity.modes.repulse.distance = 50;
                 baseOptions.interactivity.modes.repulse.duration = 0.8;
                 break;

@@ -26,7 +26,7 @@ const ElectricCursorTrail: React.FC = () => {
       {trails.map((trail) => (
         <motion.div
           key={trail.id}
-          className="absolute rounded-full bg-electric-violet opacity-70 blur-md"
+          className="absolute rounded-full bg-luxury-gold/70 blur-md"
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 0.7, scale: 1, x: trail.x, y: trail.y }}
           exit={{ opacity: 0, scale: 0 }}

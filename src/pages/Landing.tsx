@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AppNav from "@/components/AppNav";
 import { motion } from "framer-motion"; // Import motion for animations
 import HeroSection from "@/components/HeroSection";
+import ElectricCursorTrail from "@/components/ElectricCursorTrail"; // Import ElectricCursorTrail
 import HowSparksWork from "@/components/HowSparksWork";
 import OnboardingDiscoveryPostSpark from "@/components/OnboardingDiscoveryPostSpark";
 import SafetyWaitlistSection from "@/components/SafetyWaitlistSection";
@@ -23,6 +24,7 @@ const Landing = () => {
       <SparkCallHero />
       <OnboardingDiscoveryPostSpark />
       <SafetyWaitlistSection />
+      <ElectricCursorTrail /> {/* Add the cursor trail component */}
 
       {/* Ready to Unlock More Sparks CTA Section */}
       <motion.section

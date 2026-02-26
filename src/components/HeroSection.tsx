@@ -5,12 +5,12 @@ import SparkParticleSystem from "./SparkParticleSystem";
 const HeroSection: React.FC = () => {
     const fadeInSlideUpVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: "easeOut" } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15 } },
     };
 
     const fadeInVariants = {
         hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { duration: 1, ease: "easeOut" } },
+        visible: { opacity: 1, transition: { type: "spring", stiffness: 80, damping: 15 } },
     };
 
     const buttonVariants = {

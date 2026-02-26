@@ -74,18 +74,18 @@ const SparkCallHero: React.FC = () => {
                 {/* Left Content Area */}
                 <motion.div variants={containerVariants}>
                     <p className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1 text-xs uppercase tracking-[0.2em] text-white/65">
-                        <Clock className="h-3.5 w-3.5 text-neon-green" />
+                        <Clock className="h-3.5 w-3.5 text-luxury-gold-light" />
                         Cinematic Spark Call
                     </p>
                     <h2 className="mt-4 font-montserrat text-6xl text-gradient-gold md:text-7xl">
                         The 45-second moment that decides everything
                     </h2>
-                    <p className="mt-5 text-lg leading-relaxed text-text-medium">
+                    <p className="mt-5 text-lg leading-relaxed text-light-grey">
                         Orb convergence at 15 seconds triggers a reveal flash and confetti burst. The flow is designed to
                         reduce anxiety, increase clarity, and create one decisive mutual yes/no outcome.
                     </p>
 
-                    <ul className="mt-6 space-y-3 text-sm text-text-medium">
+                    <ul className="mt-6 space-y-3 text-sm text-light-grey">
                         {[{
                             icon: <CheckCircle2 className="w-4 h-4" />,
                             label: "Circular gradient timer with high-contrast readability"
@@ -111,7 +111,7 @@ const SparkCallHero: React.FC = () => {
                                 variants={itemVariants} // Use item variants
                                 transition={{ delay: 0.3 + index * 0.1 }} // Staggered reveal
                             >
-                                <span className="mt-0.5 h-4 w-4 shrink-0 text-neon-green">{item.icon}</span> {/* Render Lucide icon component */}
+                                <span className="mt-0.5 h-4 w-4 shrink-0 text-luxury-gold-light">{item.icon}</span> {/* Render Lucide icon component */}
                                 <span>{item.label}</span>
                             </motion.li>
                         ))}
@@ -150,7 +150,7 @@ const SparkCallHero: React.FC = () => {
                     <motion.div
                         className="absolute w-40 h-40 rounded-full z-20 pointer-events-none"
                         style={{
-                            background: "radial-gradient(circle, hsla(var(--verity-gold), 0.6) 0%, transparent 70%)"
+                            background: `radial-gradient(circle, hsla(var(--verity-gold), 0.6) 0%, transparent 70%)`
                         }}
                         initial="hidden"
                         animate={inView ? "converge" : "hidden"} // Will be triggered by time in actual app

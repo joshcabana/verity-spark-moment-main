@@ -48,7 +48,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
     const ctaButtonVariants = {
         hover: {
             scale: 1.05,
-            boxShadow: "0 10px 30px rgba(255, 69, 0, 0.6)",
+            boxShadow: "0 10px 30px rgba(229,165,25,0.5)", // Gold shadow
             transition: { duration: 0.3 }
         },
         tap: {
@@ -59,7 +59,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
     const actionButtonVariants = {
         hover: {
             scale: 1.05,
-            boxShadow: "0 8px 25px rgba(255, 69, 0, 0.5)",
+            boxShadow: "0 8px 25px rgba(229,165,25,0.4)", // Gold shadow
             transition: { duration: 0.3 }
         },
         tap: {
@@ -81,16 +81,16 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
     };
 
     return (
-        <section className="py-20 px-6 bg-dark-charcoal text-text-light">
+        <section className="py-20 px-6 bg-background text-foreground">
             <motion.div
                 ref={ref}
                 initial="hidden"
                 animate={inView ? "visible" : "hidden"}
                 variants={sectionVariants}
-                className="max-w-4xl mx-auto rounded-2xl p-10 shadow-2xl bg-gradient-to-br from-dark-charcoal to-dark-charcoal/50 border border-electric-violet/20"
+                className="max-w-4xl mx-auto rounded-2xl p-10 shadow-2xl bg-gradient-to-br from-background to-background/50 border border-luxury-gold/15"
             >
                 <motion.h2
-                    className="font-montserrat text-4xl md:text-6xl text-gradient-electric drop-shadow-neon mb-16 text-center"
+                    className="font-montserrat text-4xl md:text-6xl text-gradient-gold drop-shadow-gold mb-16 text-center"
                     variants={sectionVariants}
                 >
                     Your Journey with VERITY
@@ -100,25 +100,25 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                     {flowStepsContent.map((step, index) => (
                         <React.Fragment key={index}>
                             <motion.div
-                                className="bg-electric-violet/10 backdrop-blur-md rounded-xl border border-electric-violet/20 p-8 shadow-lg flex flex-col items-center text-center"
+                                className="bg-luxury-gold/5 backdrop-blur-md rounded-xl border border-luxury-gold/15 p-8 shadow-lg flex flex-col items-center text-center"
                                 variants={stepVariants}
                                 initial="hidden"
                                 animate={inView ? "visible" : "hidden"}
                                 transition={{ delay: 0.3 + index * 0.2 }}
                             >
-                                <div className="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-electric-violet to-fiery-orange rounded-full flex justify-center items-center text-white shadow-xl">
+                                <div className="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-luxury-gold to-luxury-gold-deep rounded-full flex justify-center items-center text-white shadow-xl">
                                     {step.icon}
                                 </div>
-                                <h3 className="font-montserrat text-3xl text-fiery-orange drop-shadow-electric mb-4">
+                                <h3 className="font-montserrat text-3xl text-luxury-gold drop-shadow-gold-soft mb-4">
                                     {step.title}
                                 </h3>
-                                <p className="text-text-medium text-lg max-w-2xl">
+                                <p className="text-light-grey text-lg max-w-2xl">
                                     {step.body}
                                 </p>
                                 {step.cta && (
                                     <motion.a
                                         href="#"
-                                        className="mt-6 inline-block bg-gradient-to-r from-electric-violet to-fiery-orange text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300"
+                                        className="mt-6 inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-black text-lg font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300"
                                         variants={ctaButtonVariants}
                                         whileHover="hover"
                                         whileTap="tap"
@@ -128,7 +128,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                                 )}
                                 {step.subText && (
                                     <motion.p
-                                        className="mt-5 text-neon-green font-semibold text-lg"
+                                        className="mt-5 text-luxury-gold-light font-semibold text-lg"
                                         variants={subTextPulseVariants}
                                         initial="hidden"
                                         animate={inView ? "visible" : "hidden"}
@@ -142,7 +142,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                                             <motion.a
                                                 key={actionIndex}
                                                 href={action.href}
-                                                className="inline-block bg-gradient-to-r from-electric-violet to-fiery-orange text-white text-md font-bold py-3 px-6 rounded-full shadow-md transition-all duration-300"
+                                                className="inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-black text-md font-bold py-3 px-6 rounded-full shadow-md transition-all duration-300"
                                                 variants={actionButtonVariants}
                                                 whileHover="hover"
                                                 whileTap="tap"
@@ -155,7 +155,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                             </motion.div>
                             {index < flowStepsContent.length - 1 && (
                                 <motion.div
-                                    className="text-electric-violet text-7xl text-center opacity-60"
+                                    className="text-luxury-gold text-7xl text-center opacity-60"
                                     variants={arrowVariants}
                                     initial="hidden"
                                     animate={inView ? "visible" : "hidden"}

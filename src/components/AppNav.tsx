@@ -20,7 +20,7 @@ const AppNav = () => {
   return (
     <nav
       aria-label="Main Navigation"
-      className="fixed bottom-0 left-0 right-0 z-50 border-t border-verity-gold/25 bg-[linear-gradient(180deg,hsl(var(--card)/0.84),hsl(var(--background)/0.96))] backdrop-blur-xl"
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-verity-gold/25 bg-[linear-gradient(180deg,hsl(var(--card)/0.84),hsl(var(--background)/0.96))] backdrop-blur-xl pb-[env(safe-area-inset-bottom)]"
     >
       <ul className="mx-auto flex max-w-lg list-none items-center justify-around px-2 py-2">
         {navItems.map((item) => {

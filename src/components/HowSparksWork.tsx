@@ -58,7 +58,7 @@ const HowSparksWork: React.FC = () => {
                 className="max-w-6xl mx-auto text-center"
             >
                 <motion.h2
-                    className="font-montserrat text-6xl text-gradient-electric drop-shadow-neon mb-16"
+                    className="font-montserrat text-4xl md:text-6xl text-gradient-electric drop-shadow-neon mb-16"
                     variants={itemVariants}
                 >
                     How Sparks Work

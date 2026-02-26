@@ -27,7 +27,7 @@ const HeroSection: React.FC = () => {
 
     return (
         <section className="relative w-full h-screen flex flex-col justify-center items-center text-center overflow-hidden">
-            <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0">
+            <video autoPlay loop muted playsInline preload="auto" className="absolute inset-0 w-full h-full object-cover z-0">
                 <source src="/hero-loop.webm" type="video/webm" />
                 <source src="/hero-loop.mp4" type="video/mp4" />
                 Your browser does not support the video tag.

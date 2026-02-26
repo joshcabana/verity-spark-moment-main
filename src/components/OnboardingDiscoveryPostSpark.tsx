@@ -22,9 +22,9 @@ const flowStepsContent = [
         title: "What Happens After a Spark?",
         body: "If there's a mutual reveal, the connection ignites! You'll have options to connect further, send a message, or simply reflect on the experience. No pressure, just genuine next steps.",
         actions: [
-            { label: "Send a Message", href: "#" },
-            { label: "View Profile", href: "#" },
-            { label: "Spark Again!", href: "#" }
+            { label: "Send a Message" },
+            { label: "View Profile" },
+            { label: "Spark Again!" }
         ]
     },
 ];
@@ -116,15 +116,14 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                                     {step.body}
                                 </p>
                                 {step.cta && (
-                                    <motion.a
-                                        href="#"
-                                        className="mt-6 inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-black text-lg font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300"
+                                    <motion.span
+                                        className="mt-6 inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-black text-lg font-bold py-3 px-8 rounded-full shadow-lg cursor-default"
                                         variants={ctaButtonVariants}
                                         whileHover="hover"
                                         whileTap="tap"
                                     >
                                         {step.cta}
-                                    </motion.a>
+                                    </motion.span>
                                 )}
                                 {step.subText && (
                                     <motion.p
@@ -139,16 +138,15 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                                 {step.actions && (
                                     <div className="mt-6 flex flex-wrap justify-center gap-4">
                                         {step.actions.map((action, actionIndex) => (
-                                            <motion.a
+                                            <motion.span
                                                 key={actionIndex}
-                                                href={action.href}
-                                                className="inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-black text-md font-bold py-3 px-6 rounded-full shadow-md transition-all duration-300"
+                                                className="inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-black text-md font-bold py-3 px-6 rounded-full shadow-md cursor-default"
                                                 variants={actionButtonVariants}
                                                 whileHover="hover"
                                                 whileTap="tap"
                                             >
                                                 {action.label}
-                                            </motion.a>
+                                            </motion.span>
                                         ))}
                                     </div>
                                 )}

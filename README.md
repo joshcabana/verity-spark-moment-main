@@ -82,10 +82,10 @@ npm run pilot:run:daily
 
 ### Documents
 
--   [PILOT-QUICKSTART.md](PILOT-QUICKSTART.md) — 30-minute onboarding guide
--   [docs/pilot/ACTIVATION-CHECKLIST.md](docs/pilot/ACTIVATION-CHECKLIST.md) — Detailed steps
--   [docs/pilot/tracker.md](docs/pilot/tracker.md) — Live metrics & decisions
--   [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md) — Risk register & GTM
+- [PILOT-QUICKSTART.md](PILOT-QUICKSTART.md) — 30-minute onboarding guide
+- [docs/pilot/ACTIVATION-CHECKLIST.md](docs/pilot/ACTIVATION-CHECKLIST.md) — Detailed steps
+- [docs/pilot/tracker.md](docs/pilot/tracker.md) — Live metrics & decisions
+- [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md) — Risk register & GTM
 
 ## CI Package Manager Contract
 
@@ -99,23 +99,23 @@ Every push to `main` builds and deploys the site to Vercel production.
 
 One-time setup in GitHub:
 
-1.  Add repository secrets in `Settings -> Secrets and variables -> Actions -> Secrets`:
-    -   `VERCEL_TOKEN`
-    -   `VERCEL_ORG_ID`
-    -   `VERCEL_PROJECT_ID`
-2.  Add repository variables in `Settings -> Secrets and variables -> Actions -> Variables`:
-    -   `VITE_SUPABASE_URL`
-    -   `VITE_SUPABASE_PUBLISHABLE_KEY`
-    -   Optional pricing/project vars used by the build (`VITE_*` in workflow).
+1. Add repository secrets in `Settings -> Secrets and variables -> Actions -> Secrets`:
+   - `VERCEL_TOKEN`
+   - `VERCEL_ORG_ID`
+   - `VERCEL_PROJECT_ID`
+2. Add repository variables in `Settings -> Secrets and variables -> Actions -> Variables`:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_PUBLISHABLE_KEY`
+   - Optional pricing/project vars used by the build (`VITE_*` in workflow).
 
 Current production host:
 
--   `https://verity-spark-moment-main.vercel.app`
+- `https://verity-spark-moment-main.vercel.app`
 
 Set Supabase Edge Function redirect secrets to keep Stripe return URLs on this host:
 
--   `APP_BASE_URL=https://verity-spark-moment-main.vercel.app`
--   `APP_ALLOWED_ORIGINS=https://verity-spark-moment-main.vercel.app`
+- `APP_BASE_URL=https://verity-spark-moment-main.vercel.app`
+- `APP_ALLOWED_ORIGINS=https://verity-spark-moment-main.vercel.app`
 
 ## Quality Checks
 
@@ -126,7 +126,7 @@ npm run build
 npm run audit:prod:check
 ```
 
-### Note on `react-tsparticles` deprecation warnings:
+### Note on `react-tsparticles` deprecation warnings
 
 During development, `npm install` for `react-tsparticles` and `tsparticles` showed deprecation warnings, recommending `@tsparticles/react` and `@tsparticles/engine`. This will be addressed in a future technical upgrade, ensuring full compatibility with the latest versions.
 
@@ -167,64 +167,64 @@ See [docs/security-verification.md](docs/security-verification.md) and [docs/run
 
 ### Core
 
--   `SUPABASE_URL`
--   `SUPABASE_ANON_KEY`
--   `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
 ### AI moderation
 
--   `AI_API_KEY` (preferred)
--   `LOVABLE_API_KEY` (legacy alias accepted)
--   Optional:
-    -   `AI_API_BASE_URL`
-    -   `AI_API_MODEL`
+- `AI_API_KEY` (preferred)
+- `LOVABLE_API_KEY` (legacy alias accepted)
+- Optional:
+  - `AI_API_BASE_URL`
+  - `AI_API_MODEL`
 
 ### Stripe
 
--   `STRIPE_SECRET_KEY`
--   `STRIPE_WEBHOOK_SECRET`
--   Optional for price/config cutover:
-    -   `STRIPE_PRICE_TOKENS_10`
-    -   `STRIPE_PRICE_TOKENS_15`
-    -   `STRIPE_PRICE_TOKENS_30`
-    -   `STRIPE_PRICE_VERITY_PASS`
-    -   `STRIPE_SUBSCRIPTION_PRICE_IDS` (comma-separated)
-    -   `STRIPE_TOKENS_10_AMOUNT`
-    -   `STRIPE_TOKENS_15_AMOUNT`
-    -   `STRIPE_TOKENS_30_AMOUNT`
-    -   `STRIPE_TOKEN_PACK_MAP_JSON` (JSON map override)
-    -   `APP_BASE_URL` (domain fallback for checkout/portal redirects)
-    -   `APP_ALLOWED_ORIGINS` (comma-separated redirect allowlist for checkout/portal)
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- Optional for price/config cutover:
+  - `STRIPE_PRICE_TOKENS_10`
+  - `STRIPE_PRICE_TOKENS_15`
+  - `STRIPE_PRICE_TOKENS_30`
+  - `STRIPE_PRICE_VERITY_PASS`
+  - `STRIPE_SUBSCRIPTION_PRICE_IDS` (comma-separated)
+  - `STRIPE_TOKENS_10_AMOUNT`
+  - `STRIPE_TOKENS_15_AMOUNT`
+  - `STRIPE_TOKENS_30_AMOUNT`
+  - `STRIPE_TOKEN_PACK_MAP_JSON` (JSON map override)
+    - `APP_BASE_URL` (domain fallback for checkout/portal redirects)
+  - `APP_ALLOWED_ORIGINS` (comma-separated redirect allowlist for checkout/portal)
 
 Redirect origin behavior:
 
--   If request `Origin` is in `APP_ALLOWED_ORIGINS`, Stripe return URLs use that origin.
--   If request `Origin` is missing or untrusted, functions fall back to `APP_BASE_URL`.
--   If `APP_BASE_URL` is unset/invalid, functions fall back to `https://verity-spark-moment-main.vercel.app`.
+- If request `Origin` is in `APP_ALLOWED_ORIGINS`, Stripe return URLs use that origin.
+- If request `Origin` is missing or untrusted, functions fall back to `APP_BASE_URL`.
+- If `APP_BASE_URL` is unset/invalid, functions fall back to `https://verity-spark-moment-main.vercel.app`.
 
 ## Frontend Environment Variables
 
--   `VITE_SUPABASE_URL`
--   `VITE_SUPABASE_PUBLISHABLE_KEY`
--   `VITE_SUPABASE_PROJECT_ID`
--   Optional Stripe UI configuration:
-    -   `VITE_DISPLAY_CURRENCY` (default `AUD`)
-    -   `VITE_STRIPE_PRICE_TOKENS_10`
-    -   `VITE_STRIPE_PRICE_TOKENS_15`
-    -   `VITE_STRIPE_PRICE_TOKENS_30`
-    -   `VITE_STRIPE_PRICE_VERITY_PASS`
-    -   `VITE_PRICE_PACK_10_AMOUNT`
-    -   `VITE_PRICE_PACK_15_AMOUNT`
-    -   `VITE_PRICE_PACK_30_AMOUNT`
-    -   `VITE_PRICE_VERITY_PASS_AMOUNT`
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `VITE_SUPABASE_PROJECT_ID`
+- Optional Stripe UI configuration:
+  - `VITE_DISPLAY_CURRENCY` (default `AUD`)
+  - `VITE_STRIPE_PRICE_TOKENS_10`
+  - `VITE_STRIPE_PRICE_TOKENS_15`
+  - `VITE_STRIPE_PRICE_TOKENS_30`
+  - `VITE_STRIPE_PRICE_VERITY_PASS`
+  - `VITE_PRICE_PACK_10_AMOUNT`
+  - `VITE_PRICE_PACK_15_AMOUNT`
+  - `VITE_PRICE_PACK_30_AMOUNT`
+  - `VITE_PRICE_VERITY_PASS_AMOUNT`
 
 ## Pilot Operations (Canberra + Sydney)
 
 ### Launch packet + tracker
 
--   Launch packet: [docs/pilot/launch-packet.md](docs/pilot/launch-packet.md)
--   Shared tracker: [docs/pilot/tracker.md](docs/pilot/tracker.md)
--   Anti-gravity output template: [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md)
+- Launch packet: [docs/pilot/launch-packet.md](docs/pilot/launch-packet.md)
+- Shared tracker: [docs/pilot/tracker.md](docs/pilot/tracker.md)
+- Anti-gravity output template: [docs/pilot/anti-gravity-output.md](docs/pilot/anti-gravity-output.md)
 
 ### Build Wave 1 invite plan (20 users/city, 10/day cap)
 
@@ -301,18 +301,18 @@ npm run pilot:reports:validate -- --date YYYY-MM-DD
 
 ## Launch Checklist
 
-1.  `supabase:secrets:check --mode full` passes.
-2.  `scripts/deploy-supabase.sh` succeeds.
-3.  Live smoke + live auth E2E pass.
-4.  Manual two-device call flow passes (`onboarding -> call -> spark -> chat -> purchase`).
-5.  Stripe live-mode keys/webhook configured and validated.
-6.  Custom domain connected and verified.
-7.  Pilot daily ops report saved under `reports/pilot/`.
-8.  Gate A/B/Final decision reports generated and reviewed.
+1. `supabase:secrets:check --mode full` passes.
+2. `scripts/deploy-supabase.sh` succeeds.
+3. Live smoke + live auth E2E pass.
+4. Manual two-device call flow passes (`onboarding -> call -> spark -> chat -> purchase`).
+5. Stripe live-mode keys/webhook configured and validated.
+6. Custom domain connected and verified.
+7. Pilot daily ops report saved under `reports/pilot/`.
+8. Gate A/B/Final decision reports generated and reviewed.
 
 ## Rollback Defaults
 
-1.  Re-deploy last known-good function bundle.
-2.  Restore prior Stripe key/webhook secrets.
-3.  Disable promotional traffic and keep pilot-only access.
-4.  Review `runtime_alert_events` and `stripe_events` before re-attempting rollout.
+1. Re-deploy last known-good function bundle.
+2. Restore prior Stripe key/webhook secrets.
+3. Disable promotional traffic and keep pilot-only access.
+4. Review `runtime_alert_events` and `stripe_events` before re-attempting rollout.

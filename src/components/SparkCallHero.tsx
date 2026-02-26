@@ -10,14 +10,19 @@ const SparkCallHero: React.FC = () => {
 
     const containerVariants = {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut", delay: 0.2 } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15, delay: 0.2 } },
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } },
     };
 
     const timerVariants = {
         initial: { opacity: 0, scale: 0.8 },
         animate: {
             opacity: 1, scale: 1,
-            transition: { duration: 0.5, ease: "easeOut" }
+            transition: { type: "spring", stiffness: 100, damping: 15 }
         },
         pulse: {
             scale: [1, 1.05, 1],
@@ -29,20 +34,31 @@ const SparkCallHero: React.FC = () => {
     const orbVariants = {
         hidden: { scale: 0.1, opacity: 0 },
         converge: {
-            scale: [0.1, 1.2, 1],
+            scale: [0.1, 1.2, 1], // Orb grows and then shrinks slightly
             opacity: [0, 1, 0],
-            transition: { duration: 1, ease: "easeOut", delay: 0.5 }
+            transition: { duration: 1, ease: "easeOut" } // Delay removed, will be dynamic in app
         },
     };
 
     const flashVariants = {
         hidden: { opacity: 0 },
-        reveal: { opacity: [0, 1, 0], transition: { duration: 0.3, ease: "easeOut", delay: 1.5 } },
+        reveal: { opacity: [0, 1, 0], transition: { duration: 0.3, ease: "easeOut", delay: 0.8 } }, // Adjusted delay
     };
 
     const messageVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut", delay: 1.8 } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15, delay: 1 } }, // Adjusted delay
+    };
+
+    const controlButtonVariants = {
+        hover: {
+            scale: 1.1,
+            boxShadow: "0 5px 20px rgba(138,43,226,0.5)",
+            transition: { duration: 0.2 }
+        },
+        tap: {
+            scale: 0.9
+        }
     };
 
     return (
@@ -57,7 +73,7 @@ const SparkCallHero: React.FC = () => {
                 {/* Left Content Area */}
                 <motion.div variants={containerVariants}>
                     <p className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1 text-xs uppercase tracking-[0.2em] text-white/65">
-                        <motion.span className="h-3.5 w-3.5 text-neon-green"><i className="lucide lucide-clock-3"></i></motion.span>
+                        <motion.span className="h-3.5 w-3.5 text-neon-green">⏰</motion.span>
                         Cinematic Spark Call
                     </p>
                     <h2 className="mt-4 font-montserrat text-5xl text-white md:text-6xl">
@@ -70,19 +86,19 @@ const SparkCallHero: React.FC = () => {
 
                     <ul className="mt-6 space-y-3 text-sm text-text-medium">
                         {[{
-                            icon: '✔',
+                            icon: '✔️',
                             label: "Circular gradient timer with high-contrast readability"
                         },
                         {
-                            icon: '✔',
+                            icon: '💥',
                             label: "Orb explosion + reveal flash sequence at 15 seconds"
                         },
                         {
-                            icon: '✔',
+                            icon: '🎉',
                             label: "Confetti burst on successful reveal to reinforce positive signal"
                         },
                         {
-                            icon: '✔',
+                            icon: '✨',
                             label: "Glassmorphism interaction layer with reduced-motion safety"
                         },
                         ].map((item, index) => (
@@ -91,7 +107,7 @@ const SparkCallHero: React.FC = () => {
                                 className="inline-flex items-start gap-2"
                                 initial="hidden"
                                 animate={inView ? "visible" : "hidden"}
-                                variants={itemVariants} // Reusing itemVariants from HowSparksWork, or define new if needed
+                                variants={itemVariants} 
                                 transition={{ delay: 0.3 + index * 0.1 }}
                             >
                                 <span className="mt-0.5 h-4 w-4 shrink-0 text-neon-green">{item.icon}</span>
@@ -154,10 +170,10 @@ const SparkCallHero: React.FC = () => {
 
                     {/* Controls Placeholder */}
                     <div className="absolute bottom-4 z-50 flex gap-4 bg-dark-charcoal/50 backdrop-blur-md rounded-full px-6 py-3 border border-white/10">
-                        <button className="p-3 rounded-full bg-white/20 text-white text-xl">🎤</button>
-                        <button className="p-3 rounded-full bg-white/20 text-white text-xl">📹</button>
-                        <button className="p-3 rounded-full bg-fiery-orange text-white text-xl">📞</button>
-                        <button className="p-3 rounded-full bg-neon-green text-white text-xl">➡️</button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-white/20 text-white text-xl">🎤</motion.button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-white/20 text-white text-xl">📹</motion.button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-fiery-orange text-white text-xl">📞</motion.button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-neon-green text-white text-xl">➡️</motion.button>
                     </div>
                 </motion.div>
             </motion.div>

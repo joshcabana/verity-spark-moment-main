@@ -139,7 +139,14 @@
       "postgrad",
       "usyd",
       "glassmorphism",
-      "waitlist"
+      "waitlist",
+      "Playfair",
+      "RTC",
+      "lucide",
+      "tsparticles",
+      "Vercel",
+      "Vitest",
+      "OpenClaw"
     ]
   }
 }

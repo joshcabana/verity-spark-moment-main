@@ -68,15 +68,25 @@ header {
   padding: 1.25rem 2rem;
   border-bottom: 1px solid var(--border);
   background: var(--card);
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .brand {
   font-family: "Playfair Display", serif;
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: var(--primary);
   text-decoration: none;
   letter-spacing: 0.02em;
+}
+
+#theme-toggle-container {
+  position: relative;
+  display: inline-flex;
+  border-radius: 9999px;
+  background-color: var(--background);
+  border: 1px solid var(--primary);
 }
 
 /* ── Theme Toggle Button ── */

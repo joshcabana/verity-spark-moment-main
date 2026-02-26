@@ -1,4 +1,4 @@
-# Verity: Real Eyes. Real Spark.
+# Verity: Real Eyes. Real Spark
 
 Verity is an anti-swipe dating app reimagined for a cinematic, captivating, and innovative experience. Built around short, anonymous live video "Sparks," our mission is to deliver authentic connections with world-class design and performance.
 
@@ -9,32 +9,32 @@ Verity is an anti-swipe dating app reimagined for a cinematic, captivating, and 
 
 We've transformed Verity from a functional MVP into a premium, high-end dating experience. The luxury design language embraces:
 
-*   **Elegant Dual-Mode Aesthetic:** A persistent Day/Night toggle (light/dark mode) with Gold, Black, Grey, and White as the core palette. Gold serves as the brand accent; black/grey/white for surfaces and text.
-*   **Premium Intimacy:** Glassmorphism layers, thin borders, subtle shadows, and generous whitespace provide a sophisticated, tactile feel.
-*   **Captivating Motion System:** Leveraging Framer Motion for fluid scroll-triggered animations, subtle particle systems powered by `react-tsparticles`, dynamic entrance effects, and engaging micro-interactions across every element.
-*   **Custom Typography & Branding:** A curated typography scale (`Playfair Display` for headings, `Inter` for body text) paired with a striking new logo to reinforce the "VERITY: Real Eyes. Real Spark." brand.
+- **Elegant Dual-Mode Aesthetic:** A persistent Day/Night toggle (light/dark mode) with Gold, Black, Grey, and White as the core palette. Gold serves as the brand accent; black/grey/white for surfaces and text.
+- **Premium Intimacy:** Glassmorphism layers, thin borders, subtle shadows, and generous whitespace provide a sophisticated, tactile feel.
+- **Captivating Motion System:** Leveraging Framer Motion for fluid scroll-triggered animations, subtle particle systems powered by `react-tsparticles`, dynamic entrance effects, and engaging micro-interactions across every element.
+- **Custom Typography & Branding:** A curated typography scale (`Playfair Display` for headings, `Inter` for body text) paired with a striking new logo to reinforce the "VERITY: Real Eyes. Real Spark." brand.
 
-## Key Components & Features (Rebuilt):
+## Key Components & Features (Rebuilt)
 
 Our frontend has been rebuilt with a focus on user experience and visual storytelling:
 
-*   **HeroSection:** The captivating entry point, featuring a dynamic video background, an advanced particle system, and Framer Motion-driven entrance animations.
-*   **HowSparksWork:** Visually engaging breakdown of the Spark process, using animated elements to explain the flow.
-*   **SparkCallHero:** A mock-up of the core 45-second Spark call interface, designed to reduce anxiety and maximize magic with dynamic timers, orb convergence effects, and animated reveals.
-*   **OnboardingDiscoveryPostSpark:** Guides users through their journey with Verity, from initial setup to matching and post-Spark actions, all with fluid animations and clear calls to action.
-*   **SafetyWaitlistSection:** A dual-purpose section emphasizing robust safety and trust features, paired with a FOMO-driven private beta waitlist system with dynamic countdowns and interactive elements.
+- **HeroSection:** The captivating entry point, featuring a dynamic video background, an advanced particle system, and Framer Motion-driven entrance animations.
+- **HowSparksWork:** Visually engaging breakdown of the Spark process, using animated elements to explain the flow.
+- **SparkCallHero:** A mock-up of the core 45-second Spark call interface, designed to reduce anxiety and maximize magic with dynamic timers, orb convergence effects, and animated reveals.
+- **OnboardingDiscoveryPostSpark:** Guides users through their journey with Verity, from initial setup to matching and post-Spark actions, all with fluid animations and clear calls to action.
+- **SafetyWaitlistSection:** A dual-purpose section emphasizing robust safety and trust features, paired with a FOMO-driven private beta waitlist system with dynamic countdowns and interactive elements.
 
 ## Technical Stack & Enhancements
 
--   **Vite + React + TypeScript:** Modern and performant frontend stack.
--   **Tailwind CSS + shadcn/ui:** Utility-first CSS framework with a custom advanced component library and design system (defined in `tailwind.config.ts`).
--   **Framer Motion:** Integrated for all major animations and micro-interactions, creating a buttery smooth user experience.
--   **react-tsparticles:** Used for subtle, dynamic particle effects to enhance the cinematic aesthetic.
--   **Supabase:** (Auth, Postgres, Realtime, Edge Functions, Storage) for backend services.
--   **Agora RTC:** For real-time video communication (core Spark call).
--   **Stripe Checkout + Billing Portal:** For payment processing.
--   **Performance Optimizations:** Code splitting (for Agora, Framer Motion, tsparticles), responsive design, and PWA-ready considerations (with potential for full `vite-plugin-pwa` integration).
--   **Video Optimization:** Placeholder videos are in place, with the intention to replace them with highly optimized, looping video assets for production.
+- **Vite + React + TypeScript:** Modern and performant frontend stack.
+- **Tailwind CSS + shadcn/ui:** Utility-first CSS framework with a custom advanced component library and design system (defined in `tailwind.config.ts`).
+- **Framer Motion:** Integrated for all major animations and micro-interactions, creating a buttery smooth user experience.
+- **react-tsparticles:** Used for subtle, dynamic particle effects to enhance the cinematic aesthetic.
+- **Supabase:** (Auth, Postgres, Realtime, Edge Functions, Storage) for backend services.
+- **Agora RTC:** For real-time video communication (core Spark call).
+- **Stripe Checkout + Billing Portal:** For payment processing.
+- **Performance Optimizations:** Code splitting (for Agora, Framer Motion, tsparticles), responsive design, and PWA-ready considerations (with potential for full `vite-plugin-pwa` integration).
+- **Video Optimization:** Placeholder videos are in place, with the intention to replace them with highly optimized, looping video assets for production.
 
 ## Local Development
 

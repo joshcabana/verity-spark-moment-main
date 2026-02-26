@@ -16,7 +16,7 @@ const HeroSection: React.FC = () => {
     const buttonVariants = {
         hover: {
             scale: 1.05,
-            boxShadow: "0 15px 40px rgba(199, 160, 70, 0.45)",
+            boxShadow: "0 15px 40px rgba(229,165,25,0.7)",
             transition: { duration: 0.3 }
         },
         tap: {
@@ -69,7 +69,7 @@ const HeroSection: React.FC = () => {
                 </motion.p>
                 <motion.a
                     href="#"
-                    className="inline-block bg-gradient-to-r from-primary to-verity-warm text-primary-foreground text-xl font-bold py-4 px-8 rounded-full shadow-lg"
+                    className="inline-block bg-gradient-to-r from-luxury-gold to-luxury-gold-deep text-primary-foreground text-xl font-bold py-4 px-8 rounded-full shadow-lg"
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"

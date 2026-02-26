@@ -40,7 +40,7 @@ const HowSparksWork: React.FC = () => {
         hover: {
             scale: 1.03,
             y: -12,
-            boxShadow: "0 20px 50px rgba(236, 72, 153, 0.6), 0 0 15px rgba(255, 69, 0, 0.8)",
+            boxShadow: "0 20px 50px rgba(229,165,25,0.4), 0 0 15px rgba(229,165,25,0.3)",
             transition: { duration: 0.3 }
         },
         tap: {
@@ -49,7 +49,7 @@ const HowSparksWork: React.FC = () => {
     };
 
     return (
-        <section className="py-20 px-6 bg-dark-charcoal text-text-light">
+        <section className="py-20 px-6 bg-background text-foreground">
             <motion.div
                 ref={ref}
                 initial="hidden"
@@ -58,7 +58,7 @@ const HowSparksWork: React.FC = () => {
                 className="max-w-6xl mx-auto text-center"
             >
                 <motion.h2
-                    className="font-montserrat text-4xl md:text-6xl text-gradient-electric drop-shadow-neon mb-16"
+                    className="font-montserrat text-4xl md:text-6xl text-gradient-gold drop-shadow-gold mb-16"
                     variants={itemVariants}
                 >
                     How Sparks Work
@@ -71,16 +71,16 @@ const HowSparksWork: React.FC = () => {
                     {sparkFlowContent.map((step, index) => (
                         <motion.article
                             key={index}
-                            className="bg-electric-violet/10 backdrop-blur-md rounded-2xl border border-electric-violet/20 p-8 shadow-lg transition-all duration-300 transform"
+                            className="bg-luxury-gold/5 backdrop-blur-md rounded-2xl border border-luxury-gold/15 p-8 shadow-lg transition-all duration-300 transform"
                             variants={{ ...itemVariants, ...cardHoverVariants }}
                             whileHover="hover"
                             whileTap="tap"
                             custom={index} // Pass index as custom prop for potential staggered hover effects
                         >
-                            <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-electric-violet to-fiery-orange rounded-full flex justify-center items-center text-5xl text-white shadow-md">
+                            <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-luxury-gold to-luxury-gold-deep rounded-full flex justify-center items-center text-5xl text-white shadow-md">
                                 {step.icon}
                             </div>
-                            <h3 className="font-montserrat text-2xl text-fiery-orange drop-shadow-electric mb-4">
+                            <h3 className="font-montserrat text-2xl text-luxury-gold drop-shadow-gold-soft mb-4">
                                 {step.title}
                             </h3>
                             <p className="text-text-medium text-lg">

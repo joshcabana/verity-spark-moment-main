@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ThemeToggle from "@/components/ThemeToggle";
+import { ThemeProvider } from "next-themes"; // Import ThemeProvider
+import ThemeModeToggle from "@/components/ThemeModeToggle"; // Import the new ThemeModeToggle
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Privacy = lazy(() => import("./pages/Privacy"));
@@ -16,20 +17,22 @@ const FullScreenLoader = () => (
 );
 
 const App = () => (
-  <BrowserRouter>
-    <ThemeToggle className="fixed right-4 top-[max(1rem,env(safe-area-inset-top))] z-[120]" />
-    <Suspense fallback={<FullScreenLoader />}>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/transparency" element={<Transparency />} />
-        <Route path="/safety" element={<Safety />} />
-        <Route path="/post-spark/:matchId" element={<AppAuthed />} />
-        <Route path="/*" element={<AppAuthed />} />
-      </Routes>
-    </Suspense>
-  </BrowserRouter>
+  <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true} storageKey="verity-theme">
+    <BrowserRouter>
+      <ThemeModeToggle /> {/* Place the new ThemeModeToggle here */}
+      <Suspense fallback={<FullScreenLoader />}>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/transparency" element={<Transparency />} />
+          <Route path="/safety" element={<Safety />} />
+          <Route path="/post-spark/:matchId" element={<AppAuthed />} />
+          <Route path="/*" element={<AppAuthed />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  </ThemeProvider>
 );
 
 export default App;

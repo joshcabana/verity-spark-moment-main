@@ -39,6 +39,10 @@ Then continue with all non-blocked UI/frontend/design work without waiting. Afte
 - Only skip push if the user explicitly says: `NO_PUSH`.
 - If gates fail, fix issues and re-run until green, then commit and push.
 
+## Verity-Only Context Rule
+- Do not reference legacy sales/revenue pipelines or any non-Verity project goals in analysis or status reports for this project.
+- When asked about purpose, goals, objectives, or progress, answer using Verity project context only.
+
 Status: `BLOCKED_PAYMENT_TRACK`
 Owner: `joshcabana`
 Effective: immediately

@@ -54,7 +54,7 @@ const SparkCallHero: React.FC = () => {
     const controlButtonVariants = {
         hover: {
             scale: 1.1,
-            boxShadow: "0 0 15px rgba(199,160,70,0.6), 0 0 30px rgba(199,160,70,0.35)",
+            boxShadow: "0 0 15px hsla(var(--luxury-gold),0.6), 0 0 30px hsla(var(--luxury-gold),0.35)",
             transition: { duration: 0.2 }
         },
         tap: {
@@ -63,7 +63,7 @@ const SparkCallHero: React.FC = () => {
     };
 
     return (
-        <section className="py-20 px-6 bg-dark-charcoal text-text-light">
+        <section className="py-20 px-6 bg-background text-foreground">
             <motion.div
                 ref={ref}
                 initial="hidden"
@@ -77,7 +77,7 @@ const SparkCallHero: React.FC = () => {
                         <Clock className="h-3.5 w-3.5 text-neon-green" />
                         Cinematic Spark Call
                     </p>
-                    <h2 className="mt-4 font-montserrat text-6xl text-gradient-electric md:text-7xl">
+                    <h2 className="mt-4 font-montserrat text-6xl text-gradient-gold md:text-7xl">
                         The 45-second moment that decides everything
                     </h2>
                     <p className="mt-5 text-lg leading-relaxed text-text-medium">
@@ -120,7 +120,7 @@ const SparkCallHero: React.FC = () => {
 
                 {/* Right Visual Area - Spark Call Mockup */}
                 <motion.div
-                    className="relative w-full h-[500px] flex flex-col justify-center items-center rounded-2xl overflow-hidden bg-dark-charcoal/70 border border-electric-violet/30 shadow-xl backdrop-blur-md"
+                    className="relative w-full h-[500px] flex flex-col justify-center items-center rounded-2xl overflow-hidden bg-card/70 border border-luxury-gold/30 shadow-xl backdrop-blur-md"
                     variants={containerVariants}
                     transition={{ delay: 0.4 }}
                 >
@@ -131,14 +131,14 @@ const SparkCallHero: React.FC = () => {
                             <span className="text-sm text-white/50">Opponent Stream</span>
                         </div>
                         {/* Your Stream Placeholder with Glassmorphism */}
-                        <div className="absolute bottom-8 right-8 w-1/4 h-1/4 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center text-text-dark border-2 border-neon-green shadow-lg">
+                        <div className="absolute bottom-8 right-8 w-1/4 h-1/4 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center text-text-dark border-2 border-luxury-gold shadow-lg">
                             <span className="text-xs text-white/70">Your Stream</span>
                         </div>
                     </div>
 
                     {/* Timer Display */} 
                     <motion.div
-                        className="absolute font-montserrat font-extrabold text-7xl text-neon-green drop-shadow-neon z-10"
+                        className="absolute font-montserrat font-extrabold text-7xl text-luxury-gold-light drop-shadow-gold z-10"
                         initial="initial"
                         animate={inView ? "pulse" : "initial"}
                         variants={timerVariants}
@@ -150,7 +150,7 @@ const SparkCallHero: React.FC = () => {
                     <motion.div
                         className="absolute w-40 h-40 rounded-full z-20 pointer-events-none"
                         style={{
-                            background: "radial-gradient(circle, rgba(199,160,70,0.82) 0%, rgba(181,134,52,0) 70%)"
+                            background: "radial-gradient(circle, hsla(var(--verity-gold), 0.6) 0%, transparent 70%)"
                         }}
                         initial="hidden"
                         animate={inView ? "converge" : "hidden"} // Will be triggered by time in actual app
@@ -179,8 +179,8 @@ const SparkCallHero: React.FC = () => {
                     <div className="absolute bottom-4 z-50 flex gap-4 bg-dark-charcoal/50 backdrop-blur-md rounded-full px-6 py-3 border border-white/10">
                         <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-white/20 text-white text-xl"><Mic className="w-6 h-6" /></motion.button>
                         <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-white/20 text-white text-xl"><Video className="w-6 h-6" /></motion.button>
-                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-fiery-orange text-white text-xl"><PhoneOff className="w-6 h-6" /></motion.button>
-                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-neon-green text-white text-xl"><ArrowRight className="w-6 h-6" /></motion.button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-luxury-gold-deep text-white text-xl"><PhoneOff className="w-6 h-6" /></motion.button>
+                        <motion.button whileHover="hover" whileTap="tap" variants={controlButtonVariants} className="p-3 rounded-full bg-luxury-gold text-white text-xl"><ArrowRight className="w-6 h-6" /></motion.button>
                     </div>
                 </motion.div>
             </motion.div>

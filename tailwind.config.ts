@@ -17,6 +17,7 @@ export default {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         display: ["Playfair Display", "serif"], // Change display to Playfair Display
+        serif: ["Playfair Display", "Georgia", "serif"], // New serif font for accent
       },
       colors: {
         border: "hsl(var(--border))",
@@ -52,6 +53,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // New luxury palette aliases
+        'dark-charcoal': '#0A0A0A',
+        'luxury-gold': '#E5A519',
+        'luxury-gold-light': '#F0C75E',
+        'luxury-gold-deep': '#C78B0A',
+        'warm-champagne': '#EDE8DD',
+        'mid-grey': '#8C8C8C',
+        'light-grey': '#C5C5C5',
+        'charcoal': '#242424',
         verity: {
           gold: "hsl(var(--verity-gold))",
           "gold-dim": "hsl(var(--verity-gold-dim))",
@@ -62,6 +72,8 @@ export default {
           glow: "hsl(var(--verity-glow))",
           success: "hsl(var(--verity-success))",
           danger: "hsl(var(--verity-danger))",
+          teal: "hsl(var(--verity-teal))", // Alias to gold in new theme
+          magenta: "hsl(var(--verity-magenta))", // Alias to deep gold accent
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -131,28 +143,17 @@ export default {
         confetti: "confetti 1.6s ease-out forwards",
       },
       dropShadow: {
-        neon: "0 0 22px hsla(var(--verity-gold), 0.5)", // Soft gold glow
-        electric: "0 0 14px hsla(var(--verity-gold-dim), 0.45)", // Subtle gold glow
+        gold: "0 0 25px rgba(229,165,25,0.6)", // Custom gold drop shadow
+        "gold-soft": "0 0 15px rgba(229,165,25,0.4)", // Custom soft gold drop shadow
         lux: "0 12px 36px hsla(var(--foreground), 0.3), 0 0 14px hsla(var(--verity-gold), 0.28)",
         "lux-sm": "0 6px 16px hsla(var(--foreground), 0.2), 0 0 8px hsla(var(--verity-gold), 0.2)",
       },
-      // Custom text gradients
       backgroundImage: {
-        'text-gradient-electric': 'linear-gradient(120deg, hsl(var(--verity-gold-dim)), hsl(var(--verity-gold)), hsl(var(--verity-gold-dim)))', // Luxury gold gradient
+        'text-gradient-gold': 'linear-gradient(135deg, #E5A519, #F0C75E, #C78B0A)', // New gold text gradient
       },
     },
   },
   plugins: [
     tailwindcssAnimate,
-    function({ addUtilities, theme }: { addUtilities: (utilities: Record<string, Record<string, string>>) => void, theme: (path: string) => string }) {
-      const newUtilities = {
-        '.text-gradient-electric': {
-          backgroundImage: theme('backgroundImage.text-gradient-electric'),
-          '-webkit-background-clip': 'text',
-          '-webkit-text-fill-color': 'transparent',
-        },
-      };
-      addUtilities(newUtilities);
-    }
   ],
 } satisfies Config;

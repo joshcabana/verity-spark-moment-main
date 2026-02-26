@@ -16,9 +16,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Montserrat", "Inter", "sans-serif"],
-        montserrat: ["Montserrat", "sans-serif"],
-        nunito: ["Nunito", "sans-serif"],
+        display: ["Playfair Display", "serif"], // Change display to Playfair Display
       },
       colors: {
         border: "hsl(var(--border))",
@@ -54,14 +52,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Legacy keys remapped to luxury-safe palette to avoid breaking existing classes
-        'dark-charcoal': '#0f0d0a',
-        'electric-violet': '#c7a046',
-        'neon-green': '#e4c97d',
-        'fiery-orange': '#b58634',
-        'text-light': '#f3ede1',
-        'text-medium': '#d8c9ad',
-        'text-dark': '#9d8a68',
         verity: {
           gold: "hsl(var(--verity-gold))",
           "gold-dim": "hsl(var(--verity-gold-dim))",
@@ -72,8 +62,6 @@ export default {
           glow: "hsl(var(--verity-glow))",
           success: "hsl(var(--verity-success))",
           danger: "hsl(var(--verity-danger))",
-          teal: "hsl(var(--verity-teal))",
-          magenta: "hsl(var(--verity-magenta))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -143,14 +131,14 @@ export default {
         confetti: "confetti 1.6s ease-out forwards",
       },
       dropShadow: {
-        neon: "0 0 22px rgba(199,160,70,0.5)",
-        electric: "0 0 14px rgba(229,201,125,0.45)",
-        lux: "0 12px 36px rgba(0,0,0,0.3), 0 0 14px rgba(199,160,70,0.28)",
-        "lux-sm": "0 6px 16px rgba(0,0,0,0.2), 0 0 8px rgba(199,160,70,0.2)",
+        neon: "0 0 22px hsla(var(--verity-gold), 0.5)", // Soft gold glow
+        electric: "0 0 14px hsla(var(--verity-gold-dim), 0.45)", // Subtle gold glow
+        lux: "0 12px 36px hsla(var(--foreground), 0.3), 0 0 14px hsla(var(--verity-gold), 0.28)",
+        "lux-sm": "0 6px 16px hsla(var(--foreground), 0.2), 0 0 8px hsla(var(--verity-gold), 0.2)",
       },
       // Custom text gradients
       backgroundImage: {
-        'text-gradient-electric': 'linear-gradient(120deg, #b58634, #e4c97d, #c7a046)',
+        'text-gradient-electric': 'linear-gradient(120deg, hsl(var(--verity-gold-dim)), hsl(var(--verity-gold)), hsl(var(--verity-gold-dim)))', // Luxury gold gradient
       },
     },
   },

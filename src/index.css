@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -8,111 +8,113 @@
   :root {
     color-scheme: light;
 
-    --background: 40 26% 96%;
-    --foreground: 24 12% 14%;
+    --background: 40 10% 98%; /* Luxury off-white */
+    --foreground: 220 10% 5%; /* Luxury deep charcoal */
 
-    --card: 0 0% 100%;
-    --card-foreground: 24 12% 14%;
+    --card: 0 0% 100%; /* Clean white */
+    --card-foreground: 220 10% 5%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 24 12% 14%;
+    --popover-foreground: 220 10% 5%;
 
-    --primary: 43 68% 46%;
-    --primary-foreground: 30 18% 10%;
+    --primary: 45 80% 60%; /* Luxury gold strong */
+    --primary-foreground: 220 10% 5%;
 
-    --secondary: 36 18% 90%;
-    --secondary-foreground: 24 10% 20%;
+    --secondary: 40 10% 90%; /* Luxury light grey */
+    --secondary-foreground: 210 8% 15%; /* Luxury charcoal medium */
 
-    --muted: 36 18% 93%;
-    --muted-foreground: 26 8% 42%;
+    --muted: 40 10% 93%; /* Slightly lighter muted grey */
+    --muted-foreground: 210 4% 70%; /* Luxury grey medium */
 
-    --accent: 40 56% 84%;
-    --accent-foreground: 24 12% 14%;
+    --accent: 45 60% 75%; /* Luxury gold light */
+    --accent-foreground: 220 10% 5%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 70% 45%; /* Deep red */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 36 16% 82%;
-    --input: 36 16% 82%;
-    --ring: 43 68% 46%;
+    --border: 45 20% 85%; /* Subtle champagne border */
+    --input: 45 20% 85%;
+    --ring: 45 80% 60%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 44 22% 94%;
-    --sidebar-foreground: 24 12% 16%;
-    --sidebar-primary: 43 68% 46%;
-    --sidebar-primary-foreground: 30 18% 10%;
-    --sidebar-accent: 40 22% 88%;
-    --sidebar-accent-foreground: 24 12% 14%;
-    --sidebar-border: 36 16% 82%;
-    --sidebar-ring: 43 68% 46%;
+    --sidebar-background: 40 10% 96%; /* Light grey */
+    --sidebar-foreground: 220 10% 10%; /* Dark charcoal */
+    --sidebar-primary: 45 80% 60%;
+    --sidebar-primary-foreground: 220 10% 5%;
+    --sidebar-accent: 45 60% 75%;
+    --sidebar-accent-foreground: 220 10% 10%;
+    --sidebar-border: 45 20% 85%;
+    --sidebar-ring: 45 80% 60%;
 
-    --verity-gold: 43 68% 46%;
-    --verity-gold-dim: 42 45% 34%;
-    --verity-warm: 35 58% 52%;
-    --verity-surface: 42 24% 98%;
-    --verity-surface-alt: 40 18% 91%;
-    --verity-surface-hover: 40 18% 88%;
-    --verity-glass: 42 20% 98% / 0.74;
-    --verity-glow: 43 68% 46%;
-    --verity-success: 145 46% 36%;
-    --verity-danger: 0 72% 51%;
-    --verity-teal: 43 68% 46%;
-    --verity-magenta: 35 58% 52%;
+    --verity-gold: 45 80% 60%; /* Strong gold */
+    --verity-gold-dim: 40 40% 30%; /* Dimmed gold */
+    --verity-warm: 50 20% 85%; /* Champagne */
+    --verity-surface: 40 10% 98%; /* Off-white surface */
+    --verity-surface-alt: 40 8% 95%; /* Slightly darker off-white */
+    --verity-surface-hover: 40 8% 90%; /* Light hover state */
+    --verity-glass: 0 0% 100% / 0.5; /* Subtle white glass */
+    --verity-glow: 45 80% 60%; /* Gold glow */
+    --verity-success: 120 30% 40%; /* Rich green */
+    --verity-danger: 0 70% 45%; /* Deep red */
+    --verity-teal: 180 30% 40%; /* Muted teal */
+    --verity-magenta: 300 30% 40%; /* Muted magenta */
   }
 
   .dark {
     color-scheme: dark;
 
-    --background: 30 16% 5%;
-    --foreground: 40 24% 93%;
+    --background: 220 10% 5%; /* Luxury deep charcoal */
+    --foreground: 40 10% 98%; /* Luxury off-white */
 
-    --card: 30 12% 8%;
-    --card-foreground: 40 24% 93%;
+    --card: 220 10% 8%; /* Slightly lighter charcoal */
+    --card-foreground: 40 10% 98%;
 
-    --popover: 30 12% 8%;
-    --popover-foreground: 40 24% 93%;
+    --popover: 220 10% 8%;
+    --popover-foreground: 40 10% 98%;
 
-    --primary: 43 72% 56%;
-    --primary-foreground: 30 16% 8%;
+    --primary: 45 70% 70%; /* Lighter gold for dark mode */
+    --primary-foreground: 220 10% 8%;
 
-    --secondary: 30 10% 14%;
-    --secondary-foreground: 38 18% 86%;
+    --secondary: 220 8% 15%; /* Luxury charcoal medium */
+    --secondary-foreground: 40 10% 90%; /* Luxury light grey */
 
-    --muted: 30 10% 14%;
-    --muted-foreground: 34 8% 62%;
+    --muted: 220 8% 18%; /* Slightly darker muted grey */
+    --muted-foreground: 210 4% 70%;
 
-    --accent: 36 26% 20%;
-    --accent-foreground: 40 24% 93%;
+    --accent: 45 50% 65%; /* Muted gold accent */
+    --accent-foreground: 40 10% 98%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 32 12% 20%;
-    --input: 32 12% 20%;
-    --ring: 43 72% 56%;
+    --border: 45 15% 30%; /* Darker gold border */
+    --input: 45 15% 30%;
+    --ring: 45 70% 70%;
 
-    --sidebar-background: 30 14% 7%;
-    --sidebar-foreground: 38 20% 88%;
-    --sidebar-primary: 43 72% 56%;
-    --sidebar-primary-foreground: 30 16% 8%;
-    --sidebar-accent: 30 10% 13%;
-    --sidebar-accent-foreground: 38 20% 88%;
-    --sidebar-border: 32 12% 20%;
-    --sidebar-ring: 43 72% 56%;
+    --radius: 0.75rem;
 
-    --verity-gold: 43 72% 56%;
-    --verity-gold-dim: 42 56% 40%;
-    --verity-warm: 35 60% 58%;
-    --verity-surface: 30 12% 8%;
-    --verity-surface-alt: 30 11% 12%;
-    --verity-surface-hover: 30 10% 16%;
-    --verity-glass: 30 12% 9% / 0.72;
-    --verity-glow: 43 72% 56%;
-    --verity-success: 145 46% 45%;
-    --verity-danger: 0 72% 51%;
-    --verity-teal: 43 72% 56%;
-    --verity-magenta: 35 60% 58%;
+    --sidebar-background: 220 10% 7%; /* Deeper charcoal */
+    --sidebar-foreground: 40 10% 90%;
+    --sidebar-primary: 45 70% 70%;
+    --sidebar-primary-foreground: 220 10% 8%;
+    --sidebar-accent: 220 8% 12%;
+    --sidebar-accent-foreground: 40 10% 90%;
+    --sidebar-border: 45 15% 30%;
+    --sidebar-ring: 45 70% 70%;
+
+    --verity-gold: 45 70% 70%; /* Lighter gold */
+    --verity-gold-dim: 40 30% 20%; /* Even darker gold */
+    --verity-warm: 50 15% 65%; /* Muted champagne */
+    --verity-surface: 220 10% 8%;
+    --verity-surface-alt: 220 9% 10%;
+    --verity-surface-hover: 220 8% 13%;
+    --verity-glass: 220 10% 5% / 0.6; /* Dark subtle glass */
+    --verity-glow: 45 70% 70%;
+    --verity-success: 120 30% 40%;
+    --verity-danger: 0 70% 45%;
+    --verity-teal: 180 30% 40%;
+    --verity-magenta: 300 30% 40%;
   }
 
   * {
@@ -129,81 +131,74 @@
     @apply bg-background text-foreground font-sans antialiased;
     font-family: "Inter", system-ui, sans-serif;
     background-image:
-      radial-gradient(circle at 16% 18%, hsl(43 68% 46% / 0.08), transparent 42%),
-      radial-gradient(circle at 84% 16%, hsl(35 58% 52% / 0.05), transparent 44%),
-      linear-gradient(180deg, #fbf8f2, #f2ede4);
+      radial-gradient(circle at 16% 18%, hsl(var(--verity-gold) / 0.05), transparent 42%),
+      radial-gradient(circle at 84% 16%, hsl(var(--verity-gold-dim) / 0.03), transparent 44%),
+      linear-gradient(180deg, hsl(40 10% 99%), hsl(40 8% 95%)); /* Subtle light luxury gradient */
     transition: background-image 0.4s ease, background-color 0.4s ease, color 0.25s ease;
   }
 
   .dark body {
     background-image:
-      radial-gradient(circle at 16% 18%, hsl(43 72% 56% / 0.1), transparent 42%),
-      radial-gradient(circle at 84% 16%, hsl(35 60% 58% / 0.06), transparent 44%),
-      linear-gradient(180deg, #0d0b08, #0a0907);
+      radial-gradient(circle at 16% 18%, hsl(var(--verity-gold) / 0.08), transparent 42%),
+      radial-gradient(circle at 84% 16%, hsl(var(--verity-gold-dim) / 0.05), transparent 44%),
+      linear-gradient(180deg, hsl(220 10% 4%), hsl(220 8% 7%)); /* Subtle dark luxury gradient */
   }
 
   h1,
   h2,
-  h3 {
-    font-family: "Playfair Display", "Montserrat", "Inter", serif;
-    letter-spacing: 0.01em;
-  }
-
+  h3,
   h4,
   h5,
   h6 {
-    font-family: "Montserrat", "Inter", sans-serif;
+    font-family: "Playfair Display", serif;
+    letter-spacing: 0.02em; /* Slightly increased letter spacing for elegance */
   }
 }
 
 @layer utilities {
   .text-gradient-gold {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(130deg, hsl(var(--verity-gold)), hsl(var(--verity-warm)), hsl(var(--verity-gold)));
+    background-image: linear-gradient(130deg, hsl(var(--verity-gold)), hsl(var(--luxury-gold-light)), hsl(var(--verity-gold)));
   }
 
-  .text-gradient-spark {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(130deg, hsl(var(--verity-gold)), hsl(var(--foreground) / 0.86), hsl(var(--verity-warm)));
+  .text-gradient-spark, .bg-gradient-spark { /* Retheme spark gradients to luxury gold */
+    @apply bg-clip-text text-transparent; /* Keep text-gradient-spark properties */
+    background-image: linear-gradient(130deg, hsl(var(--verity-gold-dim) / 0.8), hsl(var(--verity-gold)), hsl(var(--verity-gold-dim) / 0.8));
   }
 
   .bg-gradient-gold {
-    background-image: linear-gradient(135deg, hsl(var(--verity-gold)), hsl(var(--verity-warm)));
+    background-image: linear-gradient(135deg, hsl(var(--verity-gold)), hsl(var(--verity-gold-dim)));
   }
 
-  .bg-gradient-spark {
-    background-image: linear-gradient(135deg, hsl(var(--verity-gold) / 0.22), hsl(var(--accent) / 0.48), hsl(var(--verity-warm) / 0.25));
-  }
-
-  .bg-gradient-dark {
-    background-image: linear-gradient(180deg, #0e0c09, #090806);
+  .bg-gradient-dark { /* Repurpose or refine for luxury dark */
+    background-image: linear-gradient(180deg, hsl(220 10% 8%), hsl(220 10% 5%));
   }
 
   .glass-card {
-    @apply border border-verity-gold/25 bg-card/70 backdrop-blur-xl;
+    @apply border border-verity-gold/30 bg-card/[0.6] backdrop-blur-md; /* Subtle luxury glass */
     box-shadow:
-      0 20px 44px rgba(0, 0, 0, 0.24),
-      inset 0 1px 0 hsl(var(--foreground) / 0.08);
+      0 8px 24px hsla(var(--foreground), 0.1),
+      inset 0 1px 0 hsla(var(--background), 0.05); /* Softer shadows */
   }
 
   .glow-gold {
     box-shadow:
-      0 0 40px hsl(var(--verity-gold) / 0.22),
-      0 0 78px hsl(var(--verity-gold) / 0.1);
+      0 0 20px hsla(var(--verity-gold), 0.3),
+      0 0 40px hsla(var(--verity-gold), 0.15);
   }
 
   .glow-gold-sm {
-    box-shadow: 0 0 20px hsl(var(--verity-gold) / 0.15);
+    box-shadow: 0 0 10px hsla(var(--verity-gold), 0.2);
   }
 
   .lux-border {
-    border: 1px solid hsl(var(--verity-gold) / 0.35);
+    border: 1px solid hsla(var(--verity-gold), 0.35);
   }
 
   .lux-shadow {
     box-shadow:
-      0 12px 34px rgba(0, 0, 0, 0.22),
-      0 1px 0 hsl(var(--foreground) / 0.05) inset;
+      0 10px 30px hsla(var(--foreground), 0.15),
+      0 1px 0 hsla(var(--background), 0.03) inset;
   }
 
   .timer-ring {
@@ -211,74 +206,15 @@
     stroke-dashoffset: 0;
     transition: stroke-dashoffset 1s linear;
   }
-}
 
-@keyframes particle-drift {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0.35;
-  }
-  50% {
-    transform: translate3d(10px, -12px, 0);
-    opacity: 0.75;
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0.35;
-  }
-}
-
-@keyframes orb-converge-left {
-  0% {
-    transform: translateX(0) scale(1);
-  }
-  100% {
-    transform: translateX(38px) scale(1.1);
-  }
-}
-
-@keyframes orb-converge-right {
-  0% {
-    transform: translateX(0) scale(1);
-  }
-  100% {
-    transform: translateX(-38px) scale(1.1);
-  }
-}
-
-@keyframes reveal-flash {
-  0% {
-    opacity: 0;
-  }
-  35% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes confetti-fall {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) rotate(0deg);
-  }
-  20% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(var(--x, 0), 145px, 0) rotate(var(--r, 180deg));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

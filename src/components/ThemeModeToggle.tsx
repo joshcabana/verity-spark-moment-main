@@ -11,16 +11,6 @@ const ThemeModeToggle: React.FC = () => {
     setMounted(true);
   }, []);
 
-  // Update meta theme-color dynamically
-  useEffect(() => {
-    if (mounted) {
-      const metaThemeColor = document.querySelector("meta[name=\"theme-color\"]");
-      if (metaThemeColor) {
-        metaThemeColor.setAttribute("content", theme === 'light' ? '#F9F6F1' : '#080808');
-      }
-    }
-  }, [theme, mounted]);
-
   if (!mounted) {
     return null;
   }

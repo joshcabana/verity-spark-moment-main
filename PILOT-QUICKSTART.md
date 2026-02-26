@@ -25,9 +25,10 @@
 
 ```bash
 # Copy the example and fill in your real participants
-cp participants-EXAMPLE.csv participants.csv
+mkdir -p private/pilot
+cp docs/pilot/templates/participants.template.csv private/pilot/participants.csv
 
-# Edit participants.csv with your real emails, names, and notes
+# Edit private/pilot/participants.csv with your real emails, names, and notes
 ```
 
 **Format (4 columns):**
@@ -42,15 +43,15 @@ bob@outlook.com,Sydney,Bob,Tech community referral
 
 ```bash
 # Test the workflow without making changes
-npm run pilot:onboard -- --participants participants.csv --dry-run
+npm run pilot:onboard -- --participants private/pilot/participants.csv --dry-run
 
 # Review the output, then run for real:
-npm run pilot:onboard -- --participants participants.csv --confirm
+npm run pilot:onboard -- --participants private/pilot/participants.csv --confirm
 ```
 
 This script will:
 
-- ✓ Update `docs/pilot/wave1-invites.csv` with real emails
+- ✓ Update `private/pilot/wave1-invites.csv` with real emails
 - ✓ Re-seed Supabase auth accounts
 - ✓ Generate shareable credentials (no passwords)
 
@@ -58,7 +59,7 @@ This script will:
 
 ```bash
 # Credentials are in:
-cat reports/pilot/invite-credentials-SHAREABLE.csv
+cat private/pilot/invite-credentials-SHAREABLE.csv
 ```
 
 Send each participant:
@@ -147,9 +148,9 @@ Expected result at Gate A: **HOLD_COLLECT_EVIDENCE** (now that we have real user
 When you run `npm run pilot:onboard`:
 
 1. **Email Bulk Update**
-   - Reads `participants.csv` (your real emails)
+   - Reads `private/pilot/participants.csv` (your real emails)
    - Matches by city (Canberra ↔ Canberra, Sydney ↔ Sydney)
-   - Updates `wave1-invites.csv` with real addresses
+   - Updates `private/pilot/wave1-invites.csv` with real addresses
    - Scheduling preserved (daily intake caps respected)
 
 2. **Supabase Re-seed**
@@ -169,13 +170,13 @@ When you run `npm run pilot:onboard`:
 # Step-by-step manual invocation:
 
 # 1. Update CSV
-npm run pilot:bulk:email -- --input participants.csv --output docs/pilot/wave1-invites.csv --confirm
+npm run pilot:bulk:email -- --input private/pilot/participants.csv --output private/pilot/wave1-invites.csv --confirm
 
 # 2. Re-seed accounts
-npm run seed:pilot:users -- --wave1 --invites-csv docs/pilot/wave1-invites.csv
+npm run seed:pilot:users -- --wave1 --invites-csv private/pilot/wave1-invites.csv
 
 # 3. Generate credentials
-npm run pilot:invite:creds -- --invites docs/pilot/wave1-invites.csv --out reports/pilot/invite-credentials.csv --confirm
+npm run pilot:invite:creds -- --invites private/pilot/wave1-invites.csv --out private/pilot/invite-credentials.csv --confirm
 ```
 
 ---
@@ -199,8 +200,8 @@ If we hit **≥10 profiles + ≥5 decisions by 2026-02-27**, Gate A will return 
 
 ### "No valid real emails found in invites CSV"
 
-- Check `participants.csv` has real emails (not `REPLACE_WITH_REAL_EMAIL`)
-- Run `npm run pilot:bulk:email -- --input participants.csv --dry-run` to verify
+- Check `private/pilot/participants.csv` has real emails (not `REPLACE_WITH_REAL_EMAIL`)
+- Run `npm run pilot:bulk:email -- --input private/pilot/participants.csv --dry-run` to verify
 
 ### "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY"
 
@@ -209,7 +210,7 @@ If we hit **≥10 profiles + ≥5 decisions by 2026-02-27**, Gate A will return 
 ```bash
 export SUPABASE_URL="https://nhpbxlvogqnqutmflwlk.supabase.co"
 export SUPABASE_SERVICE_ROLE_KEY="<your-key>"
-npm run pilot:onboard -- --participants participants.csv --confirm
+npm run pilot:onboard -- --participants private/pilot/participants.csv --confirm
 ```
 
 ### "Error: User already exists"

@@ -13,20 +13,20 @@
   - Or dating app communities, tech groups, coworking spaces
   - Must have valid personal email addresses
 
-- [ ] **Create participants.csv** with columns: `email`, `city`, `name`, `notes`
-  - Example template: `participants-EXAMPLE.csv`
+- [ ] **Create private/pilot/participants.csv** with columns: `email`, `city`, `name`, `notes`
+  - Example template: `docs/pilot/templates/participants.template.csv`
   - Invite message templates: [docs/pilot/invite-message-templates.md](docs/pilot/invite-message-templates.md)
 
-- [ ] **Validate participants.csv** before seeding:
+- [ ] **Validate private/pilot/participants.csv** before seeding:
 
 ```bash
-npm run pilot:participants:validate -- --participants participants.csv
+npm run pilot:participants:validate -- --participants private/pilot/participants.csv
 ```
 
 - [ ] **Test participants list** with dry-run:
 
 ```bash
-npm run pilot:onboard -- --participants participants.csv --dry-run
+npm run pilot:onboard -- --participants private/pilot/participants.csv --dry-run
 ```
 
 ---
@@ -49,7 +49,7 @@ npm run supabase:secrets:check -- --project-ref nhpbxlvogqnqutmflwlk --mode core
 - [ ] **Run full onboarding workflow** (creates auth accounts + seeds profiles):
 
 ```bash
-npm run pilot:onboard -- --participants participants.csv --confirm
+npm run pilot:onboard -- --participants private/pilot/participants.csv --confirm
 ```
 
 - [ ] **Verify profile creation** in Supabase Dashboard:
@@ -63,7 +63,7 @@ npm run pilot:onboard -- --participants participants.csv --confirm
 - [ ] **Retrieve shareable credentials** (no passwords):
 
 ```bash
-cat reports/pilot/invite-credentials-SHAREABLE.csv
+cat private/pilot/invite-credentials-SHAREABLE.csv
 ```
 
 - [ ] **Send invites to participants** with:

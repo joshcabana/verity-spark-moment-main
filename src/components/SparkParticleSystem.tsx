@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import Particles from "react-tsparticles";
 import type { Container, Engine, ISourceOptions } from "tsparticles-engine";
-import { loadFull } from "tsparticles"; // loads tsparticles and all its plugins
+import { loadSlim } from "tsparticles"; // loads tsparticles and a slim set of plugins
 
 interface SparkParticleSystemProps {
     mode?: "ambient" | "converging" | "exploding";

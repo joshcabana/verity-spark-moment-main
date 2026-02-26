@@ -7,15 +7,8 @@ const ThemeModeToggle: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
     setMounted(true);
-
-    // Initialize theme from prefers-color-scheme if no localStorage value exists
-    if (!localStorage.getItem('theme')) {
-      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-      setTheme(prefersLight ? 'light' : 'dark');
-    }
   }, []);
 
   // Update meta theme-color dynamically
@@ -37,7 +30,7 @@ const ThemeModeToggle: React.FC = () => {
   return (
     <motion.button
       onClick={() => setTheme(isLight ? 'dark' : 'light')}
-      className="fixed top-4 right-4 z-[60] p-2.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-xl shadow-lg hover:shadow-gold transition-all duration-300"
+      className="fixed top-4 right-4 z-[60] p-2.5 rounded-full border border-border bg-card/60 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-300"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       aria-label={isLight ? 'Switch to night mode' : 'Switch to day mode'}
@@ -48,9 +41,9 @@ const ThemeModeToggle: React.FC = () => {
         transition={{ duration: 0.4, ease: 'easeInOut' }}
       >
         {isLight ? (
-          <Moon className="h-5 w-5 text-luxury-gold" />
+          <Moon className="h-5 w-5 text-primary" />
         ) : (
-          <Sun className="h-5 w-5 text-luxury-gold" />
+          <Sun className="h-5 w-5 text-primary" />
         )}
       </motion.div>
     </motion.button>

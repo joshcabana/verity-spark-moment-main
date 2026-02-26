@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "next-themes"; // Import ThemeProvider
-import ThemeModeToggle from "@/components/ThemeModeToggle"; // Import the new ThemeModeToggle
+import { ThemeProvider } from "next-themes";
+import ThemeModeToggle from "@/components/ThemeModeToggle";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Privacy = lazy(() => import("./pages/Privacy"));
@@ -17,9 +17,9 @@ const FullScreenLoader = () => (
 );
 
 const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true} storageKey="verity-theme">
+  <ThemeProvider attribute="class" defaultTheme="dark" storageKey="theme" disableTransitionOnChange>
     <BrowserRouter>
-      <ThemeModeToggle /> {/* Place the new ThemeModeToggle here */}
+      <ThemeModeToggle />
       <Suspense fallback={<FullScreenLoader />}>
         <Routes>
           <Route path="/" element={<Landing />} />

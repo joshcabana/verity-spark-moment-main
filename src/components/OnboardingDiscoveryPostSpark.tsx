@@ -90,7 +90,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                 className="max-w-4xl mx-auto rounded-2xl p-10 shadow-2xl bg-gradient-to-br from-background to-background/50 border border-luxury-gold/15"
             >
                 <motion.h2
-                    className="font-montserrat text-4xl md:text-6xl text-gradient-gold drop-shadow-gold mb-16 text-center"
+                    className="font-display text-4xl md:text-6xl text-gradient-gold drop-shadow-gold mb-16 text-center"
                     variants={sectionVariants}
                 >
                     Your Journey with VERITY
@@ -109,7 +109,7 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                                 <div className="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-luxury-gold to-luxury-gold-deep rounded-full flex justify-center items-center text-white shadow-xl">
                                     {step.icon}
                                 </div>
-                                <h3 className="font-montserrat text-3xl text-luxury-gold drop-shadow-gold-soft mb-4">
+                                <h3 className="font-display text-3xl text-luxury-gold drop-shadow-gold-soft mb-4">
                                     {step.title}
                                 </h3>
                                 <p className="text-light-grey text-lg max-w-2xl">

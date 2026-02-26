@@ -127,7 +127,7 @@ const SafetyWaitlistSection: React.FC = () => {
                 className="max-w-6xl mx-auto rounded-2xl p-10 shadow-2xl bg-gradient-to-br from-background to-background/50 border border-luxury-gold/15"
             >
                 {/* Safety & Trust Section */}
-                <h2 className="font-montserrat text-4xl md:text-6xl text-gradient-gold drop-shadow-gold mb-5 text-center">
+                <h2 className="font-display text-4xl md:text-6xl text-gradient-gold drop-shadow-gold mb-5 text-center">
                     Your Safety, Our Priority
                 </h2>
                 <p className="text-light-grey text-lg max-w-3xl mx-auto mb-16 text-center">
@@ -149,7 +149,7 @@ const SafetyWaitlistSection: React.FC = () => {
                             <div className={`mb-4 text-luxury-gold`}> {/* Adjusted to directly render Lucide icon, conditional text-fiery-orange moved to icon definition */}
                                 {feature.icon}
                             </div>
-                            <h4 className="font-montserrat text-xl text-warm-champagne mb-3">
+                            <h4 className="font-display text-xl text-warm-champagne mb-3">
                                 {feature.title}
                             </h4>
                             <p className="text-light-grey text-md">
@@ -161,7 +161,7 @@ const SafetyWaitlistSection: React.FC = () => {
 
                 {/* Waitlist / Invite System Section */}
                 <div className="border-t border-luxury-gold/20 pt-16 mt-16">
-                    <h2 className="font-montserrat text-4xl md:text-6xl text-gradient-gold drop-shadow-gold-soft mb-5 text-center">
+                    <h2 className="font-display text-4xl md:text-6xl text-gradient-gold drop-shadow-gold-soft mb-5 text-center">
                         Join the Inner Circle. Spark Early.
                     </h2>
                     <p className="text-light-grey text-lg max-w-3xl mx-auto mb-8 text-center">
@@ -169,7 +169,7 @@ const SafetyWaitlistSection: React.FC = () => {
                     </p>
 
                     <motion.div
-                        className="font-montserrat text-4xl text-luxury-gold drop-shadow-gold-soft mt-8 mb-5"
+                        className="font-display text-4xl text-luxury-gold drop-shadow-gold-soft mt-8 mb-5"
                         variants={fomoVariants}
                         animate={inView ? "pulse" : ""}
                     >

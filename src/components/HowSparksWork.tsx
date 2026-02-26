@@ -58,7 +58,7 @@ const HowSparksWork: React.FC = () => {
                 className="max-w-6xl mx-auto text-center"
             >
                 <motion.h2
-                    className="font-montserrat text-4xl md:text-6xl text-gradient-gold drop-shadow-gold mb-16"
+                    className="font-display text-4xl md:text-6xl text-gradient-gold drop-shadow-gold mb-16"
                     variants={itemVariants}
                 >
                     How Sparks Work
@@ -80,10 +80,10 @@ const HowSparksWork: React.FC = () => {
                             <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-luxury-gold to-luxury-gold-deep rounded-full flex justify-center items-center text-5xl text-white shadow-md">
                                 {step.icon}
                             </div>
-                            <h3 className="font-montserrat text-2xl text-luxury-gold drop-shadow-gold-soft mb-4">
+                            <h3 className="font-display text-2xl text-luxury-gold drop-shadow-gold-soft mb-4">
                                 {step.title}
                             </h3>
-                            <p className="text-text-medium text-lg">
+                            <p className="text-muted-foreground text-lg">
                                 {step.body}
                             </p>
                         </motion.article>

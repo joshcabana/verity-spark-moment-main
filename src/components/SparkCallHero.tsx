@@ -54,7 +54,7 @@ const SparkCallHero: React.FC = () => {
     const controlButtonVariants = {
         hover: {
             scale: 1.1,
-            boxShadow: "0 0 15px hsla(var(--luxury-gold),0.6), 0 0 30px hsla(var(--luxury-gold),0.35)",
+            boxShadow: "0 0 15px hsla(var(--verity-gold),0.6), 0 0 30px hsla(var(--verity-gold),0.35)",
             transition: { duration: 0.2 }
         },
         tap: {
@@ -77,7 +77,7 @@ const SparkCallHero: React.FC = () => {
                         <Clock className="h-3.5 w-3.5 text-luxury-gold-light" />
                         Cinematic Spark Call
                     </p>
-                    <h2 className="mt-4 font-montserrat text-6xl text-gradient-gold md:text-7xl">
+                    <h2 className="mt-4 font-display text-6xl text-gradient-gold md:text-7xl">
                         The 45-second moment that decides everything
                     </h2>
                     <p className="mt-5 text-lg leading-relaxed text-light-grey">
@@ -138,7 +138,7 @@ const SparkCallHero: React.FC = () => {
 
                     {/* Timer Display */} 
                     <motion.div
-                        className="absolute font-montserrat font-extrabold text-7xl text-luxury-gold-light drop-shadow-gold z-10"
+                        className="absolute font-display font-extrabold text-7xl text-luxury-gold-light drop-shadow-gold z-10"
                         initial="initial"
                         animate={inView ? "pulse" : "initial"}
                         variants={timerVariants}
@@ -167,7 +167,7 @@ const SparkCallHero: React.FC = () => {
 
                     {/* Post-Reveal Message */}
                     <motion.div
-                        className="absolute font-montserrat text-3xl text-white drop-shadow-lg z-40"
+                        className="absolute font-display text-3xl text-white drop-shadow-lg z-40"
                         initial="hidden"
                         animate={inView ? "visible" : "hidden"} // Will be triggered by time in actual app
                         variants={messageVariants}

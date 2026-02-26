@@ -9,38 +9,94 @@
     scroll-behavior: smooth;
   }
 
+  /* ── DAY (Light) theme ─── default ── */
   :root {
+    color-scheme: light;
+
+    --background: 40 20% 97%;       /* warm off-white  #F9F6F1 */
+    --foreground: 0 0% 10%;         /* near-black text #1A1A1A */
+
+    --card: 0 0% 100%;              /* white card */
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    --primary: 42 92% 46%;          /* slightly deeper gold for light bg contrast */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 40 10% 92%;        /* warm light grey #ECE8E1 */
+    --secondary-foreground: 0 0% 20%;
+
+    --muted: 40 10% 94%;            /* very light warm grey */
+    --muted-foreground: 0 0% 42%;   /* readable medium grey on light */
+
+    --accent: 42 80% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 10% 85%;           /* light grey border */
+    --input: 40 10% 85%;
+    --ring: 42 92% 46%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 40 20% 97%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 42 92% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 42 80% 40%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 40 10% 85%;
+    --sidebar-ring: 42 92% 46%;
+
+    --verity-gold: 42 92% 46%;
+    --verity-gold-dim: 42 55% 35%;
+    --verity-warm: 36 78% 48%;
+    --verity-surface: 40 10% 94%;
+    --verity-surface-alt: 40 10% 92%;
+    --verity-surface-hover: 40 10% 88%;
+    --verity-glass: 0 0% 100% / 0.72;
+    --verity-glow: 42 92% 46%;
+    --verity-success: 145 63% 38%;
+    --verity-danger: 0 72% 51%;
+    --verity-teal: 42 92% 46%;
+    --verity-magenta: 42 80% 40%;
+  }
+
+  /* ── NIGHT (Dark) theme ── activated by next-themes .dark class ── */
+  .dark {
     color-scheme: dark;
 
-    --background: 0 0% 3%; /* rich near-black #080808 */
-    --foreground: 45 10% 92%; /* warm cream/off-white #EDE8DD */
+    --background: 0 0% 3%;          /* rich near-black #080808 */
+    --foreground: 45 10% 92%;       /* warm cream/off-white #EDE8DD */
 
-    --card: 0 0% 7%; /* dark card surface #121212 */
+    --card: 0 0% 7%;                /* dark card surface #121212 */
     --card-foreground: 45 10% 92%;
 
     --popover: 0 0% 7%;
     --popover-foreground: 45 10% 92%;
 
-    --primary: 42 92% 56%; /* rich gold #E5A519 */
+    --primary: 42 92% 56%;          /* rich gold #E5A519 */
     --primary-foreground: 0 0% 3%;
 
-    --secondary: 0 0% 14%; /* charcoal grey #242424 */
+    --secondary: 0 0% 14%;          /* charcoal grey #242424 */
     --secondary-foreground: 45 10% 85%;
 
-    --muted: 0 0% 11%; /* deep grey #1C1C1C */
-    --muted-foreground: 0 0% 55%; /* medium grey #8C8C8C */
+    --muted: 0 0% 11%;              /* deep grey #1C1C1C */
+    --muted-foreground: 0 0% 55%;   /* medium grey #8C8C8C */
 
-    --accent: 42 80% 48%; /* deep gold accent #D99C16 */
+    --accent: 42 80% 48%;           /* deep gold accent #D99C16 */
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 16%; /* subtle grey border #292929 */
+    --border: 0 0% 16%;             /* subtle grey border #292929 */
     --input: 0 0% 16%;
-    --ring: 42 92% 56%; /* gold ring */
-
-    --radius: 0.75rem;
+    --ring: 42 92% 56%;             /* gold ring */
 
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 45 10% 85%;
@@ -59,54 +115,10 @@
     --verity-surface-hover: 0 0% 14%;
     --verity-glass: 0 0% 8% / 0.72;
     --verity-glow: 42 92% 56%;
-    --verity-success: 145 63% 42%; /* muted emerald success */
+    --verity-success: 145 63% 42%;
     --verity-danger: 0 72% 51%;
-    --verity-teal: 42 92% 56%; /* alias to gold in new theme */
-    --verity-magenta: 42 80% 48%; /* alias to deep gold accent */
-  }
-
-  .light-mode {
-    color-scheme: light;
-
-    --background: 40 20% 97%; /* warm off-white #F9F6F1 */
-    --foreground: 0 0% 10%; /* near-black text #1A1A1A */
-
-    --card: 0 0% 100%; /* white card */
-    --card-foreground: 0 0% 10%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
-
-    --primary: 42 92% 46%; /* slightly deeper gold for light bg contrast */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 40 10% 92%; /* warm light grey #ECE8E1 */
-    --secondary-foreground: 0 0% 20%;
-
-    --muted: 40 10% 94%; /* very light warm grey */
-    --muted-foreground: 0 0% 42%; /* readable medium grey on light */
-
-    --accent: 42 80% 40%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 40 10% 85%; /* light grey border */
-    --input: 40 10% 85%;
-    --ring: 42 92% 46%;
-
-    --radius: 0.75rem;
-
-    /* Sidebar variables for light mode, adapted from main light mode vars */
-    --sidebar-background: 40 20% 97%;
-    --sidebar-foreground: 0 0% 10%;
-    --sidebar-primary: 42 92% 46%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 42 80% 40%;
-    --sidebar-accent-foreground: 0 0% 10%;
-    --sidebar-border: 40 10% 85%;
-    --sidebar-ring: 42 92% 46%;
+    --verity-teal: 42 92% 56%;
+    --verity-magenta: 42 80% 48%;
   }
 
   * {
@@ -122,21 +134,29 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: "Inter", system-ui, sans-serif;
+    transition: background-color 0.4s ease, color 0.25s ease;
+  }
+
+  /* Luxury background gradients — adapt to both modes */
+  .dark body {
     background-image:
       radial-gradient(circle at 15% 20%, hsla(var(--verity-gold), 0.04), transparent 38%),
       radial-gradient(circle at 84% 14%, hsla(var(--verity-gold-dim), 0.05), transparent 42%),
       linear-gradient(180deg, #080808, #050505);
-    transition: background-image 0.4s ease, background-color 0.4s ease, color 0.25s ease;
   }
 
-  .light-mode body {
+  :root body {
     background-image:
       radial-gradient(circle at 15% 20%, hsla(var(--verity-gold), 0.06), transparent 38%),
       radial-gradient(circle at 84% 14%, hsla(var(--verity-gold-dim), 0.04), transparent 42%),
       linear-gradient(180deg, #F9F6F1, #F5F0E8);
   }
 
-  .light-mode .app-nav {
+  .dark .app-nav {
+    background: linear-gradient(180deg, rgba(8,8,8,0.92), rgba(5,5,5,0.98));
+  }
+
+  :root .app-nav {
     background: linear-gradient(180deg, rgba(249,246,241,0.92), rgba(249,246,241,0.98));
   }
 
@@ -147,13 +167,13 @@
   h5,
   h6 {
     font-family: "Playfair Display", serif;
-    letter-spacing: 0.02em; /* Slightly increased letter spacing for elegance */
+    letter-spacing: 0.02em;
   }
 }
 
 @layer utilities {
+  /* ─── Luxury text gradients ─── */
   .text-gradient-electric {
-    /* Keeping for backward compatibility, will be replaced with luxury gold */
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, hsl(42 92% 56%), hsl(36 78% 52%), hsl(42 92% 56%));
   }
@@ -171,11 +191,21 @@
     background-image: linear-gradient(135deg, #E5A519 0%, #F0C75E 45%, #C78B0A 100%);
   }
 
+  /* ─── Glass card — luxury feel ─── */
   .glass-card {
-    @apply border border-white/10 bg-black/40 backdrop-blur-xl;
-    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(229, 165, 25, 0.08);
+    @apply backdrop-blur-xl;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card) / 0.6);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.15), inset 0 1px 0 hsla(var(--verity-gold), 0.08);
   }
 
+  .dark .glass-card {
+    border-color: rgba(255, 255, 255, 0.10);
+    background: rgba(0, 0, 0, 0.40);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45), inset 0 1px 0 hsla(var(--verity-gold), 0.08);
+  }
+
+  /* ─── Gold glow effects ─── */
   .glow-gold {
     box-shadow:
       0 0 40px hsl(42 92% 56% / 0.25),
@@ -186,6 +216,16 @@
     box-shadow: 0 0 0 2px hsl(42 92% 56% / 0.3), 0 0 20px hsl(42 92% 56% / 0.15);
   }
 
+  /* ─── Luxury border & shadow utilities ─── */
+  .lux-border {
+    border: 1px solid hsla(var(--verity-gold), 0.35);
+  }
+
+  .lux-shadow {
+    box-shadow: 0 12px 36px hsla(var(--foreground), 0.08), 0 0 14px hsla(var(--verity-gold), 0.12);
+  }
+
+  /* ─── Reduced motion ─── */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -197,6 +237,3 @@
     }
   }
 }
-
-/* Ensure the font import for Playfair Display is correct and at the top */
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap");

@@ -1,5 +1,4 @@
 import { createRoot } from "react-dom/client";
-import { ThemeProvider } from "next-themes";
 import App from "./App.tsx";
 import "./index.css";
 
@@ -10,8 +9,4 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-createRoot(document.getElementById("root")!).render(
-  <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-    <App />
-  </ThemeProvider>
-);
+createRoot(document.getElementById("root")!).render(<App />);

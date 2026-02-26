@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AppNav from "@/components/AppNav";
 import { motion } from "framer-motion"; // Import motion for animations
 import HeroSection from "@/components/HeroSection";
+import AbstractParallaxBackground from "@/components/AbstractParallaxBackground"; // Import AbstractParallaxBackground
 import ElectricCursorTrail from "@/components/ElectricCursorTrail"; // Import ElectricCursorTrail
 import HowSparksWork from "@/components/HowSparksWork";
 import OnboardingDiscoveryPostSpark from "@/components/OnboardingDiscoveryPostSpark";
@@ -25,6 +26,7 @@ const Landing = () => {
       <OnboardingDiscoveryPostSpark />
       <SafetyWaitlistSection />
       <ElectricCursorTrail /> {/* Add the cursor trail component */}
+      <AbstractParallaxBackground /> {/* Add the parallax background component */}
 
       {/* Ready to Unlock More Sparks CTA Section */}
       <motion.section

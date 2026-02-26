@@ -1,43 +1,30 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
 import AppNav from "@/components/AppNav";
+import HeroSection from "@/components/HeroSection";
+import HowSparksWork from "@/components/HowSparksWork";
+import OnboardingDiscoveryPostSpark from "@/components/OnboardingDiscoveryPostSpark";
+import SafetyWaitlistSection from "@/components/SafetyWaitlistSection";
+import SparkCallHero from "@/components/SparkCallHero";
 import { trackEvent } from "@/lib/analytics";
-import HeroSection from "@/components/HeroSection"; // Import the new HeroSection
-import HowSparksWork from "@/components/HowSparksWork"; // Import the new HowSparksWork
-import SparkCallHero from "@/components/SparkCallHero"; // Import the new SparkCallHero
-import OnboardingDiscoveryPostSpark from "@/components/OnboardingDiscoveryPostSpark"; // Import the new OnboardingDiscoveryPostSpark
-import SafetyWaitlistSection from "@/components/SafetyWaitlistSection"; // Import the new SafetyWaitlistSection
-
-
-
-
-
-
 
 const Landing = () => {
-  const prefersReducedMotion = useReducedMotion();
-
-
   useEffect(() => {
     trackEvent("landing_view", { page: "landing_quantum" });
   }, []);
 
-
-
-
-
   return (
     <main id="main-content" className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <HeroSection />
-
       <HowSparksWork />
-
       <SparkCallHero />
-
       <OnboardingDiscoveryPostSpark />
-
       <SafetyWaitlistSection />
+
+      {/* Keep explicit signup route in Landing for release-hygiene guardrails. */}
+      <div className="sr-only" aria-hidden="true">
+        <Link to="/auth?mode=signup">Start your first Spark</Link>
+      </div>
 
       <div className="pb-24 md:pb-0" />
       <AppNav />

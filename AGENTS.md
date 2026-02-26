@@ -29,6 +29,16 @@ Then continue with all non-blocked UI/frontend/design work without waiting. Afte
 - Prefer direct Google Veo generation via skill: `veo` (`/Users/joshcabana/.openclaw/workspace/skills/veo/SKILL.md`) using `GEMINI_API_KEY`.
 - Do not use inference.sh-based skills (`ai-video-generation`, `google-veo`) unless the user explicitly asks: `USE_INFSH`.
 
+## Commit and Push Rule (Strict)
+- After completing any code/task changes, run all gates:
+  - `npm run build`
+  - `npm run lint`
+  - `npm run test`
+- If gates pass, commit and push to `main` in the same run.
+- Do not stop at local edits.
+- Only skip push if the user explicitly says: `NO_PUSH`.
+- If gates fail, fix issues and re-run until green, then commit and push.
+
 Status: `BLOCKED_PAYMENT_TRACK`
 Owner: `joshcabana`
 Effective: immediately

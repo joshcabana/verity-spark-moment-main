@@ -4,20 +4,20 @@ import { useInView } from 'react-intersection-observer';
 
 const flowStepsContent = [
     {
-        icon: '✨',
+        icon: '✨', // Placeholder: Animated SVG of a user entering a glowing room/portal
         title: "Welcome to Real Connections",
         body: "Dive into Verity's unique anti-swipe experience. We'll guide you through setting up your profile, understanding Spark etiquette, and getting ready for your first genuine connection.",
         cta: "Get Started"
     },
     {
-        icon: '🔎',
+        icon: '🔎', // Placeholder: Animated matching sequence or radar scan
         title: "Spark Discovery",
         body: "No endless scrolling. Verity intelligently matches you with individuals who are genuinely present and seeking a real-time Spark. Prepare for a spontaneous, authentic encounter.",
         cta: "Find Your Spark",
         subText: "Searching for compatible Sparks..."
     },
     {
-        icon: '💖',
+        icon: '💖', // Placeholder: Animated confetti burst and glowing connection line
         title: "What Happens After a Spark?",
         body: "If there's a mutual reveal, the connection ignites! You'll have options to connect further, send a message, or simply reflect on the experience. No pressure, just genuine next steps.",
         actions: [
@@ -36,12 +36,47 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
 
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15 } },
     };
 
     const stepVariants = {
         hidden: { opacity: 0, scale: 0.9 },
-        visible: { opacity: 1, scale: 1, transition: { duration: 0.7, ease: "easeOut" } },
+        visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 100, damping: 15 } },
+    };
+
+    const ctaButtonVariants = {
+        hover: {
+            scale: 1.05,
+            boxShadow: "0 10px 30px rgba(255, 69, 0, 0.6)",
+            transition: { duration: 0.3 }
+        },
+        tap: {
+            scale: 0.98
+        }
+    };
+
+    const actionButtonVariants = {
+        hover: {
+            scale: 1.05,
+            boxShadow: "0 8px 25px rgba(255, 69, 0, 0.5)",
+            transition: { duration: 0.3 }
+        },
+        tap: {
+            scale: 0.98
+        }
+    };
+
+    const subTextPulseVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { delay: 0.5, duration: 1, repeat: Infinity, repeatType: "reverse" } },
+    };
+
+    const arrowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 0.6, y: 0,
+            transition: { type: "spring", stiffness: 100, damping: 10, delay: 0.5 }
+        },
     };
 
     return (
@@ -82,19 +117,20 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                                 {step.cta && (
                                     <motion.a
                                         href="#"
-                                        className="mt-6 inline-block bg-gradient-to-r from-electric-violet to-fiery-orange text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                                        whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(255, 69, 0, 0.6)" }}
-                                        whileTap={{ scale: 0.98 }}
+                                        className="mt-6 inline-block bg-gradient-to-r from-electric-violet to-fiery-orange text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300"
+                                        variants={ctaButtonVariants}
+                                        whileHover="hover"
+                                        whileTap="tap"
                                     >
                                         {step.cta}
                                     </motion.a>
                                 )}
                                 {step.subText && (
                                     <motion.p
-                                        className="mt-5 text-neon-green font-semibold text-lg animate-pulse"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: 1 + index * 0.2, duration: 1, repeat: Infinity, repeatType: "reverse" }}
+                                        className="mt-5 text-neon-green font-semibold text-lg"
+                                        variants={subTextPulseVariants}
+                                        initial="hidden"
+                                        animate={inView ? "visible" : "hidden"}
                                     >
                                         {step.subText}
                                     </motion.p>
@@ -105,9 +141,10 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                                             <motion.a
                                                 key={actionIndex}
                                                 href={action.href}
-                                                className="inline-block bg-gradient-to-r from-electric-violet to-fiery-orange text-white text-md font-bold py-3 px-6 rounded-full shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                                                whileHover={{ scale: 1.05, boxShadow: "0 8px 25px rgba(255, 69, 0, 0.5)" }}
-                                                whileTap={{ scale: 0.98 }}
+                                                className="inline-block bg-gradient-to-r from-electric-violet to-fiery-orange text-white text-md font-bold py-3 px-6 rounded-full shadow-md transition-all duration-300"
+                                                variants={actionButtonVariants}
+                                                whileHover="hover"
+                                                whileTap="tap"
                                             >
                                                 {action.label}
                                             </motion.a>
@@ -118,8 +155,9 @@ const OnboardingDiscoveryPostSpark: React.FC = () => {
                             {index < flowStepsContent.length - 1 && (
                                 <motion.div
                                     className="text-electric-violet text-7xl text-center opacity-60"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={inView ? { opacity: 0.6, y: 0 } : { opacity: 0, y: 20 }}
+                                    variants={arrowVariants}
+                                    initial="hidden"
+                                    animate={inView ? "visible" : "hidden"}
                                     transition={{ delay: 0.5 + index * 0.2, duration: 0.6, ease: "easeOut" }}
                                 >
                                     ↓

@@ -4,17 +4,17 @@ import { useInView } from 'react-intersection-observer';
 
 const sparkFlowContent = [
     {
-        icon: '✨', // Placeholder for custom SVG/Video
+        icon: '✨', // Animated SVG of a user entering a glowing room/portal
         title: "Enter a Live Room",
         body: "Skip the endless profiles. Connect instantly with someone genuinely present and ready to spark right now."
     },
     {
-        icon: '🎥', // Placeholder for custom SVG/Video
+        icon: '🎞️', // Animated video icon or dynamic spark call UI snippet
         title: "The 45-Second Spark Call",
         body: "A focused, cinematic live video call designed to reveal authentic chemistry, cutting through chat fatigue."
     },
     {
-        icon: '🔮', // Placeholder for custom SVG/Video
+        icon: '🌟', // Animated orb convergence leading to a confetti burst
         title: "Orb Convergence + Reveal",
         body: "At 15 seconds, a dramatic orb event climaxes in a mutual reveal, unlocking continuation based on real connection."
     },
@@ -28,12 +28,24 @@ const HowSparksWork: React.FC = () => {
 
     const containerVariants = {
         hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { staggerChildren: 0.2, duration: 0.5 } },
+        visible: { opacity: 1, transition: { staggerChildren: 0.15, duration: 0.6 } }, // Slightly faster stagger and duration
     };
 
     const itemVariants = {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15, duration: 0.7 } }, // Spring physics
+    };
+
+    const cardHoverVariants = {
+        hover: {
+            scale: 1.03,
+            y: -8,
+            boxShadow: "0 15px 40px rgba(255, 69, 0, 0.4)",
+            transition: { duration: 0.3 }
+        },
+        tap: {
+            scale: 0.98
+        }
     };
 
     return (
@@ -59,8 +71,11 @@ const HowSparksWork: React.FC = () => {
                     {sparkFlowContent.map((step, index) => (
                         <motion.article
                             key={index}
-                            className="bg-electric-violet/10 backdrop-blur-md rounded-2xl border border-electric-violet/20 p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                            className="bg-electric-violet/10 backdrop-blur-md rounded-2xl border border-electric-violet/20 p-8 shadow-lg transition-all duration-300 transform"
                             variants={itemVariants}
+                            whileHover="hover"
+                            whileTap="tap"
+                            custom={index} // Pass index as custom prop for potential staggered hover effects
                         >
                             <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-electric-violet to-fiery-orange rounded-full flex justify-center items-center text-5xl text-white shadow-md">
                                 {step.icon}

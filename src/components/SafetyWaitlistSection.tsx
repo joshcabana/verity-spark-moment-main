@@ -4,22 +4,22 @@ import { useInView } from 'react-intersection-observer';
 
 const trustFeatures = [
     {
-        icon: '🛡️',
+        icon: '🛡️', // Placeholder: Animated shield or lock icon
         title: "Anonymous First 45 Seconds",
         description: "Your identity remains private until a mutual reveal. Focus on genuine connection, not first impressions."
     },
     {
-        icon: '🚨',
+        icon: '🚨', // Placeholder: Animated alert/warning icon with a pulse
         title: "Real-time Moderation",
         description: "Advanced AI and human oversight monitor every Spark for inappropriate behavior, ensuring a respectful space."
     },
     {
-        icon: '🔒',
+        icon: '🔒', // Placeholder: Animated padlock or biometric scan icon
         title: "Identity Controls",
         description: "You're in control. Set your preferences and manage who you connect with after a mutual Spark."
     },
     {
-        icon: '✨',
+        icon: '✨', // Placeholder: Animated spark or starburst icon for reveal
         title: "Mutual-Only Reveals",
         description: "No unsolicited access. Reveals only happen when both participants feel a genuine spark and opt-in."
     },
@@ -33,12 +33,12 @@ const SafetyWaitlistSection: React.FC = () => {
 
     const sectionVariants = {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+        visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 80, damping: 15 } },
     };
 
     const cardVariants = {
         hidden: { opacity: 0, scale: 0.9 },
-        visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
+        visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 100, damping: 15 } },
     };
 
     const fomoVariants = {
@@ -46,6 +46,32 @@ const SafetyWaitlistSection: React.FC = () => {
             scale: [1, 1.05, 1],
             opacity: [1, 0.9, 1],
             transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+        }
+    };
+
+    const inputFocusVariants = {
+        focus: {
+            borderColor: "#39FF14", // neon-green
+            boxShadow: "0 0 15px rgba(57,255,20,0.5)",
+            scale: 1.01,
+            transition: { duration: 0.2 }
+        },
+        initial: {
+            borderColor: "#8A2BE2", // electric-violet
+            boxShadow: "0 0 10px rgba(138,43,226,0.3)",
+            scale: 1,
+            transition: { duration: 0.2 }
+        }
+    };
+
+    const buttonVariants = {
+        hover: {
+            scale: 1.05,
+            boxShadow: "0 15px 40px rgba(255, 69, 0, 0.9)",
+            transition: { duration: 0.3 }
+        },
+        tap: {
+            scale: 0.98
         }
     };
 
@@ -75,6 +101,8 @@ const SafetyWaitlistSection: React.FC = () => {
                             initial="hidden"
                             animate={inView ? "visible" : "hidden"}
                             transition={{ delay: 0.3 + index * 0.1 }}
+                            whileHover={{ scale: 1.03, boxShadow: "0 10px 30px rgba(138,43,226,0.4)" }}
+                            whileTap={{ scale: 0.98 }}
                         >
                             <div className={`text-4xl mb-4 ${feature.icon === '🚨' ? 'text-fiery-orange' : 'text-neon-green'}`}>
                                 {feature.icon}
@@ -110,22 +138,27 @@ const SafetyWaitlistSection: React.FC = () => {
                     </p>
 
                     <div className="flex flex-col items-center gap-6 mt-8">
-                        <input
+                        <motion.input
                             type="email"
                             placeholder="Enter your email for priority access"
                             required
-                            className="w-full max-w-md p-4 rounded-full border border-electric-violet bg-dark-charcoal/50 text-text-light text-lg outline-none shadow-md focus:border-neon-green focus:shadow-neon transition-all duration-300"
+                            className="w-full max-w-md p-4 rounded-full border border-electric-violet bg-dark-charcoal/50 text-text-light text-lg outline-none shadow-md transition-all duration-300"
+                            initial="initial"
+                            whileFocus="focus"
+                            variants={inputFocusVariants}
                         />
                         <motion.button
                             className="inline-block bg-gradient-to-r from-electric-violet to-fiery-orange text-white text-xl font-bold py-4 px-10 rounded-full shadow-lg"
-                            whileHover={{ scale: 1.05, boxShadow: "0 15px 40px rgba(255, 69, 0, 0.9)" }}
-                            whileTap={{ scale: 0.98 }}
+                            variants={buttonVariants}
+                            whileHover="hover"
+                            whileTap="tap"
                         >
                             Secure My Spot
                         </motion.button>
                     </div>
                 </div>
             </motion.div>
+            {/* Note: Dynamic client-side JavaScript is needed to power the countdown-timer element. */}
         </section>
     );
 };

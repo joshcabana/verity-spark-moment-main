@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import Particles from "react-tsparticles";
 import type { Container, Engine, ISourceOptions } from "tsparticles-engine";
-import { loadFull } from "tsparticles";
+import { loadFull } from "tsparticles"; // loads tsparticles and all its plugins
 
 interface SparkParticleSystemProps {
     mode?: "ambient" | "converging" | "exploding";
@@ -12,7 +12,7 @@ interface SparkParticleSystemProps {
 
 const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambient", density = 100, speed = 0.4, className }) => {
     const particlesInit = useCallback(async (engine: Engine) => {
-        await loadFull(engine);
+        await loadFull(engine); // Revert to loadFull to fix build error
     }, []);
 
     const particlesLoaded = useCallback(async (container?: Container) => {
@@ -49,13 +49,13 @@ const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambie
             },
             particles: {
                 color: {
-                    value: ["#c7a046", "#e4c97d", "#f4ede1", "#b58634"],
+                    value: ["hsl(var(--verity-gold) / 0.1)", "hsl(var(--verity-gold-dim) / 0.05)", "hsl(var(--background) / 0.2)"], // Luxury subtle palette
                 },
                 links: {
-                    color: "#f4ede1",
+                    color: "hsl(var(--foreground) / 0.1)", // Subtle links
                     distance: 150,
                     enable: true,
-                    opacity: 0.3,
+                    opacity: 0.05, // Very subtle links
                     width: 1,
                 },
                 collisions: {
@@ -68,7 +68,7 @@ const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambie
                         default: "bounce",
                     },
                     random: true,
-                    speed: speed,
+                    speed: speed * 0.5, // Slower for floating dust
                     straight: false,
                 },
                 number: {
@@ -76,16 +76,16 @@ const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambie
                         enable: true,
                         area: 800,
                     },
-                    value: density,
+                    value: density * 0.3, // Reduced density
                 },
                 opacity: {
-                    value: 0.5,
+                    value: { min: 0.05, max: 0.15 }, // Very low opacity range
                 },
                 shape: {
                     type: "circle",
                 },
                 size: {
-                    value: { min: 1, max: 3 },
+                    value: { min: 0.5, max: 1.5 }, // Smaller particles
                 },
             },
             detectRetina: true,
@@ -95,15 +95,15 @@ const SparkParticleSystem: React.FC<SparkParticleSystemProps> = ({ mode = "ambie
             case "converging":
                 baseOptions.particles.move.direction = "right";
                 baseOptions.particles.move.speed = speed * 2;
-                baseOptions.particles.color.value = ["#c7a046", "#e4c97d"];
+                baseOptions.particles.color.value = ["hsl(var(--verity-gold) / 0.2)", "hsl(var(--verity-gold-dim) / 0.1)"]; // Converging luxury gold
                 baseOptions.interactivity.modes.repulse.distance = 50;
                 baseOptions.interactivity.modes.repulse.duration = 0.8;
                 break;
             case "exploding":
                 baseOptions.particles.move.direction = "random";
-                baseOptions.particles.move.speed = speed * 5;
-                baseOptions.particles.size.value = { min: 3, max: 7 };
-                baseOptions.particles.opacity.value = 0.8;
+                baseOptions.particles.move.speed = speed * 3; // Slightly slower explosion
+                baseOptions.particles.size.value = { min: 1.5, max: 4 }; // Smaller explosion particles
+                baseOptions.particles.opacity.value = { min: 0.3, max: 0.6 }; // Reduced explosion opacity
                 baseOptions.particles.links.opacity = 0;
                 baseOptions.particles.life = { count: 1 }; // Particles disappear after a short life
                 break;

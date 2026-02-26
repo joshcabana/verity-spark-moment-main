@@ -54,13 +54,14 @@ npm run dev
 ### Onboarding Real Participants
 
 ```bash
-# 1. Create participants.csv with real emails
-cp participants-EXAMPLE.csv participants.csv
-# Edit with your 10–20 real participant emails
+# 1. Create private participant input from the tracked template
+mkdir -p private/pilot
+cp docs/pilot/templates/participants.template.csv private/pilot/participants.csv
+# Edit with your 10–20 real participant emails (do not commit private/pilot/)
 
 # 2. Run the complete onboarding workflow (dry-run first)
-npm run pilot:onboard -- --participants participants.csv --dry-run
-npm run pilot:onboard -- --participants participants.csv --confirm
+npm run pilot:onboard -- --participants private/pilot/participants.csv --dry-run
+npm run pilot:onboard -- --participants private/pilot/participants.csv --confirm
 ```
 
 ### Monitoring & Operations

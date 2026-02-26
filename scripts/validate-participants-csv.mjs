@@ -2,13 +2,13 @@
 /**
  * validate-participants-csv.mjs
  *
- * Pre-flight check for participants.csv before running the onboard workflow.
+ * Pre-flight check for private/pilot/participants.csv before running the onboard workflow.
  * Catches format issues, placeholder emails, duplicates, and city mismatches
  * before any Supabase accounts are created.
  *
  * Usage:
- *   node scripts/validate-participants-csv.mjs --participants participants.csv
- *   node scripts/validate-participants-csv.mjs --participants participants.csv --strict
+ *   node scripts/validate-participants-csv.mjs --participants private/pilot/participants.csv
+ *   node scripts/validate-participants-csv.mjs --participants private/pilot/participants.csv --strict
  *
  * Exit codes:
  *   0 — all checks passed (safe to proceed with onboard workflow)
@@ -206,7 +206,7 @@ if (effectiveErrors.length) {
   console.log(`\n✗  Errors (${effectiveErrors.length}):`);
   for (const e of effectiveErrors) console.log(`  • ${e}`);
   console.log("\n  Fix the above issues before running the onboard workflow.");
-  console.log("  Reference: participants-EXAMPLE.csv for correct format.\n");
+  console.log("  Reference: docs/pilot/templates/participants.template.csv for correct format.\n");
   process.exit(1);
 }
 

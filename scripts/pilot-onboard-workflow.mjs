@@ -4,14 +4,14 @@
  * Complete pilot participant onboarding workflow.
  * 
  * Orchestrates the full process:
- * 1. Bulk email update (participants.csv → wave1-invites.csv)
+ * 1. Bulk email update (private/pilot/participants.csv → private/pilot/wave1-invites.csv)
  * 2. Re-seed auth accounts in Supabase
  * 3. Generate shareable credentials
  * 4. Verify activation readiness
  * 
  * Usage:
- *   npm run pilot:onboard -- --participants participants.csv --dry-run
- *   npm run pilot:onboard -- --participants participants.csv --confirm
+ *   npm run pilot:onboard -- --participants private/pilot/participants.csv --dry-run
+ *   npm run pilot:onboard -- --participants private/pilot/participants.csv --confirm
  */
 
 import { spawnSync } from "node:child_process";
@@ -54,14 +54,18 @@ const run = (command, args, description, options = {}) => {
 };
 
 const args = parseArgs(process.argv);
-const participantsPath = args.participants || "participants.csv";
+const participantsPath = args.participants || "private/pilot/participants.csv";
+const invitesPath = args.invites || "private/pilot/wave1-invites.csv";
+const credentialsPath = args.credentials || "private/pilot/invite-credentials.csv";
 const dryRunFlag = args["dry-run"] === "true" ? "--dry-run" : "";
 const confirmFlag = args.confirm === "true" ? "" : "--dry-run";
 const finalFlag = dryRunFlag || confirmFlag;
 
 if (!existsSync(participantsPath)) {
   console.error(`Error: Participants file not found: ${participantsPath}`);
-  console.error("Create a CSV with columns: email, city, name, notes");
+  console.error("Create it from template:");
+  console.error("  cp docs/pilot/templates/participants.template.csv private/pilot/participants.csv");
+  console.error("Then fill real emails and rerun.");
   process.exit(1);
 }
 
@@ -77,7 +81,7 @@ Mode:    ${finalFlag ? "DRY RUN" : "LIVE"}
 // Step 1: Bulk email update
 run(
   "node",
-  [`scripts/pilot-bulk-email-update.mjs`, `--input`, participantsPath, `--output`, `docs/pilot/wave1-invites.csv`, finalFlag].filter(Boolean),
+  [`scripts/pilot-bulk-email-update.mjs`, `--input`, participantsPath, `--output`, invitesPath, finalFlag].filter(Boolean),
   "Step 1: Update invite CSV with real emails",
 );
 
@@ -91,7 +95,7 @@ if (!finalFlag) {
   } else {
     run(
       "npm",
-      ["run", "seed:pilot:users", "--", "--wave1", "--invites-csv", "docs/pilot/wave1-invites.csv"],
+      ["run", "seed:pilot:users", "--", "--wave1", "--invites-csv", invitesPath],
       "Step 2: Re-seed Supabase accounts with real emails",
     );
   }
@@ -105,9 +109,9 @@ run(
   [
     `scripts/pilot-generate-invite-credentials.mjs`,
     `--invites`,
-    `docs/pilot/wave1-invites.csv`,
+    invitesPath,
     `--out`,
-    `reports/pilot/invite-credentials.csv`,
+    credentialsPath,
     finalFlag,
   ].filter(Boolean),
   "Step 3: Generate shareable invite credentials",
@@ -125,7 +129,7 @@ ${finalFlag ? `[DRY RUN] Review the changes above, then run again without --dry-
   npm run pilot:onboard -- --participants ${participantsPath} --confirm
 ` : `
 1. Share invite credentials with participants:
-   - File: reports/pilot/invite-credentials-SHAREABLE.csv
+   - File: ${credentialsPath.replace(".csv", "-SHAREABLE.csv")}
    - Securely deliver via email or secure channel
    
 2. Verify activation in the pilots dashboard:

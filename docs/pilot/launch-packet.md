@@ -29,5 +29,5 @@ Use this structure:
 ## Working Files In This Repo
 
 - Shared tracker: [tracker.md](tracker.md)
-- Invite schedule CSV: [wave1-invites.csv](wave1-invites.csv)
+- Invite schedule template CSV: [wave1-invites.template.csv](templates/wave1-invites.template.csv)
 - Anti-gravity output template: [anti-gravity-output.md](anti-gravity-output.md)

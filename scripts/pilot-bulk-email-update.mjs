@@ -3,20 +3,20 @@
 /**
  * Bulk email update for pilot invites.
  * 
- * Reads a CSV with real participant emails and updates wave1-invites.csv
+ * Reads a CSV with real participant emails and updates private/pilot/wave1-invites.csv
  * with those addresses, maintaining all other fields and scheduling.
  * 
  * Usage:
- *   node scripts/pilot-bulk-email-update.mjs --input participants.csv --output docs/pilot/wave1-invites.csv
+ *   node scripts/pilot-bulk-email-update.mjs --input private/pilot/participants.csv --output private/pilot/wave1-invites.csv
  * 
- * Input CSV format (participants.csv):
+ * Input CSV format (private/pilot/participants.csv):
  *   email,city,name,notes
  *   jane.smith@gmail.com,Canberra,Jane Smith,Friend of founder
  *   john.doe@outlook.com,Sydney,John Doe,Tech community referral
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { parse } from "csv-parse/sync";
 import { stringify } from "csv-stringify/sync";
 
@@ -38,13 +38,15 @@ const parseArgs = (argv) => {
 };
 
 const args = parseArgs(process.argv);
-const inputPath = args.input || "participants.csv";
-const outputPath = args.output || "docs/pilot/wave1-invites.csv";
+const inputPath = args.input || "private/pilot/participants.csv";
+const outputPath = args.output || "private/pilot/wave1-invites.csv";
+const templatePath = args.template || "docs/pilot/templates/wave1-invites.template.csv";
 const dryRun = args["dry-run"] === "true";
 
 try {
-  // Read current invite template
-  const currentCsvContent = readFileSync(outputPath, "utf8");
+  // Read current invites file if it exists; otherwise bootstrap from tracked template
+  const sourceInvitesPath = existsSync(outputPath) ? outputPath : templatePath;
+  const currentCsvContent = readFileSync(sourceInvitesPath, "utf8");
   const currentRows = parse(currentCsvContent, {
     columns: true,
     skip_empty_lines: true,
@@ -134,12 +136,16 @@ try {
 
   // Write output
   if (!dryRun) {
+    mkdirSync(dirname(resolve(process.cwd(), outputPath)), { recursive: true });
     const csvOutput = stringify(updatedRows, {
       header: true,
       columns,
     });
     writeFileSync(outputPath, csvOutput, "utf8");
     console.log(`\n✓ Updated ${outputPath} with ${updateCount} real emails`);
+    if (!existsSync(outputPath) || sourceInvitesPath === templatePath) {
+      console.log(`✓ Seeded from template: ${templatePath}`);
+    }
   } else {
     console.log(`\n[DRY RUN] Would update ${updateCount} invites`);
   }

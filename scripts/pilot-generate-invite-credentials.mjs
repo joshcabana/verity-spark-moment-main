@@ -7,11 +7,12 @@
  * including magic link generation via Supabase.
  * 
  * Usage:
- *   node scripts/pilot-generate-invite-credentials.mjs --invites docs/pilot/wave1-invites.csv --out reports/pilot/invite-credentials.csv
+ *   node scripts/pilot-generate-invite-credentials.mjs --invites private/pilot/wave1-invites.csv --out private/pilot/invite-credentials.csv
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { dirname, resolve } from "node:path";
 import { parse } from "csv-parse/sync";
 import { stringify } from "csv-stringify/sync";
 
@@ -33,8 +34,8 @@ const parseArgs = (argv) => {
 };
 
 const args = parseArgs(process.argv);
-const invitesPath = args.invites || "docs/pilot/wave1-invites.csv";
-const outputPath = args.out || "reports/pilot/invite-credentials.csv";
+const invitesPath = args.invites || "private/pilot/wave1-invites.csv";
+const outputPath = args.out || "private/pilot/invite-credentials.csv";
 const defaultPassword = args.password || "VerityPilot!2026";
 const dryRun = args["dry-run"] === "true";
 
@@ -108,6 +109,7 @@ try {
   });
 
   if (!dryRun) {
+    mkdirSync(dirname(resolve(process.cwd(), outputPath)), { recursive: true });
     writeFileSync(outputPath, csvOutput, "utf8");
     console.log(`✓ Generated credentials for ${validCount} participants`);
     console.log(`✓ Saved to ${outputPath}`);

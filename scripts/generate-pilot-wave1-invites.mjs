@@ -12,7 +12,7 @@ const startDate = readArg(argv, "--start-date", "2026-02-24");
 const domain = readArg(argv, "--domain", "verity.date");
 const cohort = readArg(argv, "--cohort", "pilot-2026q1");
 const wave = readArg(argv, "--wave", "wave-1");
-const outPath = readArg(argv, "--out", "docs/pilot/wave1-invites.csv");
+const outPath = readArg(argv, "--out", "private/pilot/wave1-invites.csv");
 const dryRun = argv.includes("--dry-run");
 
 if (!Number.isFinite(countPerCity) || countPerCity <= 0) {

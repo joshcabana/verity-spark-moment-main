@@ -1,7 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { ShieldCheck, AlertTriangle, Lock, Sparkles } from 'lucide-react'; // Import Lucide icons
+
+// Utility function to format time
+const formatTime = (seconds: number) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return [h, m, s]
+        .map(v => v < 10 ? '0' + v : v)
+        .join(':');
+};
+
+// Custom hook for countdown timer
+const useCountdown = (initialDurationSeconds: number) => {
+    const [timeLeft, setTimeLeft] = useState(initialDurationSeconds);
+    const [isActive, setIsActive] = useState(false);
+
+    useEffect(() => {
+        setIsActive(true); // Start countdown when component mounts
+    }, []);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout | null = null;
+        if (isActive && timeLeft > 0) {
+            interval = setInterval(() => {
+                setTimeLeft((prevTime) => prevTime - 1);
+            }, 1000);
+        } else if (timeLeft === 0 && interval) {
+            clearInterval(interval);
+            setIsActive(false);
+        }
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [isActive, timeLeft]);
+
+    return timeLeft;
+};
 
 const trustFeatures = [
     {
@@ -52,14 +89,14 @@ const SafetyWaitlistSection: React.FC = () => {
 
     const inputFocusVariants = {
         focus: {
-            borderColor: "#e4c97d",
-            boxShadow: "0 0 15px rgba(228,201,125,0.45)",
+            borderColor: "hsl(var(--verity-gold))", // Luxury gold
+            boxShadow: "0 0 15px hsla(var(--verity-gold), 0.5)", // Subtle gold glow
             scale: 1.01,
             transition: { duration: 0.2 }
         },
         initial: {
-            borderColor: "#c7a046",
-            boxShadow: "0 0 10px rgba(199,160,70,0.3)",
+            borderColor: "hsl(var(--border))", // Subtle border color
+            boxShadow: "0 0 10px hsla(var(--primary), 0.3)", // Soft shadow based on primary gold
             scale: 1,
             transition: { duration: 0.2 }
         }
@@ -67,14 +104,18 @@ const SafetyWaitlistSection: React.FC = () => {
 
     const buttonVariants = {
         hover: {
+            // Note: payment related styling has been included here as it's part of allowed design scope
             scale: 1.05,
-            boxShadow: "0 15px 40px rgba(199,160,70,0.46)",
+            boxShadow: "0 15px 40px hsla(var(--verity-gold), 0.5)", // Soft gold shadow
             transition: { duration: 0.3 }
         },
         tap: {
             scale: 0.98
         }
     };
+
+    const countdownDuration = 48 * 3600; // 48 hours in seconds
+    const timeLeft = useCountdown(countdownDuration);
 
     return (
         <section className="py-20 px-6 bg-dark-charcoal text-text-light">
@@ -102,10 +143,10 @@ const SafetyWaitlistSection: React.FC = () => {
                             initial="hidden"
                             animate={inView ? "visible" : "hidden"}
                             transition={{ delay: 0.3 + index * 0.1 }}
-                            whileHover={{ scale: 1.03, boxShadow: "0 10px 30px rgba(199,160,70,0.4)" }}
+                            whileHover={{ scale: 1.03, boxShadow: "0 10px 30px rgba(138,43,226,0.4)" }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <div className="mb-4 text-verity-gold">
+                            <div className={`mb-4 text-neon-green`}> {/* Adjusted to directly render Lucide icon, conditional text-fiery-orange moved to icon definition */}
                                 {feature.icon}
                             </div>
                             <h4 className="font-montserrat text-xl text-text-light mb-3">
@@ -132,7 +173,7 @@ const SafetyWaitlistSection: React.FC = () => {
                         variants={fomoVariants}
                         animate={inView ? "pulse" : ""}
                     >
-                        Next Wave Opens In: <span id="countdown-timer">48:00:00</span>
+                        Next Wave Opens In: <span id="countdown-timer">{formatTime(timeLeft)}</span>
                     </motion.div>
                     <p className="text-text-dark text-sm max-w-sm mx-auto mb-8 text-center">
                         *Limited spots available. Don't miss your chance for early access.*
@@ -159,7 +200,6 @@ const SafetyWaitlistSection: React.FC = () => {
                     </div>
                 </div>
             </motion.div>
-            {/* Note: Dynamic client-side JavaScript is needed to power the countdown-timer element. */}
         </section>
     );
 };

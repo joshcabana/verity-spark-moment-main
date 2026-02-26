@@ -86,7 +86,7 @@ const SafetyWaitlistSection: React.FC = () => {
                 className="max-w-6xl mx-auto rounded-2xl p-10 shadow-2xl bg-gradient-to-br from-dark-charcoal to-dark-charcoal/50 border border-electric-violet/20"
             >
                 {/* Safety & Trust Section */}
-                <h2 className="font-montserrat text-6xl text-gradient-electric drop-shadow-neon mb-5 text-center">
+                <h2 className="font-montserrat text-4xl md:text-6xl text-gradient-electric drop-shadow-neon mb-5 text-center">
                     Your Safety, Our Priority
                 </h2>
                 <p className="text-text-medium text-lg max-w-3xl mx-auto mb-16 text-center">
@@ -120,7 +120,7 @@ const SafetyWaitlistSection: React.FC = () => {
 
                 {/* Waitlist / Invite System Section */}
                 <div className="border-t border-electric-violet/30 pt-16 mt-16">
-                    <h2 className="font-montserrat text-6xl text-gradient-electric drop-shadow-electric mb-5 text-center">
+                    <h2 className="font-montserrat text-4xl md:text-6xl text-gradient-electric drop-shadow-electric mb-5 text-center">
                         Join the Inner Circle. Spark Early.
                     </h2>
                     <p className="text-text-medium text-lg max-w-3xl mx-auto mb-8 text-center">
